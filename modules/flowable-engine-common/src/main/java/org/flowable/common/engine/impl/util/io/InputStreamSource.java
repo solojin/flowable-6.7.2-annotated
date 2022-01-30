@@ -31,6 +31,11 @@ public class InputStreamSource implements StreamSource {
     // So we keep the content of the inputstream in memory so we can
     // re-read it.
 
+    // 此类用于bpmn解析。
+    // bpmn解析器需要至少对流进行两次检查：
+    // 一次用于模式验证，一次用于解析本身。
+    // 因此，我们将输入流的内容保存在内存中，以便重读一遍
+
     protected BufferedInputStream inputStream;
     protected byte[] bytes;
 
@@ -70,6 +75,7 @@ public class InputStreamSource implements StreamSource {
         }
 
         // Close the input stream and return bytes
+        // 关闭输入流并返回字节
         inStream.close();
         return bytes;
     }

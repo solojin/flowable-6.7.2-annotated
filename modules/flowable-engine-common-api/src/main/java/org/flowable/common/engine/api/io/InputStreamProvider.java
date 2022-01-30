@@ -21,6 +21,7 @@ public interface InputStreamProvider {
 
     /**
      * Creates a <b>NEW</b> {@link InputStream} to the provided resource.
+     * 为提供的资源创建一个新的</b>{@link InputStream}。
      */
     InputStream getInputStream();
 

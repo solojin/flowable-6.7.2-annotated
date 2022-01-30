@@ -140,6 +140,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
                 } else if (localParserMap.containsKey(xtr.getLocalName())) {
                     BaseChildElementParser childParser = localParserMap.get(xtr.getLocalName());
                     // if we're into an extension element but the current element is not accepted by this parentElement then is read as a custom extension element
+                    // 如果我们进入一个扩展元素，但当前元素不被这个parentElement接受，那么它将被读取为一个自定义扩展元素
                     if (inExtensionElements && !childParser.accepts(parentElement)) {
                         ExtensionElement extensionElement = BpmnXMLUtil.parseExtensionElement(xtr);
                         parentElement.addExtensionElement(extensionElement);
@@ -407,7 +408,8 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
 
     /**
      * add all attributes from XML to element extensionAttributes (except blackListed).
-     * 
+     * 将XML中的所有属性添加到元素extensionAttributes（黑名单除外）。
+     *
      * @param xtr
      * @param element
      * @param blackLists
@@ -435,6 +437,7 @@ public class BpmnXMLUtil implements BpmnXMLConstants {
 
     /**
      * write attributes to xtw (except blacklisted)
+     * 将属性写入xtw（黑名单除外）
      * 
      * @param attributes
      * @param xtw
