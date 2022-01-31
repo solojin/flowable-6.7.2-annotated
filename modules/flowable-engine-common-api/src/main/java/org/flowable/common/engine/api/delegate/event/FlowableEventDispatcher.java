@@ -13,14 +13,14 @@
 package org.flowable.common.engine.api.delegate.event;
 
 /**
- * Dispatcher which allows for adding and removing {@link FlowableEventListener} s to the Flowable Engine as well as dispatching {@link FlowableEvent} to all the listeners registered.
+ * 转发器（Dispatcher）允许向Flowable引擎添加和删除事件监听器{@link FlowableEventListener}，并将事件{@link FlowableEvent}分配给所有注册的监听器。
  * 
  * @author Frederik Heremans
  */
 public interface FlowableEventDispatcher {
 
     /**
-     * Adds an event-listener which will be notified of ALL events by the dispatcher.
+     * 添加一个事件监听器，调度器将通知该监听器所有事件.
      * 
      * @param listenerToAdd
      *            the listener to add
