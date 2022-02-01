@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Describes a class that listens for {@link FlowableEvent}s dispatched by the engine.
+ * 描述一个类，该类监听引擎调度的事件{@link FlowableEvent}.
  * 
  * @author Frederik Heremans
  * @author Joram Barrez
@@ -25,32 +25,31 @@ import java.util.Collections;
 public interface FlowableEventListener {
 
     /**
-     * Called when an event has been fired
+     * 在触发事件时调用
      * 
-     * @param event the event
+     * @param event 事件
      */
     void onEvent(FlowableEvent event);
 
     /**
-     * @return whether or not the current operation should fail when this listeners execution throws an exception.
+     * @return 当此监听器执行引发异常时，当前操作是否应失败。
      */
     boolean isFailOnException();
     
     /**
-     * @return Returns whether this event listener fires immediately when the event occurs or 
-     *         on a transaction lifecycle event (before/after commit or rollback).
+     * @return 在事务生命周期事件上（提交或回滚之前/之后），返回事件发生时是否立即触发此事件监听器
      */
     boolean isFireOnTransactionLifecycleEvent();
     
     /**
-     * @return if non-null, indicates the point in the lifecycle of the current transaction when the event should be fired.
+     * @return 如果非空，则指示当前事务生命周期中应该触发事件的时间点。
      */
     String getOnTransaction();
     
     /**
-     * The event types that this event listener needs to be registered for
+     * 此事件监听器需要注册的事件类型
      *
-     * @return the specific event types that this listeners should register itself for
+     * @return 此监听器应为其自身注册的特定事件类型
      */
     default Collection<? extends FlowableEventType> getTypes() {
         return Collections.emptySet();

@@ -13,7 +13,7 @@
 package org.flowable.common.engine.api.delegate.event;
 
 /**
- * 转发器（Dispatcher）允许向Flowable引擎添加和删除事件监听器{@link FlowableEventListener}，并将事件{@link FlowableEvent}分配给所有注册的监听器。
+ * 调度器（Dispatcher）允许向Flowable引擎添加和删除事件监听器{@link FlowableEventListener}，并将事件{@link FlowableEvent}分配给所有注册的监听器。
  * 
  * @author Frederik Heremans
  */
@@ -38,7 +38,7 @@ public interface FlowableEventDispatcher {
     void addEventListener(FlowableEventListener listenerToAdd, FlowableEventType... types);
 
     /**
-     * 从此转发器中删除给定的监听器。无论最初注册的是哪种类型，监听器都不会再收到通知.
+     * 从此调度器中删除给定的监听器。无论最初注册的是哪种类型，监听器都不会再收到通知.
      * 
      * @param listenerToRemove
      *            要删除的监听器
@@ -49,15 +49,15 @@ public interface FlowableEventDispatcher {
      * 将给定事件分派给任何已注册的监听器.
      * 
      * @param event
-     *            要转发的事件.
+     *            要调度的事件.
      * @param engineType
-     *            要转发的引擎类型
+     *            要调度的引擎类型
      */
     void dispatchEvent(FlowableEvent event, String engineType);
 
     /**
      * @param enabled
-     *            设置事件转发，为true则启用.
+     *            设置事件调度，为true则启用.
      */
     void setEnabled(boolean enabled);
 
