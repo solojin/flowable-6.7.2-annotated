@@ -23,46 +23,46 @@ public interface FlowableEventDispatcher {
      * 添加一个事件监听器，调度器将通知该监听器所有事件.
      * 
      * @param listenerToAdd
-     *            the listener to add
+     *            要添加的监听器
      */
     void addEventListener(FlowableEventListener listenerToAdd);
 
     /**
-     * Adds an event-listener which will only be notified when an event of the given types occurs.
+     * 添加一个事件监听器，该监听器仅在给定类型的事件发生时收到通知.
      * 
      * @param listenerToAdd
-     *            the listener to add
+     *            要添加的监听器
      * @param types
-     *            types of events the listener should be notified for
+     *            应通知监听器的事件类型
      */
     void addEventListener(FlowableEventListener listenerToAdd, FlowableEventType... types);
 
     /**
-     * Removes the given listener from this dispatcher. The listener will no longer be notified, regardless of the type(s) it was registered for in the first place.
+     * 从此转发器中删除给定的监听器。无论最初注册的是哪种类型，监听器都不会再收到通知.
      * 
      * @param listenerToRemove
-     *            listener to remove
+     *            要删除的监听器
      */
     void removeEventListener(FlowableEventListener listenerToRemove);
 
     /**
-     * Dispatches the given event to any listeners that are registered.
+     * 将给定事件分派给任何已注册的监听器.
      * 
      * @param event
-     *            event to dispatch.
+     *            要转发的事件.
      * @param engineType
-     *            type of engine to dispatch           
+     *            要转发的引擎类型
      */
     void dispatchEvent(FlowableEvent event, String engineType);
 
     /**
      * @param enabled
-     *            true, if event dispatching should be enabled.
+     *            设置事件转发，为true则启用.
      */
     void setEnabled(boolean enabled);
 
     /**
-     * @return true, if event dispatcher is enabled.
+     * @return 如果启用了事件调度器，则为true.
      */
     boolean isEnabled();
 

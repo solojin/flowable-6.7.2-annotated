@@ -13,7 +13,7 @@
 package org.flowable.common.engine.api.delegate.event;
 
 /**
- * Describes an event that occurred in the Flowable Engine which is dispatched to external listeners, if any.
+ * 描述Flowable引擎中发生的事件，该事件被分派给外部监听器（如果有）。
  * 
  * @author Frederik Heremans
  * 
@@ -21,7 +21,7 @@ package org.flowable.common.engine.api.delegate.event;
 public interface FlowableEvent {
 
     /**
-     * @return type of event.
+     * @return 事件类型.
      */
     FlowableEventType getType();
 
