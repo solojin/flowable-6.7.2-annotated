@@ -21,7 +21,7 @@ import org.flowable.common.engine.impl.context.Context;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 
 /**
- * Class capable of dispatching events.
+ * 能够调度事件的类.
  * 
  * @author Frederik Heremans
  */

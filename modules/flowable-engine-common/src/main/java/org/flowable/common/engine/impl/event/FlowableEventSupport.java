@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class that allows adding and removing event listeners and dispatching events to the appropriate listeners.
+ * 类，该类允许添加和删除事件侦听器，并将事件分派到相应的监听器.
  * 
  * @author Frederik Heremans
  */
@@ -124,8 +124,8 @@ public class FlowableEventSupport {
             if (listener.isFailOnException()) {
                 throw t;
             } else {
-                // Ignore the exception and continue notifying remaining listeners. The listener
-                // explicitly states that the exception should not bubble up
+                // 忽略异常并继续通知剩余的侦听器。
+                // 监听器明确声明不应出现例外情况
                 LOGGER.warn("Exception while executing event-listener, which was ignored", t);
             }
         }
@@ -158,7 +158,7 @@ public class FlowableEventSupport {
     protected synchronized void addTypedEventListener(FlowableEventListener listener, FlowableEventType type) {
         List<FlowableEventListener> listeners = typedListeners.get(type);
         if (listeners == null) {
-            // Add an empty list of listeners for this type
+            // 为此类型的侦听器添加的空列表
             listeners = new CopyOnWriteArrayList<>();
             typedListeners.put(type, listeners);
         }
