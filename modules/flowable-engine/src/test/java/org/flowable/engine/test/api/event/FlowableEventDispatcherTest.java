@@ -46,14 +46,14 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
     }
 
     /**
-     * Test adding a listener and check if events are sent to it. Also checks that after removal, no events are received.
+     * 测试添加监听器并检查是否向其发送了事件，还检查删除后是否未收到任何事件.
      */
     @Test
     public void testAddAndRemoveEventListenerAllEvents() throws Exception {
-        // Create a listener that just adds the events to a list
+        // 创建一个只将事件添加到列表的监听器
         TestFlowableEventListener newListener = new TestFlowableEventListener();
 
-        // Add event-listener to dispatcher
+        // 将事件监听器添加到调度程序
         dispatcher.addEventListener(newListener);
 
         TaskServiceConfiguration taskServiceConfiguration = (TaskServiceConfiguration) processEngineConfiguration.getServiceConfigurations()
@@ -63,7 +63,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         FlowableEntityEventImpl event2 = new FlowableEntityEventImpl(taskServiceConfiguration.getTaskEntityManager().create(),
                 FlowableEngineEventType.ENTITY_CREATED);
 
-        // Dispatch events
+        // 调度事件
         dispatcher.dispatchEvent(event1, processEngineConfiguration.getEngineCfgKey());
         dispatcher.dispatchEvent(event2, processEngineConfiguration.getEngineCfgKey());
 
@@ -71,8 +71,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(newListener.getEventsReceived().get(0)).isEqualTo(event1);
         assertThat(newListener.getEventsReceived().get(1)).isEqualTo(event2);
 
-        // Remove listener and dispatch events again, listener should not be
-        // invoked
+        // 删除监听器并再次分派事件，不应调用监听器
         dispatcher.removeEventListener(newListener);
         newListener.clearEventsReceived();
         dispatcher.dispatchEvent(event1, processEngineConfiguration.getEngineCfgKey());
@@ -82,14 +81,14 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
     }
 
     /**
-     * Test adding a listener and check if events are sent to it, for the types it was registered for. Also checks that after removal, no events are received.
+     * 测试添加一个监听器，并检查是否向它发送了事件，以及它注册的类型。还检查删除后是否未收到任何事件.
      */
     @Test
     public void testAddAndRemoveEventListenerTyped() throws Exception {
-        // Create a listener that just adds the events to a list
+        // 创建一个只将事件添加到列表的监听器
         TestFlowableEventListener newListener = new TestFlowableEventListener();
 
-        // Add event-listener to dispatcher
+        // 将事件监听器添加到调度程序
         dispatcher.addEventListener(newListener, FlowableEngineEventType.ENTITY_CREATED, FlowableEngineEventType.ENTITY_DELETED);
 
         TaskServiceConfiguration taskServiceConfiguration = (TaskServiceConfiguration) processEngineConfiguration.getServiceConfigurations()
@@ -101,7 +100,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         FlowableEntityEventImpl event3 = new FlowableEntityEventImpl(taskServiceConfiguration.getTaskEntityManager().create(),
                 FlowableEngineEventType.ENTITY_UPDATED);
 
-        // Dispatch events, only 2 out of 3 should have entered the listener
+        // 分派事件，三分之二的事件应该已经进入监听器
         dispatcher.dispatchEvent(event1, processEngineConfiguration.getEngineCfgKey());
         dispatcher.dispatchEvent(event2, processEngineConfiguration.getEngineCfgKey());
         dispatcher.dispatchEvent(event3, processEngineConfiguration.getEngineCfgKey());
@@ -110,8 +109,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(newListener.getEventsReceived().get(0)).isEqualTo(event1);
         assertThat(newListener.getEventsReceived().get(1)).isEqualTo(event2);
 
-        // Remove listener and dispatch events again, listener should not be
-        // invoked
+        // 删除监听器并再次分派事件，不应调用监听器
         dispatcher.removeEventListener(newListener);
         newListener.clearEventsReceived();
         dispatcher.dispatchEvent(event1, processEngineConfiguration.getEngineCfgKey());
@@ -121,15 +119,15 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
     }
 
     /**
-     * Test that adding a listener with a null-type is never called.
+     * 测试是否从未调用添加空类型的监听器。
      */
     @Test
     public void testAddAndRemoveEventListenerTypedNullType() throws Exception {
 
-        // Create a listener that just adds the events to a list
+        // 创建一个只将事件添加到列表的监听器
         TestFlowableEventListener newListener = new TestFlowableEventListener();
 
-        // Add event-listener to dispatcher
+        // 将事件监听器添加到调度程序
         dispatcher.addEventListener(newListener, (FlowableEngineEventType) null);
 
         TaskServiceConfiguration taskServiceConfiguration = (TaskServiceConfiguration) processEngineConfiguration.getServiceConfigurations()
@@ -139,7 +137,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         FlowableEntityEventImpl event2 = new FlowableEntityEventImpl(taskServiceConfiguration.getTaskEntityManager().create(),
                 FlowableEngineEventType.ENTITY_DELETED);
 
-        // Dispatch events, all should have entered the listener
+        // 分派事件时，所有事件都应该已进入监听器
         dispatcher.dispatchEvent(event1, processEngineConfiguration.getEngineCfgKey());
         dispatcher.dispatchEvent(event2, processEngineConfiguration.getEngineCfgKey());
 
@@ -147,7 +145,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
     }
 
     /**
-     * Test the {@link BaseEntityEventListener} shipped with Flowable.
+     * 测试Flowable附带的基础实体事件监听器{@link BaseEntityEventListener}。
      */
     @Test
     public void testBaseEntityEventListener() throws Exception {
@@ -166,7 +164,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         FlowableEntityEventImpl otherEvent = new FlowableEntityEventImpl(taskServiceConfiguration.getTaskEntityManager().create(),
                 FlowableEngineEventType.CUSTOM);
 
-        // Dispatch create event
+        // 调度创建事件
         dispatcher.dispatchEvent(createEvent, processEngineConfiguration.getEngineCfgKey());
         assertThat(listener.isCreateReceived()).isTrue();
         assertThat(listener.isUpdateReceived()).isFalse();
@@ -175,7 +173,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(listener.isDeleteReceived()).isFalse();
         listener.reset();
 
-        // Dispatch update event
+        // 调度更新事件
         dispatcher.dispatchEvent(updateEvent, processEngineConfiguration.getEngineCfgKey());
         assertThat(listener.isUpdateReceived()).isTrue();
         assertThat(listener.isCreateReceived()).isFalse();
@@ -183,7 +181,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(listener.isDeleteReceived()).isFalse();
         listener.reset();
 
-        // Dispatch delete event
+        // 调度删除事件
         dispatcher.dispatchEvent(deleteEvent, processEngineConfiguration.getEngineCfgKey());
         assertThat(listener.isDeleteReceived()).isTrue();
         assertThat(listener.isCreateReceived()).isFalse();
@@ -191,7 +189,7 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(listener.isUpdateReceived()).isFalse();
         listener.reset();
 
-        // Dispatch other event
+        // 调度其他事件
         dispatcher.dispatchEvent(otherEvent, processEngineConfiguration.getEngineCfgKey());
         assertThat(listener.isCustomReceived()).isTrue();
         assertThat(listener.isCreateReceived()).isFalse();
@@ -199,17 +197,17 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         assertThat(listener.isDeleteReceived()).isFalse();
         listener.reset();
 
-        // Test typed entity-listener
+        // 测试类型实体监听器
         listener = new TestBaseEntityEventListener(org.flowable.task.api.Task.class);
 
-        // Dispatch event for a task, should be received
+        // 应收到任务的调度事件
         dispatcher.addEventListener(listener);
         dispatcher.dispatchEvent(createEvent, processEngineConfiguration.getEngineCfgKey());
 
         assertThat(listener.isCreateReceived()).isTrue();
         listener.reset();
 
-        // Dispatch event for a execution, should NOT be received
+        // 不应接收执行的调度事件
         FlowableEntityEventImpl createEventForExecution = new FlowableEntityEventImpl(new ExecutionEntityImpl(), FlowableEngineEventType.ENTITY_CREATED);
 
         dispatcher.dispatchEvent(createEventForExecution, processEngineConfiguration.getEngineCfgKey());
@@ -217,11 +215,11 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
     }
 
     /**
-     * Test dispatching behavior when an exception occurs in the listener
+     * 在监听器中发生异常时测试调度行为
      */
     @Test
     public void testExceptionInListener() throws Exception {
-        // Create listener that doesn't force the dispatching to fail
+        // 创建不强制分派失败的侦听器
         TestExceptionFlowableEventListener listener = new TestExceptionFlowableEventListener(false);
         TestFlowableEventListener secondListener = new TestFlowableEventListener();
 
@@ -234,11 +232,11 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
         }).doesNotThrowAnyException();
         assertThat(secondListener.getEventsReceived()).hasSize(1);
 
-        // Remove listeners
+        // 删除监听器
         dispatcher.removeEventListener(listener);
         dispatcher.removeEventListener(secondListener);
 
-        // Create listener that forces the dispatching to fail
+        // 创建强制分派失败的监听器
         listener = new TestExceptionFlowableEventListener(true);
         secondListener = new TestFlowableEventListener();
         dispatcher.addEventListener(listener);
@@ -248,42 +246,42 @@ public class FlowableEventDispatcherTest extends PluggableFlowableTestCase {
                 .isExactlyInstanceOf(RuntimeException.class)
                 .hasMessage("Test exception");
 
-        // Second listener should NOT have been called
+        // 不应该调用第二个侦听器
         assertThat(secondListener.getEventsReceived()).isEmpty();
     }
 
     /**
-     * Test conversion of string-value (and list) in list of {@link FlowableEngineEventType}s, used in configuration of process-engine
-     * {@link ProcessEngineConfigurationImpl#setTypedEventListeners(java.util.Map)} .
+     * 测试Flowable引擎事件类型{ @link FlowableEngineeEventType }列表中字符串值（和列表）的转换，用于流程引擎的配置
+     * {@link ProcessEngineConfigurationImpl#setTypedEventListeners（java.util.Map）}。
      */
     @Test
     public void testActivitiEventTypeParsing() throws Exception {
-        // Check with empty null
+        // 使用空null进行检查
         FlowableEngineEventType[] types = FlowableEngineEventType.getTypesFromString(null);
         assertThat(types).isEmpty();
 
-        // Check with empty string
+        // 用空字符串检查
         types = FlowableEngineEventType.getTypesFromString("");
         assertThat(types).isEmpty();
 
-        // Single value
+        // 单个值
         types = FlowableEngineEventType.getTypesFromString("ENTITY_CREATED");
         assertThat(types).hasSize(1);
         assertThat(types[0]).isEqualTo(FlowableEngineEventType.ENTITY_CREATED);
 
-        // Multiple value
+        // 多个值
         types = FlowableEngineEventType.getTypesFromString("ENTITY_CREATED,ENTITY_DELETED");
         assertThat(types).hasSize(2);
         assertThat(types[0]).isEqualTo(FlowableEngineEventType.ENTITY_CREATED);
         assertThat(types[1]).isEqualTo(FlowableEngineEventType.ENTITY_DELETED);
 
-        // Additional separators should be ignored
+        // 应忽略分隔符
         types = FlowableEngineEventType.getTypesFromString(",ENTITY_CREATED,,ENTITY_DELETED,,,");
         assertThat(types).hasSize(2);
         assertThat(types[0]).isEqualTo(FlowableEngineEventType.ENTITY_CREATED);
         assertThat(types[1]).isEqualTo(FlowableEngineEventType.ENTITY_DELETED);
 
-        // Invalid type name
+        // 无效的类型名
         assertThatThrownBy(() -> FlowableEngineEventType.getTypesFromString("WHOOPS,ENTITY_DELETED"))
                 .isExactlyInstanceOf(FlowableIllegalArgumentException.class)
                 .hasMessage("Invalid event-type: WHOOPS");
