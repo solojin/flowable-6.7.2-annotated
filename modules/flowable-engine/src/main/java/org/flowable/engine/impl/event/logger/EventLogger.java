@@ -59,10 +59,10 @@ public class EventLogger extends AbstractFlowableEventListener {
     protected Clock clock;
     protected ObjectMapper objectMapper;
 
-    // Mapping of type -> handler
+    // 类型->处理类的映射
     protected Map<FlowableEngineEventType, Class<? extends EventLoggerEventHandler>> eventHandlers = new HashMap<>();
 
-    // Listeners for new events
+    // 新事件的监听器
     protected List<EventLoggerListener> listeners;
 
     public EventLogger() {
@@ -101,7 +101,7 @@ public class EventLogger extends AbstractFlowableEventListener {
         EventLoggerEventHandler eventHandler = getEventHandler(event);
         if (eventHandler != null) {
 
-            // Events are flushed when command context is closed
+            // 命令上下文关闭时刷新事件
             CommandContext currentCommandContext = Context.getCommandContext();
             EventFlusher eventFlusher = (EventFlusher) currentCommandContext.getAttribute(EVENT_FLUSHER_KEY);
 
@@ -109,7 +109,7 @@ public class EventLogger extends AbstractFlowableEventListener {
 
                 eventFlusher = createEventFlusher();
                 if (eventFlusher == null) {
-                    eventFlusher = new DatabaseEventFlusher(); // Default
+                    eventFlusher = new DatabaseEventFlusher(); // 默认
                 }
                 currentCommandContext.addAttribute(EVENT_FLUSHER_KEY, eventFlusher);
 
@@ -123,7 +123,7 @@ public class EventLogger extends AbstractFlowableEventListener {
 
                             @Override
                             public void closed(CommandContext commandContext) {
-                                // For those who are interested: we can now broadcast the events were added
+                                // 对于那些感兴趣的对象：我们现在可以广播添加的事件
                                 if (listeners != null) {
                                     for (EventLoggerListener listener : listeners) {
                                         listener.eventsAdded(EventLogger.this);
@@ -156,7 +156,7 @@ public class EventLogger extends AbstractFlowableEventListener {
         }
     }
 
-    // Subclasses can override this if defaults are not ok
+    // 如果默认设置不正确，子类可以覆盖此选项
     protected EventLoggerEventHandler getEventHandler(FlowableEvent event) {
 
         Class<? extends EventLoggerEventHandler> eventHandlerClass = null;
@@ -177,7 +177,7 @@ public class EventLogger extends AbstractFlowableEventListener {
                 }
             }
         } else {
-            // Default: dedicated mapper for the type
+            // 默认值：该类型的专用映射器
             eventHandlerClass = eventHandlers.get(event.getType());
         }
 
@@ -219,7 +219,7 @@ public class EventLogger extends AbstractFlowableEventListener {
     }
 
     /**
-     * Subclasses that want something else than the database flusher should override this method
+     * 想要数据库刷新器以外的其他对象的子类应该重写此方法
      */
     protected EventFlusher createEventFlusher() {
         return null;

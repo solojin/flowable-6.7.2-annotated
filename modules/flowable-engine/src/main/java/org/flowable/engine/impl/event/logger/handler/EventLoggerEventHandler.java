@@ -25,12 +25,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public interface EventLoggerEventHandler {
 
+    // 生成事件日志对象
     EventLogEntryEntity generateEventLogEntry(CommandContext commandContext);
 
+    // 设置事件
     void setEvent(FlowableEvent event);
 
+    // 设置时间戳
     void setTimeStamp(Date timeStamp);
 
+    // 设置映射对象
     void setObjectMapper(ObjectMapper objectMapper);
 
 }

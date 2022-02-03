@@ -39,6 +39,7 @@ public abstract class AbstractDatabaseEventLoggerEventHandler implements EventLo
     protected Date timeStamp;
     protected ObjectMapper objectMapper;
 
+    // 空参构造方法
     public AbstractDatabaseEventLoggerEventHandler() {
     }
 
@@ -52,24 +53,32 @@ public abstract class AbstractDatabaseEventLoggerEventHandler implements EventLo
 
     protected EventLogEntryEntity createEventLogEntry(String type, String processDefinitionId, String processInstanceId, String executionId, String taskId, Map<String, Object> data) {
 
+        // 从命令上下文工具类中获取事件日志对象管理器
         EventLogEntryEntity eventLogEntry = CommandContextUtil.getEventLogEntryEntityManager().create();
+        // 设置流程定义ID
         eventLogEntry.setProcessDefinitionId(processDefinitionId);
+        // 设置流程实例ID
         eventLogEntry.setProcessInstanceId(processInstanceId);
+        // 设置执行器ID
         eventLogEntry.setExecutionId(executionId);
+        // 设置任务ID
         eventLogEntry.setTaskId(taskId);
+        // 设置类型
         eventLogEntry.setType(type);
         eventLogEntry.setTimeStamp(timeStamp);
         putInMapIfNotNull(data, Fields.TIMESTAMP, timeStamp);
 
-        // Current user
+        // 当前用户
         String userId = Authentication.getAuthenticatedUserId();
         if (userId != null) {
+            // 事件日志对象中写入当前用户ID
             eventLogEntry.setUserId(userId);
             putInMapIfNotNull(data, "userId", userId);
         }
 
-        // Current tenant
+        // 当前租户
         if (!data.containsKey(Fields.TENANT_ID) && processDefinitionId != null) {
+            // 根据流程定义ID获取流程定义
             ProcessDefinition processDefinition = ProcessDefinitionUtil.getProcessDefinition(processDefinitionId);
             if (processDefinition != null && !ProcessEngineConfigurationImpl.NO_TENANT_ID.equals(processDefinition.getTenantId())) {
                 putInMapIfNotNull(data, Fields.TENANT_ID, processDefinition.getTenantId());
@@ -79,6 +88,7 @@ public abstract class AbstractDatabaseEventLoggerEventHandler implements EventLo
         try {
             eventLogEntry.setData(objectMapper.writeValueAsBytes(data));
         } catch (Exception e) {
+            // 无法序列化事件数据。数据不会写入数据库
             LOGGER.warn("Could not serialize event data. Data will not be written to the database", e);
         }
 
@@ -86,28 +96,33 @@ public abstract class AbstractDatabaseEventLoggerEventHandler implements EventLo
 
     }
 
+    // 重写方法，设置事件
     @Override
     public void setEvent(FlowableEvent event) {
         this.event = event;
     }
 
+    // 重写方法，设置时间戳
     @Override
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
     }
 
+    // 重写方法，设置对象映射
     @Override
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    // Helper methods //////////////////////////////////////////////////////
+    // 辅助器方法 //////////////////////////////////////////////////////
 
     @SuppressWarnings("unchecked")
+    // 从事件获取对象
     public <T> T getEntityFromEvent() {
         return (T) ((FlowableEntityEvent) event).getEntity();
     }
 
+    // value非空时，向map中写入新值
     public void putInMapIfNotNull(Map<String, Object> map, String key, Object value) {
         if (value != null) {
             map.put(key, value);
