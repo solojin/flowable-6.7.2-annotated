@@ -51,7 +51,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
     @BeforeEach
     protected void setUp() throws Exception {
 
-        // Database event logger setup
+        // 数据库事件日志设置
         databaseEventLogger = new EventLogger(processEngineConfiguration.getClock(), processEngineConfiguration.getObjectMapper());
         runtimeService.addEventListener(databaseEventLogger);
     }
@@ -59,11 +59,12 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
     @AfterEach
     protected void tearDown() throws Exception {
 
-        // Database event logger teardown
+        // 数据库事件日志移除
         runtimeService.removeEventListener(databaseEventLogger);
 
     }
 
+    // 测试数据库事件
     @Test
     @Deployment(resources = { "org/flowable/engine/test/api/event/DatabaseEventLoggerProcess.bpmn20.xml" })
     public void testDatabaseEvents() throws IOException {
@@ -75,11 +76,11 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                 .tenantId(testTenant)
                 .deploy().getId();
 
-        // Run process to gather data
+        // 运行进程以收集数据
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKeyAndTenantId("DatabaseEventLoggerProcess",
                 CollectionUtil.singletonMap("testVar", "helloWorld"), testTenant);
 
-        // Verify event log entries
+        // 验证事件日志条目
         List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(null, null);
 
         String processDefinitionId = processInstance.getProcessDefinitionId();
@@ -119,7 +120,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .containsEntry(Fields.TENANT_ID, testTenant);
             }
 
-            // process instance start
+            // 进程实例启动
             if (i == 1) {
 
                 assertThat(entry.getType()).isEqualTo("PROCESSINSTANCE_START");
@@ -148,7 +149,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKeys(Fields.NAME, Fields.BUSINESS_KEY);
             }
 
-            // Activity started
+            // 活动开始
             if (i == 2 || i == 5 || i == 9 || i == 12) {
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.ACTIVITY_STARTED.name());
                 assertThat(entry.getProcessDefinitionId()).isNotNull();
@@ -172,7 +173,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .containsEntry(Fields.TENANT_ID, testTenant);
             }
 
-            // Leaving start
+            // 离开开始
             if (i == 3) {
 
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.ACTIVITY_COMPLETED.name());
@@ -200,7 +201,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         );
             }
 
-            // Sequence flow taken
+            // 顺序流
             if (i == 4 || i == 7 || i == 8) {
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.SEQUENCEFLOW_TAKEN.name());
                 assertThat(entry.getProcessDefinitionId()).isNotNull();
@@ -223,7 +224,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .containsEntry(Fields.TENANT_ID, testTenant);
             }
 
-            // Leaving parallel gateway
+            // 离开并行网关
             if (i == 6) {
 
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.ACTIVITY_COMPLETED.name());
@@ -247,7 +248,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         );
             }
 
-            // Tasks
+            // T任务
             if (i == 11|| i == 14) {
 
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.TASK_CREATED.name());
@@ -322,7 +323,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
             lastLogNr = entry.getLogNumber();
         }
 
-        // Completing two tasks
+        // 完成两个任务
         for (org.flowable.task.api.Task task : taskService.createTaskQuery().list()) {
             Authentication.setAuthenticatedUserId(task.getAssignee());
             Map<String, Object> varMap = new HashMap<>();
@@ -331,7 +332,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
             Authentication.setAuthenticatedUserId(null);
         }
 
-        // Verify events
+        // 验证事件
         eventLogEntries = managementService.getEventLogEntries(lastLogNr, 100L);
         assertThat(eventLogEntries).hasSize(17);
 
@@ -378,7 +379,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .containsEntry(Fields.TENANT_ID, testTenant);
             }
 
-            // Activity Completed
+            // 已完成的活动
             if (i == 2 || i == 7 || i == 10 || i == 13) {
                 assertThat(entry.getType()).isEqualTo(FlowableEngineEventType.ACTIVITY_COMPLETED.name());
                 assertThat(entry.getProcessDefinitionId()).isNotNull();
@@ -418,7 +419,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
 
             }
 
-            // Sequence flow taken
+            // 顺序流
             if (i == 3 || i == 8 || i == 11) {
                 assertThat(entry.getType()).isNotNull();
                 assertThat(FlowableEngineEventType.SEQUENCEFLOW_TAKEN.name()).isEqualTo(entry.getType());
@@ -478,7 +479,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
             }
         }
 
-        // Cleanup
+        // 清除
         for (EventLogEntry eventLogEntry : managementService.getEventLogEntries(null, null)) {
             managementService.deleteEventLogEntry(eventLogEntry.getLogNumber());
         }
@@ -487,17 +488,18 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
 
     }
 
+    // 测试没有租户的数据库事件
     @Test
     public void testDatabaseEventsNoTenant() throws IOException {
 
         String deploymentId = repositoryService.createDeployment()
                 .addClasspathResource("org/flowable/engine/test/api/event/DatabaseEventLoggerProcess.bpmn20.xml").deploy().getId();
 
-        // Run process to gather data
+        // 运行进程以收集数据
         ProcessInstance processInstance = runtimeService
                 .startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld"));
 
-        // Verify event log entries
+        // 验证事件日志条目
         List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(null, null);
 
         String processDefinitionId = processInstance.getProcessDefinitionId();
@@ -524,7 +526,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // process instance start
+            // 流程实例开始
             if (i == 1) {
                 assertThat(entry.getType()).isEqualTo("PROCESSINSTANCE_START");
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -534,7 +536,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // Activity started
+            // 活动开始
             if (i == 2 || i == 5 || i == 9 || i == 12) {
                 assertThat(FlowableEngineEventType.ACTIVITY_STARTED.name()).isEqualTo(entry.getType());
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -544,7 +546,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // Leaving start
+            // 离开开始
             if (i == 3) {
                 assertThat(FlowableEngineEventType.ACTIVITY_COMPLETED.name()).isEqualTo(entry.getType());
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -554,7 +556,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // Sequence flow taken
+            // 顺序流
             if (i == 4 || i == 7 || i == 8) {
                 assertThat(FlowableEngineEventType.SEQUENCEFLOW_TAKEN.name()).isEqualTo(entry.getType());
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -564,7 +566,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // Leaving parallel gateway
+            // 离开并行网关
             if (i == 6) {
                 assertThat(FlowableEngineEventType.ACTIVITY_COMPLETED.name()).isEqualTo(entry.getType());
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -574,7 +576,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                         .doesNotContainKey(Fields.TENANT_ID);
             }
 
-            // Tasks
+            // 任务
             if (i == 11 || i == 14) {
                 assertThat(FlowableEngineEventType.TASK_CREATED.name()).isEqualTo(entry.getType());
                 Map<String, Object> data = objectMapper.readValue(entry.getData(), new TypeReference<HashMap<String, Object>>() {
@@ -597,13 +599,14 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
 
         repositoryService.deleteDeployment(deploymentId, true);
 
-        // Cleanup
+        // 清除
         for (EventLogEntry eventLogEntry : managementService.getEventLogEntries(null, null)) {
             managementService.deleteEventLogEntry(eventLogEntry.getLogNumber());
         }
 
     }
 
+    // 测试独立的任务事件
     @Test
     public void testStandaloneTaskEvents() throws JsonParseException, JsonMappingException, IOException {
 
@@ -625,7 +628,7 @@ public class DatabaseEventLoggerTest extends PluggableFlowableTestCase {
                     .containsEntry(Fields.TENANT_ID, "myTenant");
         }
 
-        // Cleanup
+        // 清除
         taskService.deleteTask(task.getId(), true);
         for (EventLogEntry eventLogEntry : managementService.getEventLogEntries(null, null)) {
             managementService.deleteEventLogEntry(eventLogEntry.getLogNumber());
