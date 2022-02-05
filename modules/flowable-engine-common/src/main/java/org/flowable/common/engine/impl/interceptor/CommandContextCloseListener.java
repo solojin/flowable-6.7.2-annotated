@@ -15,55 +15,55 @@ package org.flowable.common.engine.impl.interceptor;
 import org.flowable.common.engine.impl.cfg.TransactionContext;
 
 /**
- * A listener that can be used to be notified of lifecycle events of the {@link CommandContext}.
+ * 一个监听器，可用于通知命令上下文{@link CommandContext}的生命周期事件。
  * 
  * @author Joram Barrez
  */
 public interface CommandContextCloseListener {
 
     /**
-     * Called when the {@link CommandContext} is being closed, but no 'close logic' has been executed.
+     * 在关闭命令上下文{@link CommandContext}但未执行“关闭逻辑”时调用。
      * 
-     * At this point, the {@link TransactionContext} (if applicable) has not yet been committed/rolledback and none of the {@link Session} instances have been flushed.
+     * 此时，事务上下文{@link TransactionContext}（如果适用）尚未提交/回滚，会话{@link Session}实例均未刷新。
      * 
-     * If an exception happens and it is not caught in this method: - The {@link Session} instances will *not* be flushed - The {@link TransactionContext} will be rolled back (if applicable)
+     * 如果发生异常且未在此方法中捕获：-将不刷新会话{@link Session}实例，事务上下文{@link TransactionContext}将回滚（如果适用）
      */
     void closing(CommandContext commandContext);
 
     /**
-     * Called when the {@link Session} have been successfully flushed. When an exception happened during the flushing of the sessions, this method will not be called.
+     * 在成功刷新会话{@link Session}时调用。当刷新会话期间发生异常时，将不会调用此方法。
      * 
-     * If an exception happens and it is not caught in this method: - The {@link Session} instances will *not* be flushed - The {@link TransactionContext} will be rolled back (if applicable)
+     * 如果发生异常且未在此方法中捕获：-将不刷新会话{@link Session}实例，事务上下文{@link TransactionContext}将回滚（如果适用）
      */
     void afterSessionsFlush(CommandContext commandContext);
 
     /**
-     * Called when the {@link CommandContext} is successfully closed.
+     * 当命令上下文{@link CommandContext}成功关闭时调用。
      * 
-     * At this point, the {@link TransactionContext} (if applicable) has been successfully committed and no rollback has happened. All {@link Session} instances have been closed.
+     * 此时，事务上下文{@link TransactionContext}（如果适用）已成功提交，没有发生回滚。所有会话{@link Session}实例都已关闭。
      * 
-     * Note that throwing an exception here does *not* affect the transaction. The {@link CommandContext} will log the exception though.
+     * 请注意，在此处引发异常不会影响事务。命令上下文{@link CommandContext}将记录异常。
      */
     void closed(CommandContext commandContext);
 
     /**
-     * Called when the {@link CommandContext} has not been successfully closed due to an exception that happened.
+     * 在命令上下文{@link CommandContext}由于发生异常而未成功关闭时调用。
      * 
-     * Note that throwing an exception here does *not* affect the transaction. The {@link CommandContext} will log the exception though.
+     * 请注意，在此处引发异常不会影响事务。命令上下文{@link CommandContext}将记录异常。
      */
     void closeFailure(CommandContext commandContext);
     
     /**
-     * Determines the order in which the close listeners will be executed
+     * 确定关闭监听器的执行顺序
      * 
-     * @return order lowest number will be executed first
+     * @return 顺序最低者将首先执行
      */
     Integer order();
     
     /**
-     * Determines if there are multiple occurrences allowed of this close listener
+     * 确定此关闭监听器是否允许多次出现
      * 
-     * @return multipleAllowed multiple occurrences allowed
+     * @return 是否允许多次出现
      */
     boolean multipleAllowed();
 
