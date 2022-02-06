@@ -31,35 +31,45 @@ public class DatabaseEventFlusher extends AbstractEventFlusher {
     public void closing(CommandContext commandContext) {
 
         if (commandContext.getException() != null) {
-            return; // Not interested in events about exceptions
+            return; //未关注事件异常
         }
 
+        // 根据命令上下文工具类获取流程引擎配置类
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
+        // 根据流程引擎配置类获取EventLogEntryEntityManager类对象，它负责 ACT_EVT_LOG 表的操作
         EventLogEntryEntityManager eventLogEntryEntityManager = processEngineConfiguration.getEventLogEntryEntityManager();
+        // 遍历事件日志处理器对象
         for (EventLoggerEventHandler eventHandler : eventHandlers) {
             try {
+                // 通过事件日志实体对象管理器的插入方法，新增事件处理器根据命令上下文生成的事件日志。
                 eventLogEntryEntityManager.insert(eventHandler.generateEventLogEntry(commandContext), false);
             } catch (Exception e) {
+                // 无法创建事件日志
                 LOGGER.warn("Could not create event log", e);
             }
         }
     }
 
+    // 在成功刷新会话{@link Session}时调用。当刷新会话期间发生异常时，将不会调用此方法。
+    // 如果发生异常且未在此方法中捕获：-将不刷新会话{@link Session}实例，事务上下文{@link TransactionContext}将回滚（如果适用）
     @Override
     public void afterSessionsFlush(CommandContext commandContext) {
 
     }
 
+    // 关闭失败时调用
     @Override
     public void closeFailure(CommandContext commandContext) {
 
     }
-    
+
+    // 确定关闭监听器的执行顺序。数值最低者先执行
     @Override
     public Integer order() {
         return 100;
     }
 
+    // 确定此关闭监听器是否允许多次出现
     @Override
     public boolean multipleAllowed() {
         return false;

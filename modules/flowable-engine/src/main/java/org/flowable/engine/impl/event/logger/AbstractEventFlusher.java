@@ -27,7 +27,7 @@ public abstract class AbstractEventFlusher implements EventFlusher {
 
     @Override
     public void closed(CommandContext commandContext) {
-        // Not interested in closed
+        // 未关注已关闭方法
     }
 
     @Override
