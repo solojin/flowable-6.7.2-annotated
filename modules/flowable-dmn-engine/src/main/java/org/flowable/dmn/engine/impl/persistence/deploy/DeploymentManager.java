@@ -58,10 +58,11 @@ public class DeploymentManager {
 
     public DecisionEntity findDeployedDecisionById(String decisionId) {
         if (decisionId == null) {
+            // 非法决策ID值：空值
             throw new FlowableException("Invalid decision id : null");
         }
 
-        // first try the cache
+        // 首先尝试缓存
         DecisionCacheEntry cacheEntry = decisionCache.get(decisionId);
         DecisionEntity decision = cacheEntry != null ? cacheEntry.getDecisionEntity() : null;
 
@@ -130,7 +131,7 @@ public class DeploymentManager {
     }
 
     /**
-     * Resolving the decision will fetch the DMN, parse it and store the {@link org.flowable.dmn.model.DmnDefinition} in memory.
+     * 解析决策获取DMN，解析它并将Dmn定义{@ link org.flowable.DMN.model.DmnDefinition }存储在内存中。
      */
     public DecisionCacheEntry resolveDecision(DmnDecision decision) {
         String decisionId = decision.getId();
@@ -163,10 +164,10 @@ public class DeploymentManager {
             throw new FlowableObjectNotFoundException("Could not find a deployment with id '" + deploymentId + "'.");
         }
 
-        // Remove any dmn definition from the cache
+        // 从缓存中删除任何dmn定义
         List<DmnDecision> definitions = new DecisionQueryImpl().deploymentId(deploymentId).list();
 
-        // Delete data
+        // 删除数据
         deploymentEntityManager.deleteDeployment(deploymentId);
 
         for (DmnDecision definition : definitions) {
