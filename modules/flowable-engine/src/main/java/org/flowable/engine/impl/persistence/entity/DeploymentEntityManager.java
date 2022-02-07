@@ -24,16 +24,22 @@ import org.flowable.engine.repository.Deployment;
  */
 public interface DeploymentEntityManager extends EntityManager<DeploymentEntity> {
 
+    // 根据生命周期查询部署
     List<Deployment> findDeploymentsByQueryCriteria(DeploymentQueryImpl deploymentQuery);
 
+    // 获取部署资源名称
     List<String> getDeploymentResourceNames(String deploymentId);
 
+    // 根据本地方法查询部署
     List<Deployment> findDeploymentsByNativeQuery(Map<String, Object> parameterMap);
 
+    // 根据本地方法查询部署数量
     long findDeploymentCountByNativeQuery(Map<String, Object> parameterMap);
 
+    // 根据生命周期查询部署数量
     long findDeploymentCountByQueryCriteria(DeploymentQueryImpl deploymentQuery);
 
+    // 移除部署
     void deleteDeployment(String deploymentId, boolean cascade);
 
 }

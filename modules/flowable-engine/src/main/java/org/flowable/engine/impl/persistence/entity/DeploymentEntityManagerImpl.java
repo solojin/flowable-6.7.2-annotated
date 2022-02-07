@@ -96,9 +96,9 @@ public class DeploymentEntityManagerImpl
 
             removeTimerStartJobs(processDefinition);
 
-            // If previous process definition version has a timer/signal/message start event, it must be added
-            // Only if the currently deleted process definition is the latest version,
-            // we fall back to the previous timer/signal/message start event
+            // 如果以前的流程定义版本有计时器/信号/消息启动事件，则必须添加该事件
+            // 仅当当前删除的流程定义是最新版本时，
+            // 我们回到上一个计时器/信号/消息启动事件
 
             restorePreviousStartEventsIfNeeded(processDefinition);
         }
@@ -109,8 +109,8 @@ public class DeploymentEntityManagerImpl
     }
 
     protected void updateRelatedModels(String deploymentId) {
-        // Remove the deployment link from any model.
-        // The model will still exists, as a model is a source for a deployment model and has a different lifecycle
+        // 从任何模型中删除部署链接。
+        // 模型仍然存在，因为模型是部署模型的源，并且具有不同的生命周期
         List<Model> models = new ModelQueryImpl().deploymentId(deploymentId).list();
         for (Model model : models) {
             ModelEntity modelEntity = (ModelEntity) model;
@@ -168,7 +168,7 @@ public class DeploymentEntityManagerImpl
         ProcessDefinitionEntity latestProcessDefinition = findLatestProcessDefinition(processDefinition);
         if (latestProcessDefinition != null && processDefinition.getId().equals(latestProcessDefinition.getId())) {
 
-            // Try to find a previous version (it could be some versions are missing due to deletions)
+            // 尝试查找以前的版本（可能是由于删除而缺少某些版本）
             ProcessDefinition previousProcessDefinition = findNewLatestProcessDefinitionAfterRemovalOf(processDefinition);
             if (previousProcessDefinition != null) {
 
@@ -302,8 +302,8 @@ public class DeploymentEntityManagerImpl
 
     protected ProcessDefinition findNewLatestProcessDefinitionAfterRemovalOf(ProcessDefinition processDefinitionToBeRemoved) {
 
-        // The latest process definition is not necessarily the one with 'version -1' (some versions could have been deleted)
-        // Hence, the following logic
+        // 最新的流程定义不一定是带有“版本-1”的流程定义（某些版本可能已被删除）
+        // 因此，遵循以下逻辑
 
         ProcessDefinitionQueryImpl query = new ProcessDefinitionQueryImpl();
         query.processDefinitionKey(processDefinitionToBeRemoved.getKey());
