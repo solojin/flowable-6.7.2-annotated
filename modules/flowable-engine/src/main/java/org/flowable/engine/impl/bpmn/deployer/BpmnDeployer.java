@@ -60,6 +60,7 @@ public class BpmnDeployer implements EngineDeployer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BpmnDeployer.class);
 
+    // ID生成器
     protected IdGenerator idGenerator;
     protected ParsedDeploymentBuilderFactory parsedDeploymentBuilderFactory;
     protected BpmnDeploymentHelper bpmnDeploymentHelper;
@@ -71,8 +72,7 @@ public class BpmnDeployer implements EngineDeployer {
     public void deploy(EngineDeployment deployment, Map<String, Object> deploymentSettings) {
         LOGGER.debug("Processing deployment {}", deployment.getName());
 
-        // The ParsedDeployment represents the deployment, the process definitions, and the BPMN
-        // resource, parse, and model associated with each process definition.
+        // 解析部署包含部署、流程定义和BPMN与每个流程定义关联的资源、解析和模型.
         ParsedDeployment parsedDeployment = parsedDeploymentBuilderFactory
                 .getBuilderForDeploymentAndSettings(deployment, deploymentSettings)
                 .build();
@@ -117,9 +117,8 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Creates new diagrams for process definitions if the deployment is new, the process definition in question supports it, and the engine is configured to make new diagrams.
-     *
-     * When this method creates a new diagram, it also persists it via the ResourceEntityManager and adds it to the resources of the deployment.
+     * 如果部署是新的，为流程定义创建新图表、相关流程定义支持它，并且配置引擎以创建新图表。
+     * 当此方法创建新图表时，它还通过资源实体管理器将其持久化，并将其添加到部署的资源中。
      */
     protected void createAndPersistNewDiagramsIfNeeded(ParsedDeployment parsedDeployment) {
         final ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration();
@@ -140,8 +139,8 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Updates all the process definition entities to have the correct diagram resource name. Must be called after createAndPersistNewDiagramsAsNeeded to ensure that any newly-created diagrams already
-     * have their resources attached to the deployment.
+     * 更新所有流程定义实体，使其具有正确的图表资源名称。
+     * 必须在createAndPersistNewDiagramsAsNeeded方法之后调用，以确保所有新创建的图都已将他们的资源附加到部署中。
      */
     protected void setProcessDefinitionDiagramNames(ParsedDeployment parsedDeployment) {
         Map<String, EngineResource> resources = parsedDeployment.getDeployment().getResources();
@@ -153,7 +152,8 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Constructs a map from new ProcessDefinitionEntities to the previous version by key and tenant. If no previous version exists, no map entry is created.
+     * 由主键和租户构造从新P流程定义实体到上一版本的映射。
+     * 如果不存在以前的版本，则不会创建映射条目。
      */
     protected Map<ProcessDefinitionEntity, ProcessDefinitionEntity> getPreviousVersionsOfProcessDefinitions(
             ParsedDeployment parsedDeployment) {
@@ -172,7 +172,8 @@ public class BpmnDeployer implements EngineDeployer {
     }
     
     /**
-     * Constructs a map from new ProcessDefinitionEntities to the previous derived from version by key and tenant. If no previous version exists, no map entry is created.
+     * 构造一个映射从新的流程定义实体到根据主键和租户从版本派生的上一个流程定义实体。
+     * 如果不存在以前的版本，则不会创建映射条目。
      */
     protected Map<ProcessDefinitionEntity, ProcessDefinitionEntity> getPreviousDerivedFromVersionsOfProcessDefinitions(
             ParsedDeployment parsedDeployment) {
@@ -191,8 +192,9 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Sets the version on each process definition entity, and the identifier. If the map contains an older version for a process definition, then the version is set to that older entity's version
-     * plus one; otherwise it is set to 1. Also dispatches an ENTITY_CREATED event.
+     * 设置每个流程定义实体的版本和标识符。
+     * 如果映射包含流程定义的旧版本，则该版本将设置为该旧实体的版本加一；否则设置为1.
+     * 还调度实体创建 ENTITY_CREATED 事件。
      */
     protected void setProcessDefinitionVersionsAndIds(ParsedDeployment parsedDeployment,
             Map<ProcessDefinitionEntity, ProcessDefinitionEntity> mapNewToOldProcessDefinitions) {
@@ -274,7 +276,7 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Saves each process definition. It is assumed that the deployment is new, the definitions have never been saved before, and that they have all their values properly set up.
+     * 保存每个进程定义。假设部署是新的，之前从未保存过定义，并且它们的所有值都已正确设置.
      */
     protected void persistProcessDefinitionsAndAuthorizations(ParsedDeployment parsedDeployment) {
         CommandContext commandContext = Context.getCommandContext();
@@ -310,9 +312,9 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Returns the ID to use for a new process definition; subclasses may override this to provide their own identification scheme.
-     *
-     * Process definition ids NEED to be unique across the whole engine!
+     * 返回用于新进程定义的ID;
+     * 子类可以覆盖此项以提供自己的标识方案。
+     * 整个引擎中的流程定义ID必须是唯一的！
      */
     protected String getIdForNewProcessDefinition(ProcessDefinitionEntity processDefinition) {
         String prefixId = "";
@@ -323,9 +325,9 @@ public class BpmnDeployer implements EngineDeployer {
         String nextId = idGenerator.getNextId();
 
         String result = prefixId + processDefinition.getKey() + ":" + processDefinition.getVersion() + ":" + nextId; // ACT-505
-        // ACT-115: maximum id length is 64 characters
+        // ACT-115: id的最大长度为64个字符
         if (result.length() > 64) {
-            // The length is exceeded due to the long process definition key
+            // 由于长度超出了长进程定义键
             result = prefixId + nextId;
         }
 
@@ -333,7 +335,7 @@ public class BpmnDeployer implements EngineDeployer {
     }
 
     /**
-     * Loads the persisted version of each process definition and set values on the in-memory version to be consistent.
+     * 加载每个进程定义的持久化版本，并将内存版本上的值设置为一致。
      */
     protected void makeProcessDefinitionsConsistentWithPersistedVersions(ParsedDeployment parsedDeployment) {
         for (ProcessDefinitionEntity processDefinition : parsedDeployment.getAllProcessDefinitions()) {

@@ -17,9 +17,12 @@ import java.util.Map;
 import org.flowable.common.engine.api.repository.EngineDeployment;
 
 /**
+ * 引擎部署器，实现类有BPMN部署器BpmnDeployer，DMN部署器DmnDeployer，CMMN部署器CmmnDeployer，
+ * 规则部署器RulesDeployer，事件部署器EventDeployer，表单部署器FormDeployer，应用部署器AppDeployer
  * @author Tijs Rademakers
  */
 public interface EngineDeployer {
+
 
     void deploy(EngineDeployment deployment, Map<String, Object> deploymentSettings);
 }
