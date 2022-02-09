@@ -21,46 +21,46 @@ import org.flowable.common.engine.impl.interceptor.Session;
 import org.flowable.common.engine.impl.persistence.entity.Entity;
 
 /**
- * This is a cache for {@link Entity} instances during the execution of one {@link Command}.
+ * 这是在执行一个命令{@link命令}期间实体{@link Entity}实例的缓存.
  * 
  * @author Joram Barrez
  */
 public interface EntityCache extends Session {
 
     /**
-     * Returns all cached {@link Entity} instances as a map with following structure: { entityClassName, {entityId, entity} }
+     * 以Map映射的形式返回所有缓存的实体{@link Entity}实例，其结构如下: { entityClassName, {entityId, entity} }
      */
     Map<Class<?>, Map<String, CachedEntity>> getAllCachedEntities();
 
     /**
-     * Adds the gives {@link Entity} to the cache.
+     * 将实体{@link Entity}添加到缓存中。
      * 
      * @param entity
-     *            The {@link Entity} instance
+     *             实体{@link Entity} 实例
      * @param storeState
-     *            If true, the current state {@link Entity#getPersistentState()} will be stored for future diffing. Note that, if false, the {@link Entity} will always be seen as changed.
-     * @return Returns a {@link CachedEntity} instance, which can be enriched later on.
+     *            如果为true，将存储当前状态{@link Entity#getPersistentState（）}，以备将来进行区分。请注意，如果为false，实体{@link Entity}将始终被视为已更改。
+     * @return 返回一个缓存实体{@link CachedEntity}实例，稍后可以对其进行充实。
      */
     CachedEntity put(Entity entity, boolean storeState);
 
     /**
-     * Returns the cached {@link Entity} instance of the given class with the provided id. Returns null if such a {@link Entity} cannot be found.
+     * 使用提供的id返回给定类的缓存实体{@link Entity}实例。如果找不到这样的实体{@link Entity}，则返回null。
      */
     <T> T findInCache(Class<T> entityClass, String id);
 
     /**
-     * Returns all cached {@link Entity} instances of a given type. Returns an empty list if no instances of the given type exist.
+     * 返回给定类型的所有缓存的实体{@link Entity}实例。 如果不存在给定类型的实例，则返回空列表。
      */
     <T> List<T> findInCache(Class<T> entityClass);
 
     /**
-     * Returns all {@link CachedEntity} instances for the given type. The difference with {@link #findInCache(Class)} is that here the whole {@link CachedEntity} is returned, which gives access to the
-     * persistent state at the moment of putting it in the cache.
+     * 返回给定类型的所有实体{@ link cachedential }实例。
+     * 与{@link#findInCache（Class）}的不同之处在于，这里返回整个缓存实体{@link CachedEntity}，它允许访问将其放入缓存时的持久状态。
      */
     <T> Collection<CachedEntity> findInCacheAsCachedObjects(Class<T> entityClass);
 
     /**
-     * Removes the {@link Entity} of the given type with the given id from the cache.
+     * 从缓存中删除具有给定id的给定类型的实体{@link Entity}。
      */
     void cacheRemove(Class<?> entityClass, String entityId);
 }
