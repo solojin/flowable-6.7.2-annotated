@@ -34,7 +34,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Default cache: keep everything in memory, unless a limit is set.
+ * 默认缓存：将所有内容保留在内存中，除非设置了限制。
+ * 用Map结构存储缓存信息，缓存实体为ProcessDefinitionInfoCacheObject流程定义缓存对象
  * 
  * @author Tijs Rademakers
  */
@@ -45,25 +46,28 @@ public class ProcessDefinitionInfoCache implements DeploymentCache<ProcessDefini
     protected Map<String, ProcessDefinitionInfoCacheObject> cache;
     protected CommandExecutor commandExecutor;
 
-    /** Cache with no limit */
+    /** 不做限制的缓存 */
     public ProcessDefinitionInfoCache(CommandExecutor commandExecutor) {
         this.commandExecutor = commandExecutor;
+        // 译者注：Collections.synchronizedMap的同步Map方法效率比较低，因为内部使用的是Synchronized锁，推荐使用JUC包下的ConcurrentHashMap实现
         this.cache = Collections.synchronizedMap(new HashMap<>());
     }
 
-    /** Cache which has a hard limit: no more elements will be cached than the limit. */
+    /** 具有硬限制的缓存：缓存的元素数量不会超过int limit该限制。 */
     public ProcessDefinitionInfoCache(CommandExecutor commandExecutor, final int limit) {
         this.commandExecutor = commandExecutor;
+        // 译者注：Collections.synchronizedMap的同步Map方法效率比较低，因为内部使用的是Synchronized锁，推荐使用JUC包下的ConcurrentHashMap实现
         this.cache = Collections.synchronizedMap(new LinkedHashMap<String, ProcessDefinitionInfoCacheObject>(limit + 1, 0.75f, true) {
-            // +1 is needed, because the entry is inserted first, before it is removed
-            // 0.75 is the default (see javadocs)
-            // true will keep the 'access-order', which is needed to have a real LRU cache
+            // +1是必需的，因为在删除条目之前先插入该条目
+            // 加载因子默认值为0.75（参见javadocs）
+            // true将保留“访问顺序”，这是实现LRU缓存算法（即最近最少使用页面置换算法）所需的字段
             private static final long serialVersionUID = 1L;
 
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, ProcessDefinitionInfoCacheObject> eldest) {
                 boolean removeEldest = size() > limit;
                 if (removeEldest) {
+                    // 已达到缓存限制，{}将被逐出
                     LOGGER.trace("Cache limit is reached, {} will be evicted", eldest.getKey());
                 }
                 return removeEldest;
@@ -144,6 +148,7 @@ public class ProcessDefinitionInfoCache implements DeploymentCache<ProcessDefini
                     ObjectNode infoNode = (ObjectNode) objectMapper.readTree(infoBytes);
                     cacheObject.setInfoNode(infoNode);
                 } catch (Exception e) {
+                    // 读取进程定义的json info节点时出错
                     throw new FlowableException("Error reading json info node for process definition " + processDefinitionId, e);
                 }
             }
