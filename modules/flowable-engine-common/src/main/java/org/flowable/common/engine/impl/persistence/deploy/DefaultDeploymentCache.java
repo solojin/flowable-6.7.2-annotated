@@ -22,8 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default cache: keep everything in memory, unless a limit is set.
- * 
+ * 默认缓存：将所有内容保留在内存中，除非设置了限制。
+ * 用Map结构存储缓存数据
+ *
  * @author Joram Barrez
  */
 public class DefaultDeploymentCache<T> implements DeploymentCache<T> {
@@ -32,24 +33,28 @@ public class DefaultDeploymentCache<T> implements DeploymentCache<T> {
 
     protected Map<String, T> cache;
 
-    /** Cache with no limit */
+    /** 不做限制的缓存
+     * 译者注：Collections.synchronizedMap的同步Map方法效率比较低，因为内部使用的是Synchronized锁，推荐使用JUC包下的ConcurrentHashMap实现
+     */
     public DefaultDeploymentCache() {
         this.cache = Collections.synchronizedMap(new HashMap<>());
     }
 
     /**
-     * Cache which has a hard limit: no more elements will be cached than the limit.
+     * 具有硬限制的缓存：缓存的元素不会超过参数int limit的限制。
      */
     public DefaultDeploymentCache(final int limit) {
+        // 译者注：Collections.synchronizedMap的同步Map方法效率比较低，因为内部使用的是Synchronized锁，推荐使用JUC包下的ConcurrentHashMap实现
         this.cache = Collections.synchronizedMap(new LinkedHashMap<String, T>(limit + 1, 0.75f, true) { // +1 is needed, because the entry is inserted first, before it is removed
-            // 0.75 is the default (see javadocs)
-            // true will keep the 'access-order', which is needed to have a real LRU cache
+            // 加载因子默认值为0.75（参见javadocs）
+            // true将保留“访问顺序”，这是实现LRU缓存算法（即最近最少使用页面置换算法）所需的字段
             private static final long serialVersionUID = 1L;
 
             @Override
             protected boolean removeEldestEntry(Map.Entry<String, T> eldest) {
                 boolean removeEldest = size() > limit;
                 if (removeEldest && LOGGER.isTraceEnabled()) {
+                    // 已达到缓存限制，{}将被逐出
                     LOGGER.trace("Cache limit is reached, {} will be evicted", eldest.getKey());
                 }
                 return removeEldest;

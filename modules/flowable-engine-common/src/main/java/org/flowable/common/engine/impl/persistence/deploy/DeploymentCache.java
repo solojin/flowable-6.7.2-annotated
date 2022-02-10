@@ -15,23 +15,31 @@ package org.flowable.common.engine.impl.persistence.deploy;
 import java.util.Collection;
 
 /**
- * Interface for cache implementations.
+ * 缓存实现的接口类。
+ * 泛型参数
  * 
  * @author Joram Barrez
  */
 public interface DeploymentCache<T> {
 
+    // 根据ID获取缓存实体
     T get(String id);
 
+    // 根据ID判断是否包含
     boolean contains(String id);
 
+    // 根据ID新的缓存实体
     void add(String id, T object);
 
+    // 根据ID移除缓存实体
     void remove(String id);
 
+    // 清除全部缓存
     void clear();
-    
+
+    // 获取所有缓存实体
     Collection<T> getAll();
 
+    // 获取缓存实体的数量
     int size();
 }
