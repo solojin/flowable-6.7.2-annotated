@@ -17,11 +17,15 @@ import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.flowable.job.api.Job;
 
 /**
+ * 作业处理器接口类
+ *
  * @author Tom Baeyens
  */
 public interface JobHandler {
 
+    // 获取作业处理器类型
     String getType();
 
+    // 执行作业
     void execute(Job job, String configuration, ExecutionEntity execution, CommandContext commandContext);
 }
