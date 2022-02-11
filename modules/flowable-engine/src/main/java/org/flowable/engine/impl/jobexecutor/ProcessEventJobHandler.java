@@ -24,28 +24,36 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
+ * 流程事件作业处理器
+ *
  * @author Daniel Meyer
  * @author Joram Barrez
  */
 public class ProcessEventJobHandler implements JobHandler {
 
+    // 类型：事件
     public static final String TYPE = "event";
 
+    // 获取作业处理器类型
     @Override
     public String getType() {
         return TYPE;
     }
 
+    // 执行作业，job工作实体，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
+        // 根据命令上下文获取流程引擎配置
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
+        // 根据流程引擎配置获取事件订阅配置以及事件订阅服务类
         EventSubscriptionService eventSubscriptionService = processEngineConfiguration.getEventSubscriptionServiceConfiguration().getEventSubscriptionService();
 
-        // lookup subscription:
+        // 查找订阅：
         EventSubscriptionEntity eventSubscriptionEntity = eventSubscriptionService.findById(configuration);
 
-        // if event subscription is null, ignore
+        // 如果事件订阅为null，则忽略
         if (eventSubscriptionEntity != null) {
+            // 事件订阅工具类，接收事件方法
             EventSubscriptionUtil.eventReceived(eventSubscriptionEntity, null, false);
         }
 
