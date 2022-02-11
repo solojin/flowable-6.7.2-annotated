@@ -24,24 +24,35 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
+ * 触发器定时事件作业处理器
+ *
  * @author Joram Barrez
  */
 public class TriggerTimerEventJobHandler implements JobHandler {
 
+    // 类型：触发器定时
     public static final String TYPE = "trigger-timer";
 
+    // 获取作业处理器类型
     @Override
     public String getType() {
         return TYPE;
     }
 
+    // 执行作业，job工作实体，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
+        // 变量范围强制转换执行器实体类
         ExecutionEntity executionEntity = (ExecutionEntity) variableScope;
+        // 通过命令上下文工具类获取议程，设置计划触发执行操作
         CommandContextUtil.getAgenda(commandContext).planTriggerExecutionOperation(executionEntity);
+        // 根据命令上下文获取流程引擎配置
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
+        // 根据流程引擎配置获取Flowable事件调度器
         FlowableEventDispatcher eventDispatcher = processEngineConfiguration.getEventDispatcher();
+        // 如果Flowable事件调度器存在且已开启
         if (eventDispatcher != null && eventDispatcher.isEnabled()) {
+            // 调度执行事件
             eventDispatcher.dispatchEvent(FlowableEventBuilder.createEntityEvent(FlowableEngineEventType.TIMER_FIRED, job),
                     processEngineConfiguration.getEngineCfgKey());
         }
