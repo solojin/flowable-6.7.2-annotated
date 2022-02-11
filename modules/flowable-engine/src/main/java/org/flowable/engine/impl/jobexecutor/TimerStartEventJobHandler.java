@@ -30,24 +30,31 @@ import org.flowable.variable.api.delegate.VariableScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 定时启动事件作业处理器
+ * 可以在开始事件中设置定时启动，这样当流程部署完成后，超过预定时间，流程实例自动启动
+ * */
 public class TimerStartEventJobHandler extends TimerEventHandler implements JobHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TimerStartEventJobHandler.class);
 
+    // 类型：定时启动事件
     public static final String TYPE = "timer-start-event";
 
+    // 获取作业处理器类型
     @Override
     public String getType() {
         return TYPE;
     }
 
+    // 执行作业，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
 
         ProcessDefinitionEntity processDefinitionEntity = ProcessDefinitionUtil
                 .getProcessDefinitionFromDatabase(job.getProcessDefinitionId()); // From DB -> need to get latest suspended state
         if (processDefinitionEntity == null) {
-            throw new FlowableException("Could not find process definition needed for timer start event");
+            throw new FlowableException("找不到定时器启动事件所需的进程定义");
         }
 
         try {
@@ -59,12 +66,13 @@ public class TimerStartEventJobHandler extends TimerEventHandler implements JobH
                             processEngineConfiguration.getEngineCfgKey());
                 }
 
-                // Find initial flow element matching the signal start event
+                // 找到与信号启动事件匹配的初始流程元素
                 org.flowable.bpmn.model.Process process = ProcessDefinitionUtil.getProcess(job.getProcessDefinitionId());
                 String activityId = TimerEventHandler.getActivityIdFromConfiguration(configuration);
                 if (activityId != null) {
                     FlowElement flowElement = process.getFlowElement(activityId, true);
                     if (flowElement == null) {
+                        // 找不到与activityId匹配的流程元素
                         throw new FlowableException("Could not find matching FlowElement for activityId " + activityId);
                     }
                     ProcessInstanceHelper processInstanceHelper = processEngineConfiguration.getProcessInstanceHelper();
@@ -75,13 +83,17 @@ public class TimerStartEventJobHandler extends TimerEventHandler implements JobH
                 }
 
             } else {
+                // 忽略挂起的进程定义{}的定时器
                 LOGGER.debug("ignoring timer of suspended process definition {}", processDefinitionEntity.getName());
             }
         } catch (RuntimeException e) {
+            // 定时器执行期间出现异常
             LOGGER.error("exception during timer execution", e);
             throw e;
         } catch (Exception e) {
+            // 定时器执行期间出现异常
             LOGGER.error("exception during timer execution", e);
+            // // 定时器执行期间出现异常
             throw new FlowableException("exception during timer execution: " + e.getMessage(), e);
         }
     }
