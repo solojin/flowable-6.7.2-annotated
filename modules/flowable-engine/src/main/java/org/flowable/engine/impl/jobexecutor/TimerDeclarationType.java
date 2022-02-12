@@ -18,9 +18,18 @@ import org.flowable.common.engine.impl.calendar.CycleBusinessCalendar;
 import org.flowable.common.engine.impl.calendar.DueDateBusinessCalendar;
 import org.flowable.common.engine.impl.calendar.DurationBusinessCalendar;
 
+/**
+ * 定时器声明类型 枚举类
+ */
 public enum TimerDeclarationType {
+    /**
+     * DueDateBusinessCalendar 截止日期业务日程表
+     * DurationBusinessCalendar 持续时间业务日程表
+     * CycleBusinessCalendar 循环业务日程表
+     */
     DATE(DueDateBusinessCalendar.NAME), DURATION(DurationBusinessCalendar.NAME), CYCLE(CycleBusinessCalendar.NAME);
 
+    // 日程表名称
     public final String calendarName;
 
     TimerDeclarationType(String calendarName) {
