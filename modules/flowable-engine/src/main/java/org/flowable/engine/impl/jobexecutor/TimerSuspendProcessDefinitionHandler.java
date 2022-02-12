@@ -23,6 +23,8 @@ import org.flowable.variable.api.delegate.VariableScope;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * 定时器挂起进程定义处理器
+ *
  * @author Joram Barrez
  */
 public class TimerSuspendProcessDefinitionHandler extends TimerChangeProcessDefinitionSuspensionStateJobHandler {

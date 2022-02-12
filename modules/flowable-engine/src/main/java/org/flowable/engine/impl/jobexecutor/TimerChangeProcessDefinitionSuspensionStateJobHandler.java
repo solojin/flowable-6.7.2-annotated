@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
+ * 定时器修改进程定义挂起状态作业处理程序
+ *
  * @author Joram Barrez
  */
 public abstract class TimerChangeProcessDefinitionSuspensionStateJobHandler implements JobHandler {

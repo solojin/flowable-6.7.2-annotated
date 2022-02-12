@@ -26,6 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 定时器执行嵌套活动作业处理器
+ * 即任务超时作业。在实际项目中，可以为任务节点绑定一个定时边界事件，如果任务节点在指定时间之内没有结束，则流程引擎实例会按照边界事件的方向执行
+ *
  * @author Tom Baeyens
  * @author Joram Barrez
  */
@@ -33,6 +36,7 @@ public class TimerExecuteNestedActivityJobHandler extends TimerEventHandler impl
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TimerExecuteNestedActivityJobHandler.class);
 
+    // 类型：定时器-转换
     public static final String TYPE = "timer-transition";
     public static final String PROPERTYNAME_TIMER_ACTIVITY_ID = "activityId";
     public static final String PROPERTYNAME_END_DATE_EXPRESSION = "timerEndDate";
@@ -50,6 +54,7 @@ public class TimerExecuteNestedActivityJobHandler extends TimerEventHandler impl
         ActivityImpl borderEventActivity = execution.getProcessDefinition().findActivity(nestedActivityId);
 
         if (borderEventActivity == null) {
+            // 触发定时器时出错：未找到边界事件活动“+nestedActivityId+”
             throw new ActivitiException("Error while firing timer: border event activity " + nestedActivityId + " not found");
         }
 
@@ -65,15 +70,19 @@ public class TimerExecuteNestedActivityJobHandler extends TimerEventHandler impl
                     .getActivityBehavior()
                     .execute(execution);
         } catch (RuntimeException e) {
+            // 定时器执行期间出现异常
             LOGGER.error("exception during timer execution", e);
             throw e;
 
         } catch (Exception e) {
+            // 定时器执行期间出现异常
             LOGGER.error("exception during timer execution", e);
+            // 定时器执行期间出现异常
             throw new ActivitiException("exception during timer execution: " + e.getMessage(), e);
         }
     }
 
+    // 条件调度超时活动
     protected void dispatchActivityTimeoutIfNeeded(Job timerEntity, ExecutionEntity execution, CommandContext commandContext) {
 
         String nestedActivityId = TimerEventHandler.getActivityIdFromConfiguration(timerEntity.getJobHandlerConfiguration());
@@ -88,25 +97,27 @@ public class TimerExecuteNestedActivityJobHandler extends TimerEventHandler impl
         }
     }
 
+    // 调度超时执行
     protected void dispatchExecutionTimeOut(Job job, ExecutionEntity execution, CommandContext commandContext) {
-        // subprocesses
+        // 子流程
         for (ExecutionEntity subExecution : execution.getExecutions()) {
             dispatchExecutionTimeOut(job, subExecution, commandContext);
         }
 
-        // call activities
+        // 调用活动
         ExecutionEntity subProcessInstance = commandContext.getExecutionEntityManager().findSubProcessInstanceBySuperExecutionId(execution.getId());
         if (subProcessInstance != null) {
             dispatchExecutionTimeOut(job, subProcessInstance, commandContext);
         }
 
-        // activity with timer boundary event
+        // 带有定时器边界事件的活动
         ActivityImpl activity = execution.getActivity();
         if (activity != null && activity.getActivityBehavior() != null) {
             dispatchActivityTimeOut(job, activity, execution, commandContext);
         }
     }
 
+    // 调度超时活动
     protected void dispatchActivityTimeOut(Job job, ActivityImpl activity, ExecutionEntity execution, CommandContext commandContext) {
         commandContext.getEventDispatcher().dispatchEvent(
                 ActivitiEventBuilder.createActivityCancelledEvent(activity.getId(),
