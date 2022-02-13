@@ -39,7 +39,7 @@ public class TriggerTimerEventJobHandler implements JobHandler {
         return TYPE;
     }
 
-    // 执行作业，job工作实体，configuration配置，variableScope变量范围，commandContext命令上下文
+    // 执行作业，job作业实体，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
         // 变量范围强制转换执行器实体类

@@ -19,24 +19,30 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * 定时器修改进程定义挂起状态作业处理程序
+ * 定时器修改流程定义挂起状态作业处理器
  *
  * @author Joram Barrez
  */
 public abstract class TimerChangeProcessDefinitionSuspensionStateJobHandler implements JobHandler {
 
+    // 作业处理器包含的流程实例
     private static final String JOB_HANDLER_CFG_INCLUDE_PROCESS_INSTANCES = "includeProcessInstances";
 
+    // 创建作业处理器配置
     public static String createJobHandlerConfiguration(boolean includeProcessInstances) {
+        // 通过命令上下文工具类获取流程引擎配置器
         ObjectNode jsonNode = CommandContextUtil.getProcessEngineConfiguration().getObjectMapper().createObjectNode();
         jsonNode.put(JOB_HANDLER_CFG_INCLUDE_PROCESS_INSTANCES, includeProcessInstances);
         return jsonNode.toString();
     }
 
+    // 获取标志位，是否包含流程实例
     public static boolean getIncludeProcessInstances(JsonNode configNode) {
+        // 从配置节点中获取属性：JOB_HANDLER_CFG_INCLUDE_PROCESS_INSTANCES 作业处理器包含的流程实例
         if (configNode.has(JOB_HANDLER_CFG_INCLUDE_PROCESS_INSTANCES)) {
             return configNode.get(JOB_HANDLER_CFG_INCLUDE_PROCESS_INSTANCES).asBoolean();
         }
+        // 默认返回false
         return false;
     }
 
