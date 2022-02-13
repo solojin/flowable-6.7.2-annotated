@@ -23,12 +23,14 @@ import org.flowable.variable.api.delegate.VariableScope;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * 定时器挂起进程定义处理器
+ * 定时器挂起流程定义处理器
+ * 继承定时器修改流程定义挂起状态作业处理器
  *
  * @author Joram Barrez
  */
 public class TimerSuspendProcessDefinitionHandler extends TimerChangeProcessDefinitionSuspensionStateJobHandler {
 
+    // 类型：挂起流程定义
     public static final String TYPE = "suspend-processdefinition";
 
     @Override
@@ -36,21 +38,30 @@ public class TimerSuspendProcessDefinitionHandler extends TimerChangeProcessDefi
         return TYPE;
     }
 
+    // 执行作业，job作业实体，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
+        // 根据命令上下文，通过命令上下文工具类获取流程引擎配置
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
-        
+
+        // 挂起流程实例标志位，默认false
         boolean suspendProcessInstances = false;
         try {
+            // 从流程引擎配置器获取配置节点
             JsonNode configNode = processEngineConfiguration.getObjectMapper().readTree(configuration);
+            // 获取标志位，是否包含流程实例
             suspendProcessInstances = getIncludeProcessInstances(configNode);
         } catch (Exception e) {
+            // 读取json值时出错
             throw new FlowableException("Error reading json value " + configuration, e);
         }
 
+        // 从作业实体获取流程定义ID
         String processDefinitionId = job.getProcessDefinitionId();
 
+        // 新建挂起流程定义命令
         SuspendProcessDefinitionCmd suspendProcessDefinitionCmd = new SuspendProcessDefinitionCmd(processDefinitionId, null, suspendProcessInstances, null, job.getTenantId());
+        // 执行挂起流程定义命令
         suspendProcessDefinitionCmd.execute(commandContext);
     }
 
