@@ -17,6 +17,7 @@ import org.flowable.engine.impl.cmd.JobRetryCmd;
 import org.flowable.job.service.impl.asyncexecutor.FailedJobCommandFactory;
 
 /**
+ * 默认失败作业命令工厂类
  * @author Saeid Mirzaei
  */
 public class DefaultFailedJobCommandFactory implements FailedJobCommandFactory {

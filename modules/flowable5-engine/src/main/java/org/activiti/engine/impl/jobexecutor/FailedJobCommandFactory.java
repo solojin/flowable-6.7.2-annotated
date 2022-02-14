@@ -14,6 +14,9 @@ package org.activiti.engine.impl.jobexecutor;
 
 import org.activiti.engine.impl.interceptor.Command;
 
+/**
+ * 失败作业命令工厂类
+ */
 public interface FailedJobCommandFactory {
 
     public Command<Object> getCommand(String jobId, Throwable exception);

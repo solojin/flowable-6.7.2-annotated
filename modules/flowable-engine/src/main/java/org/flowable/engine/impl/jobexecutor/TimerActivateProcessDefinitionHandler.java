@@ -23,17 +23,22 @@ import org.flowable.variable.api.delegate.VariableScope;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * 定时器激活流程定义处理器
+ *
  * @author Joram Barrez
  */
 public class TimerActivateProcessDefinitionHandler extends TimerChangeProcessDefinitionSuspensionStateJobHandler {
 
+    // 类型：激活流程定义
     public static final String TYPE = "activate-processdefinition";
 
+    // 获取类型
     @Override
     public String getType() {
         return TYPE;
     }
 
+    // 执行作业，job作业实体，configuration配置，variableScope变量范围，commandContext命令上下文
     @Override
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
@@ -43,6 +48,7 @@ public class TimerActivateProcessDefinitionHandler extends TimerChangeProcessDef
             JsonNode configNode = processEngineConfiguration.getObjectMapper().readTree(configuration);
             activateProcessInstances = getIncludeProcessInstances(configNode);
         } catch (Exception e) {
+            // 读取json值时出错
             throw new FlowableException("Error reading json value " + configuration, e);
         }
 

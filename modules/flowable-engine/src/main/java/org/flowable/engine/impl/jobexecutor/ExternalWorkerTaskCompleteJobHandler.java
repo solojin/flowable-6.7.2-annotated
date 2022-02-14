@@ -28,10 +28,13 @@ import org.flowable.variable.service.VariableService;
 import org.flowable.variable.service.impl.persistence.entity.VariableInstanceEntity;
 
 /**
+ * 外部工作者任务完成作业处理器
+ *
  * @author Filip Hrisafov
  */
 public class ExternalWorkerTaskCompleteJobHandler implements JobHandler {
 
+    // 类型：外部工作者完成
     public static final String TYPE = "external-worker-complete";
 
     @Override
@@ -43,6 +46,7 @@ public class ExternalWorkerTaskCompleteJobHandler implements JobHandler {
     public void execute(JobEntity job, String configuration, VariableScope variableScope, CommandContext commandContext) {
         ExecutionEntity executionEntity = (ExecutionEntity) variableScope;
 
+        // 标记外部工作者完成状态，并清除运行时变量信息
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
         VariableService variableService = processEngineConfiguration.getVariableServiceConfiguration().getVariableService();
         List<VariableInstanceEntity> jobVariables = variableService.findVariableInstanceBySubScopeIdAndScopeType(executionEntity.getId(), ScopeTypes.BPMN_EXTERNAL_WORKER);

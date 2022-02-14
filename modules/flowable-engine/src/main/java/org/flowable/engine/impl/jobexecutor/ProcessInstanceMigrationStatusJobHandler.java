@@ -25,8 +25,12 @@ import org.flowable.engine.migration.ProcessInstanceBatchMigrationResult;
 import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
+/**
+ * 流程实例迁移状态作业处理器
+ */
 public class ProcessInstanceMigrationStatusJobHandler extends AbstractProcessInstanceMigrationJobHandler {
 
+    // 类型： 流程迁移状态
     public static final String TYPE = "process-migration-status";
 
     @Override
