@@ -21,8 +21,12 @@ import org.flowable.job.service.JobHandler;
 import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
+/**
+ * BPMN历史清除作业处理器
+ */
 public class BpmnHistoryCleanupJobHandler implements JobHandler {
 
+    // 类型：BPMN历史清除
     public static final String TYPE = "bpmn-history-cleanup";
 
     private static final String DEFAULT_BATCH_NAME = "Flowable BPMN History Cleanup";
@@ -38,6 +42,7 @@ public class BpmnHistoryCleanupJobHandler implements JobHandler {
 
         int batchSize = processEngineConfiguration.getCleanInstancesBatchSize();
 
+        // 查询可清除的历史流程实例信息，并清除BPMN历史
         HistoricProcessInstanceQuery query = processEngineConfiguration.getHistoryCleaningManager().createHistoricProcessInstanceCleaningQuery();
         if (processEngineConfiguration.isCleanInstancesSequentially()) {
             query.deleteSequentiallyUsingBatch(batchSize, DEFAULT_BATCH_NAME);
@@ -45,6 +50,7 @@ public class BpmnHistoryCleanupJobHandler implements JobHandler {
             query.deleteInParallelUsingBatch(batchSize, DEFAULT_BATCH_NAME);
         }
 
+        // 批量查询，查询批量可清除信息，清除关联数据
         BatchQuery batchCleaningQuery = processEngineConfiguration.getHistoryCleaningManager().createBatchCleaningQuery();
         if (batchCleaningQuery != null) {
             batchCleaningQuery.deleteWithRelatedData();
