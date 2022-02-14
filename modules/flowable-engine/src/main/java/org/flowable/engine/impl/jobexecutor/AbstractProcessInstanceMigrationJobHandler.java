@@ -21,9 +21,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * 抽象流程实例迁移作业处理器
+ */
 public abstract class AbstractProcessInstanceMigrationJobHandler implements JobHandler {
 
+    // 批量结果状态标签
     public static final String BATCH_RESULT_STATUS_LABEL = "resultStatus";
+    // 批量结果信息标签
     public static final String BATCH_RESULT_MESSAGE_LABEL = "resultMessage";
 
     protected static final String CFG_LABEL_BATCH_ID = "batchId";

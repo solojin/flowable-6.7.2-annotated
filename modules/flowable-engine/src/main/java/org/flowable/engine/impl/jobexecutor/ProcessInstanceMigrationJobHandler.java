@@ -28,8 +28,12 @@ import org.flowable.variable.api.delegate.VariableScope;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * 流程实例迁移作业处理器
+ */
 public class ProcessInstanceMigrationJobHandler extends AbstractProcessInstanceMigrationJobHandler {
 
+    // 类型：流程迁移
     public static final String TYPE = "process-migration";
 
     @Override
