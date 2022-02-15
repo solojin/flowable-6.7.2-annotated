@@ -24,6 +24,8 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
+ * 并行多实例活动完成作业处理器
+ *
  * @author Filip Hrisafov
  */
 public class ParallelMultiInstanceActivityCompletionJobHandler  implements JobHandler {

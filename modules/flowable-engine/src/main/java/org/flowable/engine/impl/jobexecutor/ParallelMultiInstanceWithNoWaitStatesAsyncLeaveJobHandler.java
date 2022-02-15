@@ -31,6 +31,8 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
+ * 无等待状态的并行多实例异步离开作业处理器
+ *
  * @author Joram Barrez
  */
 public class ParallelMultiInstanceWithNoWaitStatesAsyncLeaveJobHandler implements JobHandler {
@@ -58,9 +60,9 @@ public class ParallelMultiInstanceWithNoWaitStatesAsyncLeaveJobHandler implement
                     DelegateExecution multiInstanceRootExecution = ExecutionGraphUtil.getMultiInstanceRootExecution(execution);
                     if (multiInstanceRootExecution != null) {
 
-                        // Optimization to do the active count here: if there are still active executions in the database, there's no need to do anything:
-                        // no need to fetch any variables such as the completed, nr of active, etc.
-                        // The job can simply be rescheduled and it will try the same logic again later as things are not yet done.
+                        // 优化此处的活动计数：如果数据库中仍有活动执行，则无需执行任何操作：
+                        // 无需获取任何变量，如已完成的、活动的nr等。
+                        // 这项工作可以简单地被重新安排，并且在事情尚未完成时，它将再次尝试相同的逻辑。
                         long activeChildExecutionCount = executionEntityManager.countActiveExecutionsByParentId(multiInstanceRootExecution.getId());
                         if (activeChildExecutionCount > 0) {
 
@@ -69,7 +71,7 @@ public class ParallelMultiInstanceWithNoWaitStatesAsyncLeaveJobHandler implement
                                 reCreateJob(processEngineConfiguration, execution);
 
                             } else {
-                                // If all the remaining execution are boundary event execution, the multi instance can be left.
+                                // 如果所有剩余的执行都是边界事件执行，则可以保留多实例。
                                 List<ExecutionEntity> boundaryEventChildExecutions = executionEntityManager
                                     .findExecutionsByParentExecutionAndActivityIds(multiInstanceRootExecution.getId(), boundaryEventActivityIds);
                                 if (activeChildExecutionCount <= boundaryEventChildExecutions.size()) {
@@ -93,8 +95,8 @@ public class ParallelMultiInstanceWithNoWaitStatesAsyncLeaveJobHandler implement
     }
 
     protected void reCreateJob(ProcessEngineConfigurationImpl processEngineConfiguration, ExecutionEntity execution) {
-        // Not the usual way of creating a job, as we specifically don't want the async executor to trigger.
-        // The job should be picked up in the next acquire cycle, as to not continuous loop.
+        // 这不是创建作业的常见方式，因为我们特别不希望异步执行器触发。
+        // 该作业应在下一个采集周期中提取，以避免连续循环。
         JobService jobService = processEngineConfiguration.getJobServiceConfiguration().getJobService();
         JobEntity newJob = JobUtil.createJob(execution, TYPE, processEngineConfiguration);
         jobService.createAsyncJobNoTriggerAsyncExecutor(newJob, true);
@@ -103,8 +105,8 @@ public class ParallelMultiInstanceWithNoWaitStatesAsyncLeaveJobHandler implement
 
     protected void leaveMultiInstance(ProcessEngineConfigurationImpl processEngineConfiguration, ExecutionEntity execution,
         ParallelMultiInstanceBehavior parallelMultiInstanceBehavior) {
-        // The ParallelMultiInstanceBehavior is implemented with a child execution leaving in mind.
-        // Hence why a random child execution is selected instead of passing the multi-instance root execution
+        // ParallelMultiInstanceBehavior的实现考虑了子执行。
+        // 因此选择随机子执行而不是传递多实例根执行
         boolean multiInstanceCompleted = parallelMultiInstanceBehavior.leaveAsync(execution);
         if (!multiInstanceCompleted) {
             reCreateJob(processEngineConfiguration, execution);
