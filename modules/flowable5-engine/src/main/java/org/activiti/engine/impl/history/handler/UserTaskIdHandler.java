@@ -18,8 +18,9 @@ import org.flowable.engine.delegate.TaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
 
 /**
- * Called when a task is created for a user-task activity. Allows recording task-id in historic activity.
- * 
+ * 为用户任务活动创建任务时调用。允许在历史活动中记录任务id。
+ *
+ * 负责更新在历史活动表ACT_HI_ACTINST中的任务ID值
  * @author Frederik Heremans
  */
 public class UserTaskIdHandler implements TaskListener {

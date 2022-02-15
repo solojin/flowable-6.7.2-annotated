@@ -22,6 +22,8 @@ import org.flowable.task.service.delegate.DelegateTask;
 import org.flowable.task.service.delegate.TaskListener;
 
 /**
+ * 负责调度执行delegateExpression方式创建的任务监听器
+ *
  * @author Joram Barrez
  */
 public class DelegateExpressionTaskListener implements TaskListener {
@@ -42,12 +44,13 @@ public class DelegateExpressionTaskListener implements TaskListener {
             TaskListener taskListener = (TaskListener) delegate;
             taskListener.notify(delegateTask);
         } else {
+            // 委托表达式“+ expression +”未解析为任务监听器的实现
             throw new FlowableIllegalArgumentException("Delegate expression " + expression + " did not resolve to an implementation of " + TaskListener.class);
         }
     }
 
     /**
-     * returns the expression text for this task listener.
+     * 返回此任务监听器的表达式文本。
      */
     public String getExpressionText() {
         return expression.getExpressionText();

@@ -18,6 +18,8 @@ import org.flowable.task.service.delegate.DelegateTask;
 import org.flowable.task.service.delegate.TaskListener;
 
 /**
+ * 负责调度执行expression方式创建的任务监听器
+ *
  * @author Joram Barrez
  */
 public class ExpressionTaskListener implements TaskListener {
@@ -34,7 +36,7 @@ public class ExpressionTaskListener implements TaskListener {
     }
 
     /**
-     * returns the expression text for this task listener.
+     * 返回此任务监听器的表达式文本。
      */
     public String getExpressionText() {
         return expression.getExpressionText();

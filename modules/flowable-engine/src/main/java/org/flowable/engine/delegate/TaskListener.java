@@ -14,7 +14,7 @@
 package org.flowable.engine.delegate;
 
 /**
- * Here for backwards compatibility, prefer use the {@link org.flowable.task.service.delegate.TaskListener}.
+ * 在这里，为了向后兼容，最好使用该任务监听器接口类{@link org.flowable.task.service.delegate.TaskListener}。
  *
  * @author Tom Baeyens
  * @author Joram Barrez

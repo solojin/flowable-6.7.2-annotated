@@ -19,6 +19,8 @@ import org.flowable.engine.delegate.TaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
 
 /**
+ * 负责更新在历史活动表ACT_HI_ACTINST中的任务节点负责人，对应该表的ASSIGNMENT_字段
+ *
  * @author Tom Baeyens
  */
 public class UserTaskAssignmentHandler implements TaskListener {

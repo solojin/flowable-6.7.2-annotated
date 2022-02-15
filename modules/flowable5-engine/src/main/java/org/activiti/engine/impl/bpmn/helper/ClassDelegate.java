@@ -45,9 +45,9 @@ import org.flowable.task.service.delegate.DelegateTask;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Helper class for bpmn constructs that allow class delegation.
+ * 用于允许类委派的bpmn构造的帮助器类。
  *
- * This class will lazily instantiate the referenced classes when needed at runtime.
+ * 在运行时需要时，该类将惰性地实例化引用的类。
  * 
  * @author Joram Barrez
  * @author Falko Menge
@@ -89,7 +89,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         this(clazz.getName(), fieldDeclarations, skipExpression);
     }
 
-    // Execution listener
+    // 执行 监听器
     @Override
     public void notify(DelegateExecution execution) {
         if (executionListenerInstance == null) {
@@ -111,7 +111,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         }
     }
 
-    // Task listener
+    // 任务 监听器
     @Override
     public void notify(DelegateTask delegateTask) {
         if (taskListenerInstance == null) {
@@ -135,7 +135,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         }
     }
 
-    // Activity Behavior
+    // 活动行为
     @Override
     public void execute(DelegateExecution execution) {
         ActivityExecution activityExecution = (ActivityExecution) execution;
@@ -165,7 +165,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         }
     }
 
-    // Signallable activity behavior
+    // 信号活动行为
     @Override
     public void signal(ActivityExecution execution, String signalName, Object signalData) throws Exception {
         if (activityBehaviorInstance == null) {
@@ -179,8 +179,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         }
     }
 
-    // Subprocess activityBehaviour
-
+    // 子流程活动行为
     @Override
     public void completing(DelegateExecution execution, DelegateExecution subProcessInstance) throws Exception {
         if (activityBehaviorInstance == null) {
@@ -219,7 +218,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         }
     }
 
-    // Adds properties to the given delegation instance (eg multi instance) if needed
+    // 如果需要，将属性添加到给定的委派实例（例如多实例）
     protected ActivityBehavior determineBehaviour(ActivityBehavior delegateInstance, ActivityExecution execution) {
         if (hasMultiInstanceCharacteristics()) {
             multiInstanceActivityBehavior.setInnerActivityBehavior((AbstractBpmnActivityBehavior) delegateInstance);
@@ -232,8 +231,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         return ClassDelegate.defaultInstantiateDelegate(className, fieldDeclarations);
     }
 
-    // --HELPER METHODS (also usable by external classes) ----------------------------------------
-
+    // --助手方法（也可由外部类使用） ----------------------------------------
     public static Object defaultInstantiateDelegate(Class<?> clazz, List<FieldDeclaration> fieldDeclarations) {
         return defaultInstantiateDelegate(clazz.getName(), fieldDeclarations);
     }
@@ -284,7 +282,7 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
                 }
             }
 
-            // Check if the delegate field's type is correct
+            // 检查委托字段的类型是否正确
             if (!fieldTypeCompatible(declaration, field)) {
                 throw new ActivitiIllegalArgumentException("Incompatible type set on field declaration '" + declaration.getName()
                         + "' for class " + target.getClass().getName()
@@ -300,13 +298,13 @@ public class ClassDelegate extends AbstractBpmnActivityBehavior implements TaskL
         if (declaration.getValue() != null) {
             return field.getType().isAssignableFrom(declaration.getValue().getClass());
         } else {
-            // Null can be set any field type
+            // Null表示可以设置为任何字段类型
             return true;
         }
     }
 
     /**
-     * returns the class name this {@link ClassDelegate} is configured to. Comes in handy if you want to check which delegates you already have e.g. in a list of listeners
+     *返回此类委托类{@link ClassDelegate}配置的类名。如果你想检查你已经有哪些委托类，例如在监听器列表中，这很有用
      */
     public String getClassName() {
         return className;
