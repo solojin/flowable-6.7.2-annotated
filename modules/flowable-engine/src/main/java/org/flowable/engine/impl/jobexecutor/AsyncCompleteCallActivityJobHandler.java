@@ -20,19 +20,18 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
- * A {@link JobHandler} implementation that asynchronously will end an execution asynchronously.
- * 
- * Primary use case is handling a parallel multi-instance call activity where the child process 
- * has an async step just before reaching the end event.
- * The async locking happens on the level of the child process instance, but the end event will 
- * execute the completing/completed callbacks of the call activity, which are done in scope of 
- * the parent process instance and can lead to optimistic locking exceptions. 
- * By scheduling the job in context of the parent process instance, the correct lock will be used.  
+ * 异步完成调用活动作业处理器
+ * 异步结束执行的作业处理器{@link JobHandler}实现。
+ * 主要用例是处理并行多实例调用活动，其中子进程在到达结束事件之前有一个异步步骤。
+ * 异步锁定发生在子进程实例的级别上，但结束事件将执行在范围内完成父进程实例
+ * 调用活动的完成回调方法，并可能导致乐观锁定异常。
+ * 通过在父进程实例的上下文中调度作业，将使用正确的锁。
  * 
  * @author Joram Barrez
  */
 public class AsyncCompleteCallActivityJobHandler implements JobHandler {
 
+    // 类型：异步完成调用活动
     public static final String TYPE = "async-complete-call-actiivty";
 
     @Override

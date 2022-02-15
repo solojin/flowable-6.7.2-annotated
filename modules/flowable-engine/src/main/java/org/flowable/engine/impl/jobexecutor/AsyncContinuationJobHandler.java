@@ -23,11 +23,13 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
- * 
+ * 异步延续作业处理程序
+ *
  * @author Tijs Rademakers
  */
 public class AsyncContinuationJobHandler implements JobHandler {
 
+    // 类型：异步延续
     public static final String TYPE = "async-continuation";
 
     @Override

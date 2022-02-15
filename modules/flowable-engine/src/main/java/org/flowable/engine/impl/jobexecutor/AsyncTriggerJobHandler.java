@@ -20,11 +20,13 @@ import org.flowable.job.service.impl.persistence.entity.JobEntity;
 import org.flowable.variable.api.delegate.VariableScope;
 
 /**
- * 
+ * 异步触发作业处理器
+ *
  * @author Tijs Rademakers
  */
 public class AsyncTriggerJobHandler implements JobHandler {
 
+    // 类型：异步触发
     public static final String TYPE = "async-trigger";
 
     @Override
