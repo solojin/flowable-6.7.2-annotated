@@ -19,6 +19,8 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 
 /**
+ * 负责更新ACT_HI_PROCINST表中的数据
+ *
  * @author Tom Baeyens
  */
 public class ProcessInstanceEndHandler implements ExecutionListener {

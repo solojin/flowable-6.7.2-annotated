@@ -19,6 +19,8 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 
 /**
+ * 负责将开始节点的信息插入到ACT_HI_ACTINST表中
+ *
  * @author Tom Baeyens
  */
 public class StartEventEndHandler implements ExecutionListener {

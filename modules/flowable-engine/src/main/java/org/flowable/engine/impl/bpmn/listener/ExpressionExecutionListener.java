@@ -18,8 +18,9 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 
 /**
- * An {@link ExecutionListener} that evaluates a {@link Expression} when notified.
- * 
+ * 一个执行监听器{@link ExecutionListener}，在收到通知时对表达式{@link Expression}求值。
+ * 负责调度执行expression方式创建的执行监听器
+ *
  * @author Frederik Heremans
  */
 public class ExpressionExecutionListener implements ExecutionListener {
@@ -37,7 +38,7 @@ public class ExpressionExecutionListener implements ExecutionListener {
     }
 
     /**
-     * returns the expression text for this execution listener. Comes in handy if you want to check which listeners you already have.
+     * 返回此执行监听器的表达式文本。如果你想检查你已经有了哪些监听器，这很有用。
      */
     public String getExpressionText() {
         return expression.getExpressionText();

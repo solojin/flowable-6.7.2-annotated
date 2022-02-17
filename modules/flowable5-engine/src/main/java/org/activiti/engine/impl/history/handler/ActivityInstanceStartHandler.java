@@ -19,9 +19,11 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 
 /**
+ * 负责将历史数据插入到ACT_HI_ACTINST表中
+ *
  * @author Tom Baeyens
  * 
- *         BE AWARE: For Start Events this is done in the ProcessDefinitionEntity!
+ *         请注意：对于开始事件，这是在ProcessDefinitionEntity中完成的！
  */
 public class ActivityInstanceStartHandler implements ExecutionListener {
 

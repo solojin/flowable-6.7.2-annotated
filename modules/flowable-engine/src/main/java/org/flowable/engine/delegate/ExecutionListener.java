@@ -13,7 +13,7 @@
 package org.flowable.engine.delegate;
 
 /**
- * Callback interface to be notified of execution events like starting a process instance, ending an activity instance or taking a transition.
+ * 回调接口，用于通知执行事件，如启动流程实例、结束活动实例或进行转换。
  * 
  * @author Tom Baeyens
  * @author Joram Barrez

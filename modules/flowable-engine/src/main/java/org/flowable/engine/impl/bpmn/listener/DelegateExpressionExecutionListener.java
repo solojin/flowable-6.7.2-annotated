@@ -26,6 +26,8 @@ import org.flowable.engine.impl.delegate.invocation.JavaDelegateInvocation;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
+ * 负责调度执行DelegateExpression方式创建的执行监听器
+ *
  * @author Joram Barrez
  */
 public class DelegateExpressionExecutionListener implements ExecutionListener {
@@ -51,7 +53,7 @@ public class DelegateExpressionExecutionListener implements ExecutionListener {
     }
 
     /**
-     * returns the expression text for this execution listener. Comes in handy if you want to check which listeners you already have.
+     * 返回此执行监听器的表达式文本。如果你想检查你已经有了哪些监听器，这很有用。
      */
     public String getExpressionText() {
         return expression.getExpressionText();

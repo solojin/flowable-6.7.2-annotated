@@ -19,6 +19,8 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.ExecutionListener;
 
 /**
+ * 负责更新ACT_HI_ACTINST表中的删除原因（非必须）、结束时间、节点持续时间
+ *
  * @author Tom Baeyens
  */
 public class ActivityInstanceEndHandler implements ExecutionListener {
