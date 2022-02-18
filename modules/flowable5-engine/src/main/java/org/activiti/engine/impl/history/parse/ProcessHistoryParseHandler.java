@@ -19,6 +19,9 @@ import org.flowable.bpmn.model.BaseElement;
 import org.flowable.bpmn.model.Process;
 
 /**
+ * 流程历史解析器
+ * 负责解析Process实例对象并为其添加事件类型为end的监听器
+ *
  * @author Joram Barrez
  */
 public class ProcessHistoryParseHandler extends AbstractBpmnParseHandler<Process> {
@@ -30,6 +33,7 @@ public class ProcessHistoryParseHandler extends AbstractBpmnParseHandler<Process
         return Process.class;
     }
 
+    // 执行解析，为其添加类型为end的监听器
     @Override
     protected void executeParse(BpmnParse bpmnParse, Process element) {
         bpmnParse.getCurrentProcessDefinition().addExecutionListener(org.activiti.engine.impl.pvm.PvmEvent.EVENTNAME_END, PROCESS_INSTANCE_END_HANDLER);

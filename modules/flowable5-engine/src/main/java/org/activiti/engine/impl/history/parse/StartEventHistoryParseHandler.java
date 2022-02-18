@@ -19,6 +19,9 @@ import org.flowable.bpmn.model.BaseElement;
 import org.flowable.bpmn.model.StartEvent;
 
 /**
+ * 开始事件历史解析器
+ * 负责解析开始事件实例对象并为其添加事件类型为end的监听器
+ *
  * @author Joram Barrez
  */
 public class StartEventHistoryParseHandler extends AbstractBpmnParseHandler<StartEvent> {

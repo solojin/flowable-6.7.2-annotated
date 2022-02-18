@@ -41,12 +41,16 @@ import org.flowable.bpmn.model.ThrowEvent;
 import org.flowable.bpmn.model.UserTask;
 
 /**
+ * 流节点历史解析器
+ * 负责解析流程三大要素并为其添加事件类型为start和end的监听器
+ *
  * @author Joram Barrez
  */
 public class FlowNodeHistoryParseHandler implements BpmnParseHandler {
 
     protected static final ActivityInstanceEndHandler ACTIVITI_INSTANCE_END_LISTENER = new ActivityInstanceEndHandler();
 
+    // 实例活动实例开始处理器对象，负责将基本信息插入到历史节点表中
     protected static final ActivityInstanceStartHandler ACTIVITY_INSTANCE_START_LISTENER = new ActivityInstanceStartHandler();
 
     protected static Set<Class<? extends BaseElement>> supportedElementClasses = new HashSet<>();
@@ -84,7 +88,7 @@ public class FlowNodeHistoryParseHandler implements BpmnParseHandler {
     public void parse(BpmnParse bpmnParse, BaseElement element) {
         ActivityImpl activity = bpmnParse.getCurrentScope().findActivity(element.getId());
         if (element instanceof BoundaryEvent) {
-            // A boundary-event never receives an activity start-event
+            // 边界事件从不接收活动开始事件
             activity.addExecutionListener(org.activiti.engine.impl.pvm.PvmEvent.EVENTNAME_END, ACTIVITY_INSTANCE_START_LISTENER, 0);
             activity.addExecutionListener(org.activiti.engine.impl.pvm.PvmEvent.EVENTNAME_END, ACTIVITI_INSTANCE_END_LISTENER, 1);
         } else {

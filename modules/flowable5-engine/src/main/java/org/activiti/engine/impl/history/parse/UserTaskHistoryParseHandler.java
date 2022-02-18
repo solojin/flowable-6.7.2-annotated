@@ -23,6 +23,9 @@ import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.delegate.TaskListener;
 
 /**
+ * 用户任务历史解析器
+ * 负责解析用户任务实例对象并为其添加类型为代理assigment和创建create的监听器
+ *
  * @author Joram Barrez
  */
 public class UserTaskHistoryParseHandler extends AbstractBpmnParseHandler<UserTask> {
@@ -39,7 +42,9 @@ public class UserTaskHistoryParseHandler extends AbstractBpmnParseHandler<UserTa
     @Override
     protected void executeParse(BpmnParse bpmnParse, UserTask element) {
         TaskDefinition taskDefinition = (TaskDefinition) bpmnParse.getCurrentActivity().getProperty(UserTaskParseHandler.PROPERTY_TASK_DEFINITION);
+        // 添加ASSIGNMENT类型的监听器
         taskDefinition.addTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, USER_TASK_ASSIGNMENT_HANDLER);
+        // 添加 CREATE类型的监听器
         taskDefinition.addTaskListener(TaskListener.EVENTNAME_CREATE, USER_TASK_ID_HANDLER);
     }
 
