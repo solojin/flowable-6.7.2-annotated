@@ -17,9 +17,9 @@ import org.flowable.engine.impl.bpmn.parser.factory.ListenerFactory;
 import org.flowable.engine.impl.cfg.BpmnParseFactory;
 
 /**
- * Parser for BPMN 2.0 process models.
+ * BPMN 2.0流程模型的解析器。
  * 
- * There is only one instance of this parser in the process engine. This {@link BpmnParser} creates {@link BpmnParse} instances that can be used to actually parse the BPMN 2.0 XML process definitions.
+ * 流程引擎中只有一个该解析器的实例。这个{@link BpmnParser}创建了{@link BpmnParse}实例，可用于实际解析BPMN 2.0 XML流程定义。
  * 
  * @author Tom Baeyens
  * @author Joram Barrez
@@ -27,17 +27,17 @@ import org.flowable.engine.impl.cfg.BpmnParseFactory;
 public class BpmnParser {
 
     /**
-     * The namespace of the BPMN 2.0 diagram interchange elements.
+     * BPMN 2.0图交换元素的名称空间。
      */
     public static final String BPMN_DI_NS = "http://www.omg.org/spec/BPMN/20100524/DI";
 
     /**
-     * The namespace of the BPMN 2.0 diagram common elements.
+     * BPMN 2.0图表公共元素的名称空间。
      */
     public static final String BPMN_DC_NS = "http://www.omg.org/spec/DD/20100524/DC";
 
     /**
-     * The namespace of the generic OMG DI elements (don't ask me why they didn't use the BPMN_DI_NS ...)
+     * 通用OMG DI元素的名称空间（不要问我为什么不使用BPMN_DI_NS…）
      */
     public static final String OMG_DI_NS = "http://www.omg.org/spec/DD/20100524/DI";
 
@@ -47,7 +47,7 @@ public class BpmnParser {
     protected BpmnParseHandlers bpmnParserHandlers;
 
     /**
-     * Creates a new {@link BpmnParse} instance that can be used to parse only one BPMN 2.0 process definition.
+     * 创建一个新的{@link BpmnParse}实例，该实例只能用于解析一个BPMN 2.0进程定义。
      */
     public BpmnParse createParse() {
         return bpmnParseFactory.createBpmnParse(this);

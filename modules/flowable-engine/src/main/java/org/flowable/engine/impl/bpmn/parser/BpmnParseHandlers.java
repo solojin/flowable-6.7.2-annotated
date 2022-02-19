@@ -24,6 +24,8 @@ import org.flowable.engine.parse.BpmnParseHandler;
 import org.slf4j.Logger;
 
 /**
+ * BPMN解析处理器
+ *
  * @author Joram Barrez
  */
 public class BpmnParseHandlers {
@@ -40,12 +42,14 @@ public class BpmnParseHandlers {
         return parseHandlers.get(clazz);
     }
 
+    // 批量添加BPMN处理器
     public void addHandlers(List<BpmnParseHandler> bpmnParseHandlers) {
         for (BpmnParseHandler bpmnParseHandler : bpmnParseHandlers) {
             addHandler(bpmnParseHandler);
         }
     }
 
+    // 添加BPMN处理器
     public void addHandler(BpmnParseHandler bpmnParseHandler) {
         for (Class<? extends BaseElement> type : bpmnParseHandler.getHandledTypes()) {
             List<BpmnParseHandler> handlers = parseHandlers.get(type);
@@ -57,22 +61,25 @@ public class BpmnParseHandlers {
         }
     }
 
+    // 解析元素
     public void parseElement(BpmnParse bpmnParse, BaseElement element) {
 
         if (element instanceof DataObject) {
-            // ignore DataObject elements because they are processed on Process
-            // and Sub process level
+            // 忽略DataObject元素，因为它们是在进程上处理的
+            // 和子流程级别
             return;
         }
 
+        // 如果是流元素，设置为BPMN解析器当前正处理的流元素
         if (element instanceof FlowElement) {
             bpmnParse.setCurrentFlowElement((FlowElement) element);
         }
 
-        // Execute parse handlers
+        // 执行解析处理程序
         List<BpmnParseHandler> handlers = parseHandlers.get(element.getClass());
 
         if (handlers == null) {
+            // 找不到与{elementId}匹配的分析处理程序。这可能是一个BUG。
             LOGGER.warn("Could not find matching parse handler for + {} this is likely a bug.", element.getId());
         } else {
             for (BpmnParseHandler handler : handlers) {
