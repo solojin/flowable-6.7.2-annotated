@@ -34,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 边界事件解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */
@@ -50,6 +52,7 @@ public class BoundaryEventParseHandler extends AbstractFlowNodeBpmnParseHandler<
     protected void executeParse(BpmnParse bpmnParse, BoundaryEvent boundaryEvent) {
 
         if (boundaryEvent.getAttachedToRef() == null) {
+            // 边界事件中的引用无效。确保引用的活动与边界事件{}定义在同一范围内
             LOGGER.warn("Invalid reference in boundary event. Make sure that the referenced activity is defined in the same scope as the boundary event {}", boundaryEvent.getId());
             return;
         }
@@ -85,7 +88,7 @@ public class BoundaryEventParseHandler extends AbstractFlowNodeBpmnParseHandler<
 
         } 
         
-        // Should already be picked up by process validator on deploy, so this is just to be sure
+        // 应该已经在部署时由process validator获取，所以这只是为了确定
         LOGGER.warn("Unsupported boundary event type for boundary event {}", boundaryEvent.getId());
     }
 

@@ -15,6 +15,9 @@ package org.flowable.engine.impl.bpmn.parser.handler;
 import org.flowable.bpmn.model.FlowNode;
 
 /**
+ * 抽象流节点解析处理类
+ * 负责处理流节点实例对象
+ *
  * @author Joram Barrez
  */
 public abstract class AbstractFlowNodeBpmnParseHandler<T extends FlowNode> extends AbstractBpmnParseHandler<T> {

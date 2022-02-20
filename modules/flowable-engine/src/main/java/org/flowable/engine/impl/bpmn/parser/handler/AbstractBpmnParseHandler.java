@@ -31,6 +31,11 @@ import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 import org.flowable.engine.parse.BpmnParseHandler;
 
 /**
+ * BPMN解析处理器模板类
+ * 完成两大功能：
+ * 1、对BaseElement实例对象进行解析
+ * 2、将BaseElement的解析结果添加执行监听器
+ *
  * @author Joram Barrez
  */
 public abstract class AbstractBpmnParseHandler<T extends BaseElement> implements BpmnParseHandler {
@@ -85,7 +90,7 @@ public abstract class AbstractBpmnParseHandler<T extends BaseElement> implements
     }
 
     protected void processArtifacts(BpmnParse bpmnParse, Collection<Artifact> artifacts) {
-        // associations
+        // 联系
         for (Artifact artifact : artifacts) {
             if (artifact instanceof Association) {
                 createAssociation(bpmnParse, (Association) artifact);
@@ -97,7 +102,7 @@ public abstract class AbstractBpmnParseHandler<T extends BaseElement> implements
         BpmnModel bpmnModel = bpmnParse.getBpmnModel();
         if (bpmnModel.getArtifact(association.getSourceRef()) != null || bpmnModel.getArtifact(association.getTargetRef()) != null) {
 
-            // connected to a text annotation so skipping it
+            // 已连接到文本批注，因此跳过它
         }
 
         // ActivityImpl sourceActivity =

@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 中间捕获事件解析处理器
+ *
  * @author Joram Barrez
  */
 public class IntermediateCatchEventParseHandler extends AbstractFlowNodeBpmnParseHandler<IntermediateCatchEvent> {
@@ -66,7 +68,7 @@ public class IntermediateCatchEventParseHandler extends AbstractFlowNodeBpmnPars
             nestedActivity.setAsync(event.isAsynchronous());
             nestedActivity.setExclusive(!event.isNotExclusive());
 
-            // Catch event behavior is the same for all types
+            // 捕获事件行为对于所有类型都是相同的
             nestedActivity.setActivityBehavior(bpmnParse.getActivityBehaviorFactory().createIntermediateCatchEventActivityBehavior(event));
 
             if (eventDefinition instanceof TimerEventDefinition
@@ -76,6 +78,7 @@ public class IntermediateCatchEventParseHandler extends AbstractFlowNodeBpmnPars
                 bpmnParse.getBpmnParserHandlers().parseElement(bpmnParse, eventDefinition);
 
             } else {
+                // 不支持事件{}的中间捕获事件类型
                 LOGGER.warn("Unsupported intermediate catch event type for event {}", event.getId());
             }
         }

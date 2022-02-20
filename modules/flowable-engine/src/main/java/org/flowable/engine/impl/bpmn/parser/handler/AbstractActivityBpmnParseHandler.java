@@ -24,6 +24,8 @@ import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
+ * 抽象活动BPMN解析处理类
+ *
  * @author Joram Barrez
  */
 public abstract class AbstractActivityBpmnParseHandler<T extends FlowNode> extends AbstractFlowNodeBpmnParseHandler<T> {
@@ -41,48 +43,48 @@ public abstract class AbstractActivityBpmnParseHandler<T extends FlowNode> exten
 
         MultiInstanceLoopCharacteristics loopCharacteristics = modelActivity.getLoopCharacteristics();
 
-        // Activity Behavior
+        // 活动行为
         MultiInstanceActivityBehavior miActivityBehavior = createMultiInstanceActivityBehavior(modelActivity, loopCharacteristics, bpmnParse);
         modelActivity.setBehavior(miActivityBehavior);
 
         ExpressionManager expressionManager = CommandContextUtil.getProcessEngineConfiguration().getExpressionManager();
 
-        // loop cardinality
+        // 循环基数
         if (StringUtils.isNotEmpty(loopCharacteristics.getLoopCardinality())) {
             miActivityBehavior.setLoopCardinalityExpression(expressionManager.createExpression(loopCharacteristics.getLoopCardinality()));
         }
 
-        // completion condition
+        // 完成条件
         if (StringUtils.isNotEmpty(loopCharacteristics.getCompletionCondition())) {
             miActivityBehavior.setCompletionCondition(loopCharacteristics.getCompletionCondition());
         }
 
-        // flowable:collection
+        // flowable:集合
         if (StringUtils.isNotEmpty(loopCharacteristics.getInputDataItem())) {
             miActivityBehavior.setCollectionExpression(expressionManager.createExpression(loopCharacteristics.getInputDataItem()));
         }
 
-        // flowable:collectionString
+        // flowable:字符串集合
         if (StringUtils.isNotEmpty(loopCharacteristics.getCollectionString())) {
             miActivityBehavior.setCollectionString(loopCharacteristics.getCollectionString());
         }
 
-        // flowable:elementVariable
+        // flowable:元素变量
         if (StringUtils.isNotEmpty(loopCharacteristics.getElementVariable())) {
             miActivityBehavior.setCollectionElementVariable(loopCharacteristics.getElementVariable());
         }
 
-        // flowable:elementIndexVariable
+        // flowable:元素索引变量
         if (StringUtils.isNotEmpty(loopCharacteristics.getElementIndexVariable())) {
             miActivityBehavior.setCollectionElementIndexVariable(loopCharacteristics.getElementIndexVariable());
         }
 
-        // flowable:collectionParser
+        // flowable:集合解析
         if (loopCharacteristics.getHandler() != null) {
             miActivityBehavior.setHandler(loopCharacteristics.getHandler().clone());
         }
 
-        // flowable:variableAggregation
+        // flowable:变量聚合
         if (loopCharacteristics.getAggregations() != null) {
             miActivityBehavior.setAggregations(loopCharacteristics.getAggregations().clone());
         }

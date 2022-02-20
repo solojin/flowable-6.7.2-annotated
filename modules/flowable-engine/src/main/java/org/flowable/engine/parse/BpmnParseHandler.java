@@ -20,10 +20,11 @@ import org.flowable.engine.impl.bpmn.parser.handler.AbstractBpmnParseHandler;
 import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 /**
- * Allows to hook into the parsing of one or more elements during the parsing of a BPMN 2.0 process. For more details, see the userguide section on bpmn parse handlers.
+ * BPMN解析处理器
+ * 允许在解析BPMN 2.0进程期间连接到一个或多个元素的解析中。有关更多详细信息，请参阅关于bpmn解析处理程序的userguide部分。
  * 
- * Instances of this class can be injected into the {@link ProcessEngineConfigurationImpl}. The handler will then be called whenever a BPMN 2.0 element is parsed that matches the types returned by the
- * {@link #getHandledTypes()} method.
+ * 此类的实例可以注入{@link ProcessEngineConfigurationImpl}。然后，每当解析出与BPMN返回的类型匹配的BPMN 2.0元素时，就会调用该处理程序
+ * {@link#getHandledTypes（）}方法。
  * 
  * @see AbstractBpmnParseHandler
  * 
@@ -32,15 +33,15 @@ import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 public interface BpmnParseHandler {
 
     /**
-     * The types for which this handler must be called during process parsing.
+     * 在流程解析期间必须调用此处理程序的类型。
      */
     Collection<Class<? extends BaseElement>> getHandledTypes();
 
     /**
-     * The actual delegation method. The parser will calls this method on a match with the {@link #getHandledTypes()} return value.
+     * 实际的委派方法。解析器将在匹配{@link#getHandledTypes（）}返回值时调用此方法。
      * 
      * @param bpmnParse
-     *            The {@link BpmnParse} instance that acts as container for all things produced during the parsing.
+     *            {@link BpmnParse}实例，充当解析过程中生成的所有内容的容器。
      */
     void parse(BpmnParse bpmnParse, BaseElement element);
 
