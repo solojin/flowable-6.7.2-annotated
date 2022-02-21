@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 结束事件解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */
@@ -50,6 +52,7 @@ public class EndEventParseHandler extends AbstractActivityBpmnParseHandler<EndEv
                 if (bpmnParse.getBpmnModel().containsErrorRef(errorDefinition.getErrorCode())) {
                     String errorCode = bpmnParse.getBpmnModel().getErrors().get(errorDefinition.getErrorCode());
                     if (StringUtils.isEmpty(errorCode)) {
+                        // 错误事件{}需要错误代码
                         LOGGER.warn("errorCode is required for an error event {}", endEvent.getId());
                     }
                 }
@@ -62,6 +65,7 @@ public class EndEventParseHandler extends AbstractActivityBpmnParseHandler<EndEv
                     escalation = bpmnParse.getBpmnModel().getEscalation(escalationDefinition.getEscalationCode());
                     String escalationCode = escalation.getEscalationCode();
                     if (StringUtils.isEmpty(escalationCode)) {
+                        // 升级事件{}需要升级代码
                         LOGGER.warn("escalationCode is required for an escalation event {}", endEvent.getId());
                     }
                 }

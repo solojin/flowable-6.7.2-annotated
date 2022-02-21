@@ -34,6 +34,8 @@ import org.flowable.common.engine.impl.util.CollectionUtil;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 开始事件解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */
