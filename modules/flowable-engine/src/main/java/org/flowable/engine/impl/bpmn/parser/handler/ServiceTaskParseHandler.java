@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 服务任务解析处理器
+ *
  * @author Joram Barrez
  */
 public class ServiceTaskParseHandler extends AbstractActivityBpmnParseHandler<ServiceTask> {
@@ -89,6 +91,7 @@ public class ServiceTaskParseHandler extends AbstractActivityBpmnParseHandler<Se
             serviceTask.setBehavior(webServiceActivityBehavior);
 
         } else {
+            // 服务任务必须有“class”、“delegateExpression”、“type”、“operation”或“expression”属性之一{
             LOGGER.warn("One of the attributes 'class', 'delegateExpression', 'type', 'operation', or 'expression' is mandatory on service task {}", serviceTask.getId());
         }
 

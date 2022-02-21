@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 发送任务解析处理器
+ *
  * @author Joram Barrez
  */
 public class SendTaskParseHandler extends AbstractActivityBpmnParseHandler<SendTask> {
@@ -54,6 +56,7 @@ public class SendTaskParseHandler extends AbstractActivityBpmnParseHandler<SendT
             sendTask.setBehavior(webServiceActivityBehavior);
 
         } else {
+            // sendTask{}上的一个属性“type”或“operation”是必需的
             LOGGER.warn("One of the attributes 'type' or 'operation' is mandatory on sendTask {}", sendTask.getId());
         }
     }

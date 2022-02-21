@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 用户任务解析处理器
+ *
  * @author Joram Barrez
  */
 public class UserTaskParseHandler extends AbstractActivityBpmnParseHandler<UserTask> {
