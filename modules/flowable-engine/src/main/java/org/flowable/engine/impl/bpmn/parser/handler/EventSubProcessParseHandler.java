@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.EventSubProcess;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 事件子流程解析处理器
+ *
  * @author Joram Barrez
  */
 public class EventSubProcessParseHandler extends AbstractActivityBpmnParseHandler<EventSubProcess> {

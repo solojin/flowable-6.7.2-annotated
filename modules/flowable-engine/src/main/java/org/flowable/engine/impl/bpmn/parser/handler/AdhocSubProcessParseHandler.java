@@ -18,6 +18,8 @@ import org.flowable.bpmn.model.SubProcess;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 临时子进程解析处理器
+ *
  * @author Tijs Rademakers
  */
 public class AdhocSubProcessParseHandler extends AbstractActivityBpmnParseHandler<SubProcess> {

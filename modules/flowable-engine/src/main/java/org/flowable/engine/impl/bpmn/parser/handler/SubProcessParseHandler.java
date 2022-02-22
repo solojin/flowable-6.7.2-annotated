@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.SubProcess;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 子流程解析处理器
+ *
  * @author Joram Barrez
  */
 public class SubProcessParseHandler extends AbstractActivityBpmnParseHandler<SubProcess> {
@@ -29,12 +31,13 @@ public class SubProcessParseHandler extends AbstractActivityBpmnParseHandler<Sub
     @Override
     protected void executeParse(BpmnParse bpmnParse, SubProcess subProcess) {
 
+        // 策略模式，动态设置子流程解析行为
         subProcess.setBehavior(bpmnParse.getActivityBehaviorFactory().createSubprocessActivityBehavior(subProcess));
 
         bpmnParse.processFlowElements(subProcess.getFlowElements());
         processArtifacts(bpmnParse, subProcess.getArtifacts());
 
-        // no data objects for event subprocesses
+        // 没有用于事件子流程的数据对象
         /*
          * if (!(subProcess instanceof EventSubProcess)) { // parse out any data objects from the template in order to set up the necessary process variables Map<String, Object> variables =
          * processDataObjects(bpmnParse, subProcess.getDataObjects(), activity); activity.setVariables(variables); }
