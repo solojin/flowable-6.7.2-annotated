@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.ParallelGateway;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 并行网关
+ *
  * @author Joram Barrez
  */
 public class ParallelGatewayParseHandler extends AbstractActivityBpmnParseHandler<ParallelGateway> {

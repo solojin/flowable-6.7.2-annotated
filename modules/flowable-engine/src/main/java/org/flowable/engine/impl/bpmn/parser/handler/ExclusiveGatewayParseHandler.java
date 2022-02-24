@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.ExclusiveGateway;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 排他网关
+ *
  * @author Joram Barrez
  */
 public class ExclusiveGatewayParseHandler extends AbstractActivityBpmnParseHandler<ExclusiveGateway> {

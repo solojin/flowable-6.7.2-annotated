@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.InclusiveGateway;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 包容网关
+ *
  * @author Joram Barrez
  */
 public class InclusiveGatewayParseHandler extends AbstractActivityBpmnParseHandler<InclusiveGateway> {

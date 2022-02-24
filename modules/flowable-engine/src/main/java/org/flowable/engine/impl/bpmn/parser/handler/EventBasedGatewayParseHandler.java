@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.EventGateway;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 基于事件的网关解析处理器
+ *
  * @author Joram Barrez
  */
 public class EventBasedGatewayParseHandler extends AbstractActivityBpmnParseHandler<EventGateway> {
