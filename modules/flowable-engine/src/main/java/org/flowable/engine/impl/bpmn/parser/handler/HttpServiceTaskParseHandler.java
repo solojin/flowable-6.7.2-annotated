@@ -18,6 +18,8 @@ import org.flowable.bpmn.model.ServiceTask;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * HTTP服务任务解析处理器
+ *
  * @author Tijs Rademakers
  */
 public class HttpServiceTaskParseHandler extends AbstractActivityBpmnParseHandler<ServiceTask> {
@@ -27,6 +29,7 @@ public class HttpServiceTaskParseHandler extends AbstractActivityBpmnParseHandle
         return HttpServiceTask.class;
     }
 
+    // 策略模式动态设置行为，工厂模式创建HTTP活动行为
     @Override
     protected void executeParse(BpmnParse bpmnParse, ServiceTask serviceTask) {
         serviceTask.setBehavior(bpmnParse.getActivityBehaviorFactory().createHttpActivityBehavior(serviceTask));

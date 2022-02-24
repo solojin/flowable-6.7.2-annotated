@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 脚本任务解析处理器
  * @author Joram Barrez
  */
 public class ScriptTaskParseHandler extends AbstractActivityBpmnParseHandler<ScriptTask> {

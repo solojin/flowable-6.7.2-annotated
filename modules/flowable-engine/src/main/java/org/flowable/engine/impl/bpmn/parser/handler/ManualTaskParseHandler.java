@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.ManualTask;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 手动任务解析处理器
+ *
  * @author Joram Barrez
  */
 public class ManualTaskParseHandler extends AbstractActivityBpmnParseHandler<ManualTask> {

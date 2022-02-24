@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.BusinessRuleTask;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 业务规则解析处理器
+ *
  * @author Joram Barrez
  */
 public class BusinessRuleParseHandler extends AbstractActivityBpmnParseHandler<BusinessRuleTask> {
@@ -26,6 +28,7 @@ public class BusinessRuleParseHandler extends AbstractActivityBpmnParseHandler<B
         return BusinessRuleTask.class;
     }
 
+    // 策略模式动态设置行为，工厂模式创建业务规则活动行为
     @Override
     protected void executeParse(BpmnParse bpmnParse, BusinessRuleTask businessRuleTask) {
         businessRuleTask.setBehavior(bpmnParse.getActivityBehaviorFactory().createBusinessRuleTaskActivityBehavior(businessRuleTask));
