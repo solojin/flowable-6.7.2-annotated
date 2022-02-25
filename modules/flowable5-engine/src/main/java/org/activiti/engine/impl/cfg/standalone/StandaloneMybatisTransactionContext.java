@@ -31,6 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 独立MyBatis事务上下文
+ * 最终委托SqlSession实例对象完成事务管理
+ *
  * @author Tom Baeyens
  */
 public class StandaloneMybatisTransactionContext implements TransactionContext {
@@ -71,12 +74,12 @@ public class StandaloneMybatisTransactionContext implements TransactionContext {
     }
 
     /**
-     * Fires the event for the provided {@link TransactionState}.
+     * 为提供的事务{@link TransactionState}激发事件。
      *
-     * @param transactionState    The {@link TransactionState} for which the listeners will be called.
-     * @param executeInNewContext If true, the listeners will be called in a new command context. This is needed for example when firing the {@link TransactionState#COMMITTED} event: the transaction is already
-     *                            committed and executing logic in the same context could lead to strange behaviour (for example doing a {@link SqlSession#update(String)} would actually roll back the update (as the
-     *                            MyBatis context is already committed and the internal flags have not been correctly set).
+     * @param transactionState    将为其调用监听器的事务状态{@link TransactionState}。
+     * @param executeInNewContext 如果为true，将在新的命令上下文中调用侦听器。例如，当触发{@link TransactionState#COMMITTED}事件时，
+     * 就需要这样做：事务已经完成在同一上下文中提交和执行逻辑可能会导致奇怪的行为（例如，
+     * 执行{@link SqlSession#update（String）}）实际上会回滚更新（正如MyBatis上下文已提交，内部标志未正确设置）。
      */
     protected void fireTransactionEvent(TransactionState transactionState, boolean executeInNewContext) {
         if (stateTransactionListeners == null) {

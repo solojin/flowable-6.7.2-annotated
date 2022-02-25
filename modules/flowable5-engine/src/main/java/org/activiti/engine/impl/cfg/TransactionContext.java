@@ -13,12 +13,16 @@
 package org.activiti.engine.impl.cfg;
 
 /**
+ * 事务上下文
+ *
  * @author Tom Baeyens
  */
 public interface TransactionContext {
 
+    // 提交
     void commit();
 
+    // 回滚
     void rollback();
 
     void addTransactionListener(TransactionState transactionState, TransactionListener transactionListener);
