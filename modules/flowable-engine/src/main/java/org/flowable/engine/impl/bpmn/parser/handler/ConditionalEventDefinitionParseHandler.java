@@ -19,6 +19,8 @@ import org.flowable.bpmn.model.IntermediateCatchEvent;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 条件事件定义解析器
+ *
  * @author Tijs Rademakers
  */
 public class ConditionalEventDefinitionParseHandler extends AbstractBpmnParseHandler<ConditionalEventDefinition> {

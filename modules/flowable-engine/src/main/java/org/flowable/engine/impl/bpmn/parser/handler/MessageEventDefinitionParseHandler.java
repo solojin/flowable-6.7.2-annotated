@@ -24,6 +24,8 @@ import org.flowable.bpmn.model.MessageEventDefinition;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 消息事件定义解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */

@@ -23,6 +23,8 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
+ * 将事务交给Spring管理
+ *
  * @author Frederik Heremans
  * @author Joram Barrez
  */
@@ -42,23 +44,20 @@ public class SpringTransactionContext implements TransactionContext {
         if (transactionSynchronizationAdapterOrder != null) {
             this.transactionSynchronizationAdapterOrder = transactionSynchronizationAdapterOrder;
         } else {
-            // Revert to default, which is a high number as the behaviour prior
-            // to adding the order would
-            // case the TransactionSynchronizationAdapter to be called AFTER all
-            // Adapters that implement Ordered
+            // 恢复到默认值，这是一个很高的数字，因为添加订单之前的行为会将TransactionSynchronizationAdapter
+            // 设置为在所有实现Ordered的适配器之后调用
             this.transactionSynchronizationAdapterOrder = Integer.MAX_VALUE;
         }
     }
 
     @Override
     public void commit() {
-        // Do nothing, transaction is managed by spring
+        // 什么都不做，事务由spring管理
     }
 
     @Override
     public void rollback() {
-        // Just in case the rollback isn't triggered by an
-        // exception, we mark the current transaction rollBackOnly.
+        // 为了防止回滚不是由异常触发的，我们将当前事务标记为rollBackOnly。
         transactionManager.getTransaction(null).setRollbackOnly();
     }
 

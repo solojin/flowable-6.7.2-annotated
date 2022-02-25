@@ -19,6 +19,8 @@ import org.flowable.bpmn.model.EscalationEventDefinition;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 升级事件定义解析处理器
+ *
  * @author Tijs Rademakers
  */
 public class EscalationEventDefinitionParseHandler extends AbstractBpmnParseHandler<EscalationEventDefinition> {

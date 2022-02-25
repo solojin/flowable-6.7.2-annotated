@@ -19,6 +19,8 @@ import org.flowable.bpmn.model.ThrowEvent;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 补偿事件定义解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */

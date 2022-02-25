@@ -19,6 +19,8 @@ import org.flowable.bpmn.model.TimerEventDefinition;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 定时器定义解析处理器
+ *
  * @author Joram Barrez
  */
 public class TimerEventDefinitionParseHandler extends AbstractBpmnParseHandler<TimerEventDefinition> {

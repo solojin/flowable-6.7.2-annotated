@@ -19,6 +19,8 @@ import org.flowable.bpmn.model.VariableListenerEventDefinition;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 变量监听器事件定义解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */

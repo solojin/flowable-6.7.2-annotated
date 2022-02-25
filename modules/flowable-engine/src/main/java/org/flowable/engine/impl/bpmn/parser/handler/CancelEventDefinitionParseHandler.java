@@ -18,6 +18,8 @@ import org.flowable.bpmn.model.CancelEventDefinition;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 取消事件定义解析处理器
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */

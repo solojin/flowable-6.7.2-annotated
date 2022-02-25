@@ -17,6 +17,8 @@ import org.flowable.bpmn.model.SendEventServiceTask;
 import org.flowable.engine.impl.bpmn.parser.BpmnParse;
 
 /**
+ * 发送事件解析处理器
+ *
  * @author Tijs Rademakers
  */
 public class SendEventServiceTaskParseHandler extends AbstractActivityBpmnParseHandler<SendEventServiceTask> {
