@@ -23,6 +23,9 @@ import org.flowable.engine.impl.bpmn.parser.FieldDeclaration;
 import org.flowable.engine.impl.el.FixedValue;
 
 /**
+ * 抽象行为工厂类
+ * 内部持有表达式管理器，主要负责将FieldExtension类型的集合转化为FieldDeclaration类型的集合
+ *
  * @author Joram Barrez
  */
 public abstract class AbstractBehaviorFactory {
