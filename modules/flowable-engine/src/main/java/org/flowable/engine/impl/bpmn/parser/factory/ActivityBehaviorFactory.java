@@ -117,19 +117,20 @@ import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.flowable.engine.impl.delegate.ActivityBehavior;
 
 /**
- * Factory class used by the {@link BpmnParser} and {@link BpmnParse} to instantiate the behaviour classes. For example when parsing an exclusive gateway, this factory will be requested to create a
- * new {@link ActivityBehavior} that will be set on the element of that step of the process and will implement the spec-compliant behavior of the exclusive gateway.
+ * 活动行为工厂类
+ * 工厂类用于BPMN解析类{@link BpmnParser}，BPMN解析类实例化行为类。例如，在解析独占网关时，
+ * 将请求此工厂创建新的行为类{@link ActivityBehavior}，设置在流程当前步骤的元素上，并实现独占网关符合规范的行为。
+ *
+ * 您可以提供这个类自己的实现。通过这种方式，可以为标准bpmn xml构造提供不同的执行语义。你可以调整这个专用网关
+ * 如果你想要的话，使其变成完全不同的东西。只有在希望更改任何BPMN默认构造的默认行为时，才建议创建自己的{@link ActivityBehaviorFactory}。
+ * 即使这样，也要三思，因为它不再是符合规范的bpmn了。
  * 
- * You can provide your own implementation of this class. This way, you can give different execution semantics to a standard bpmn xml construct. Eg. you could tweak the exclusive gateway to do
- * something completely different if you would want that. Creating your own {@link ActivityBehaviorFactory} is only advisable if you want to change the default behavior of any BPMN default construct.
- * And even then, think twice, because it won't be spec compliant bpmn anymore.
+ * 请注意，您始终可以使用类委托将任何自定义步骤表示为服务任务。
  * 
- * Note that you can always express any custom step as a service task with a class delegation.
- * 
- * The easiest and advisable way to implement your own {@link ActivityBehaviorFactory} is to extend the {@link DefaultActivityBehaviorFactory} class and override the method specific to the
- * {@link ActivityBehavior} you want to change.
- * 
- * An instance of this interface can be injected in the {@link ProcessEngineConfigurationImpl} and its subclasses.
+ * 实现自己的{@link ActivityBehaviorFactory}最简单、最可取的方法是扩展{@link DefaultActivityBehaviorFactory}类，
+ * 并重写特定于{@link ActivityBehavior}您想更改的地方。
+ *
+ * 这个接口的一个实例可以注入{@link ProcessEngineConfigurationImpl}及其子类中。
  * 
  * @author Joram Barrez
  */
@@ -161,8 +162,8 @@ public interface ActivityBehaviorFactory {
 
     MailActivityBehavior createMailActivityBehavior(SendTask sendTask);
 
-    // We do not want a hard dependency on the Mule module, hence we return
-    // ActivityBehavior and instantiate the delegate instance using a string instead of the Class itself.
+    // 我们不希望对Mule模块产生硬依赖，因此我们返回
+    // ActivityBehavior并使用字符串而不是类本身实例化委托实例。
     ActivityBehavior createMuleActivityBehavior(ServiceTask serviceTask);
 
     ActivityBehavior createMuleActivityBehavior(SendTask sendTask);
