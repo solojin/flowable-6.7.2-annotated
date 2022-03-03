@@ -133,7 +133,9 @@ import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.flowable.engine.impl.delegate.ActivityBehavior;
 
 /**
- * Default implementation of the {@link ActivityBehaviorFactory}. Used when no custom {@link ActivityBehaviorFactory} is injected on the {@link ProcessEngineConfigurationImpl}.
+ * 默认活动行为工厂类
+ * 活动行为工厂{@link ActivityBehaviorFactory}的默认实现。
+ * 在流程引擎配置类{@link ProcessEngineConfigurationImpl}上没有注入自定义{@link ActivityBehaviorFactory}时使用。
  *
  * @author Joram Barrez
  */
@@ -148,7 +150,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         this(new DefaultClassDelegateFactory());
     }
 
-    // Start event
+    // 开始事件
     public static final String EXCEPTION_MAP_FIELD = "mapExceptions";
 
     @Override
@@ -156,7 +158,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new NoneStartEventActivityBehavior();
     }
 
-    // Task
+    // 任务
 
     @Override
     public TaskActivityBehavior createTaskActivityBehavior(Task task) {
@@ -183,7 +185,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new UserTaskActivityBehavior(userTask);
     }
 
-    // Service task
+    // 服务任务
 
     protected Expression getSkipExpressionFromServiceTask(ServiceTask serviceTask) {
         return createExpression(serviceTask.getSkipExpression());
@@ -256,8 +258,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new DmnActivityBehavior(sendTask);
     }
 
-    // We do not want a hard dependency on Mule, hence we return
-    // ActivityBehavior and instantiate the delegate instance using a string instead of the Class itself.
+    // 我们不想对Mule有强依赖，所以我们会回到ActivityBehavior并使用字符串而不是类本身实例化委托实例。
     @Override
     public ActivityBehavior createMuleActivityBehavior(ServiceTask serviceTask) {
         return createMuleActivityBehavior(serviceTask, serviceTask.getFieldExtensions());
@@ -281,8 +282,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         }
     }
 
-    // We do not want a hard dependency on Camel, hence we return
-    // ActivityBehavior and instantiate the delegate instance using a string instead of the Class itself.
+    // 我们不想对Camel有强依赖，所以我们会回到ActivityBehavior并使用字符串而不是类本身实例化委托实例。
     @Override
     public ActivityBehavior createCamelActivityBehavior(ServiceTask serviceTask) {
         return createCamelActivityBehavior(serviceTask, serviceTask.getFieldExtensions());
@@ -310,7 +310,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
             }
 
             if (theClass == null) {
-                // Default Camel behavior class
+                // 默认 Camel 行为类
                 theClass = Class.forName(getDefaultCamelBehaviorClassName());
             }
 
@@ -419,7 +419,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return ruleActivity;
     }
 
-    // Script task
+    // 脚本任务
 
     @Override
     public ScriptTaskActivityBehavior createScriptTaskActivityBehavior(ScriptTask scriptTask) {
@@ -442,7 +442,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new ExternalWorkerTaskActivityBehavior(externalWorkerServiceTask, topicExpression, skipExpression);
     }
 
-    // Gateways
+    // 网关
 
     @Override
     public ExclusiveGatewayActivityBehavior createExclusiveGatewayActivityBehavior(ExclusiveGateway exclusiveGateway) {
@@ -464,7 +464,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new EventBasedGatewayActivityBehavior();
     }
 
-    // Multi Instance
+    // 多实例
 
     @Override
     public SequentialMultiInstanceBehavior createSequentialMultiInstanceBehavior(Activity activity, AbstractBpmnActivityBehavior innerActivityBehavior) {
@@ -476,7 +476,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new ParallelMultiInstanceBehavior(activity, innerActivityBehavior);
     }
 
-    // Subprocess
+    // 子流程
 
     @Override
     public SubProcessActivityBehavior createSubprocessActivityBehavior(SubProcess subProcess) {
@@ -535,7 +535,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new AdhocSubProcessActivityBehavior();
     }
 
-    // Call activity
+    // 调用活动
 
     @Override
     public CallActivityBehavior createCallActivityBehavior(CallActivity callActivity) {
@@ -547,14 +547,14 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new CaseTaskActivityBehavior();
     }
 
-    // Transaction
+    // 事务
 
     @Override
     public TransactionActivityBehavior createTransactionActivityBehavior(Transaction transaction) {
         return new TransactionActivityBehavior();
     }
 
-    // Intermediate Events
+    // 中间事件
 
     @Override
     public IntermediateCatchEventActivityBehavior createIntermediateCatchEventActivityBehavior(IntermediateCatchEvent intermediateCatchEvent) {
@@ -621,7 +621,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return new IntermediateThrowCompensationEventActivityBehavior(compensateEventDefinition);
     }
 
-    // End events
+    // 结束事件
 
     @Override
     public NoneEndEventActivityBehavior createNoneEndEventActivityBehavior(EndEvent endEvent) {
@@ -661,7 +661,7 @@ public class DefaultActivityBehaviorFactory extends AbstractBehaviorFactory impl
         return terminateEndEventActivityBehavior;
     }
 
-    // Boundary Events
+    // 边界事件
 
     @Override
     public BoundaryEventActivityBehavior createBoundaryEventActivityBehavior(BoundaryEvent boundaryEvent, boolean interrupting) {
