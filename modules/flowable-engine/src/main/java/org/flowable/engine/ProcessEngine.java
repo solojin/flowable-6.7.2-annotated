@@ -16,31 +16,26 @@ import org.flowable.common.engine.api.Engine;
 import org.flowable.common.engine.impl.FlowableVersions;
 
 /**
- * Provides access to all the services that expose the BPM and workflow operations.
- * 
- * <ul>
- * <li><b>{@link org.flowable.engine.RuntimeService}: </b> Allows the creation of {@link org.flowable.engine.repository.Deployment}s and the starting of and searching on
- * {@link org.flowable.engine.runtime.ProcessInstance}s.</li>
- * <li><b>{@link org.flowable.engine.TaskService}: </b> Exposes operations to manage human (standalone) {@link org.flowable.task.api.Task}s, such as claiming, completing and assigning tasks</li>
- * <li><b>{@link org.flowable.engine.IdentityService}: </b> Used for managing users, groups and the relations between them</li>
- * <li><b>{@link org.flowable.engine.ManagementService}: </b> Exposes engine admin and maintenance operations</li>
- * <li><b>{@link org.flowable.engine.HistoryService}: </b> Service exposing information about ongoing and past process instances.</li>
- * </ul>
- * 
- * Typically, there will be only one central ProcessEngine instance needed in a end-user application. Building a ProcessEngine is done through a {@link ProcessEngineConfiguration} instance and is a
- * costly operation which should be avoided. For that purpose, it is advised to store it in a static field or JNDI location (or something similar). This is a thread-safe object, so no special
- * precautions need to be taken.
+ * 流程引擎 接口类
+ * 提供对暴露BPM和工作流操作的所有服务的访问。
+ * {@link org.flowable.engine.RuntimeService}: 允许创建流程运行时实例和查找流程实例 {@link org.flowable.engine.repository.Deployment}s {@link org.flowable.engine.runtime.ProcessInstance}s.
+ * {@link org.flowable.engine.TaskService}: 暴露给管理人的操作 (单线程) {@link org.flowable.task.api.Task}s, 比如申领、完成和指派任务
+ * {@link org.flowable.engine.IdentityService}: 用来管理用户、组，还有用户和组之间关系的服务
+ * {@link org.flowable.engine.ManagementService}: 暴露引擎管理和维护的操作
+ * {@link org.flowable.engine.HistoryService}: 暴露历史实例信息的服务
+ * 通常，最终用户应用程序中只需要一个中央ProcessEngine实例。构建ProcessEngine是通过{@link ProcessEngineConfiguration}实例完成的，是一个
+ * 应避免的昂贵操作。为此，建议将其存储在静态字段或JNDI位置（或类似位置）。那是一个线程安全的对象，因此没有特殊的需要采取的预防措施。
  * 
  * @author Tom Baeyens
  * @author Joram Barrez
  */
 public interface ProcessEngine extends Engine {
 
-    /** the version of the flowable library */
+    /** Flowable库的版本 */
     String VERSION = FlowableVersions.CURRENT_VERSION;
 
     /**
-     * Starts the executors (async and async history), if they are configured to be auto-activated.
+     * 启动的执行方法（异步或历史异步），可配置为自动激活。
      */
     void startExecutors();
 
