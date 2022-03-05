@@ -17,6 +17,8 @@ import org.activiti.engine.impl.cfg.TransactionContextFactory;
 import org.activiti.engine.impl.interceptor.CommandContext;
 
 /**
+ * Mybatis事务上下文工厂类
+ *
  * @author Tom Baeyens
  */
 public class StandaloneMybatisTransactionContextFactory implements TransactionContextFactory {
