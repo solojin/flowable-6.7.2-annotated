@@ -15,6 +15,8 @@ package org.activiti.engine.impl.cfg;
 import org.activiti.engine.impl.interceptor.CommandContext;
 
 /**
+ * 事务上下文工厂类
+ *
  * @author Tom Baeyens
  */
 public interface TransactionContextFactory {

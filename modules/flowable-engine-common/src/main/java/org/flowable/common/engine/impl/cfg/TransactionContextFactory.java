@@ -15,6 +15,8 @@ package org.flowable.common.engine.impl.cfg;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 
 /**
+ * 事务上下文工厂
+ *
  * @author Tom Baeyens
  */
 public interface TransactionContextFactory {
