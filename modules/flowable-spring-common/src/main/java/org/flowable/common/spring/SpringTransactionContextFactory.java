@@ -19,6 +19,8 @@ import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
+ * Spring事务上下文工厂类
+ *
  * @author Frederik Heremans
  */
 public class SpringTransactionContextFactory implements TransactionContextFactory {
