@@ -22,7 +22,8 @@ import org.flowable.engine.delegate.ExecutionListener;
 import org.flowable.engine.delegate.TransactionDependentExecutionListener;
 
 /**
- * A {@link TransactionListener} that invokes an {@link ExecutionListener}.
+ * 执行监听器事务监听器
+ * 调用执行监听器{@link ExecutionListener}的事务监听器{@link TransactionListener}。
  * 
  * @author Joram Barrez
  */

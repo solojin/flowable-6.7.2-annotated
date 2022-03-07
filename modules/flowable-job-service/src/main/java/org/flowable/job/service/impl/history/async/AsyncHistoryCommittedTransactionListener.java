@@ -19,6 +19,8 @@ import org.flowable.common.engine.impl.cfg.TransactionListener;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 
 /**
+ * 异步历史提交事务监听器
+ *
  * @author Joram Barrez
  */
 public class AsyncHistoryCommittedTransactionListener implements TransactionListener {

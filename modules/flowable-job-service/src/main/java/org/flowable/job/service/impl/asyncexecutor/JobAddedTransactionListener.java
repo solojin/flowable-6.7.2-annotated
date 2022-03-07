@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 作业添加事务监听器
+ *
  * @author Tijs Rademakers
  * @author Joram Barrez
  */
@@ -39,11 +41,11 @@ public class JobAddedTransactionListener implements TransactionListener {
 
     @Override
     public void execute(CommandContext commandContext) {
-        // No need to wrap this call in a new command context, as otherwise the
-        // call to the executeAsyncJob would require a new database connection and transaction
-        // which would block the current connection/transaction (of the calling thread)
-        // until the job has been handed of to the async executor.
-        // When the connection pool is small, this might lead to contention and (temporary) locks.
+        // 无需在新的命令上下文中包装此调用，否则
+        // 调用executeAsyncJob需要一个新的数据库连接和事务
+        // 这将阻止（调用线程的）当前连接/事务
+        // 直到作业被交给异步执行器。
+        // 当连接池很小时，这可能会导致争用和（临时）锁定。
         asyncExecutor.executeAsyncJob(job);
     }
 }

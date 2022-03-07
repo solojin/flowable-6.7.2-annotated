@@ -18,8 +18,9 @@ import org.flowable.job.service.JobServiceConfiguration;
 import org.flowable.job.service.impl.persistence.entity.HistoryJobEntity;
 
 /**
- * A {@link TransactionListener} that will, typically on post-commit, trigger 
- * the async history executor to execute the provided list of {@link HistoryJobEntity} instances. 
+ * 触发器异步历史执行器事务监听器
+ * 一个事务监听器{@link TransactionListener}，通常在提交后触发
+ * 异步历史执行器，用于执行提供的历史作业实体{@link HistoryJobEntity}实例列表。
  * 
  * @author Joram Barrez
  */
@@ -30,9 +31,7 @@ public class TriggerAsyncHistoryExecutorTransactionListener implements Transacti
     protected JobServiceConfiguration jobServiceConfiguration;
     
     public TriggerAsyncHistoryExecutorTransactionListener(JobServiceConfiguration jobServiceConfiguration, HistoryJobEntity historyJobEntity) {
-        // The execution of this listener will reference components that might 
-        // not be available when the command context is closing (when typically 
-        // the history jobs are created and scheduled), so they are already referenced here.
+        // 此侦听器的执行将引用可能命令上下文关闭时不可用（通常在历史记录作业已创建并计划），因此它们已在此处引用。
         this.jobServiceConfiguration = jobServiceConfiguration;
         this.historyJobEntity = historyJobEntity;
     }

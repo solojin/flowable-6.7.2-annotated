@@ -15,6 +15,8 @@ package org.activiti.engine.impl.cfg;
 import org.activiti.engine.impl.interceptor.CommandContext;
 
 /**
+ * 事务监听器
+ *
  * @author Tom Baeyens
  */
 public interface TransactionListener {

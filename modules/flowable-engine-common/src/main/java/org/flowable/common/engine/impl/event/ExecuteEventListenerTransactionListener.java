@@ -19,6 +19,9 @@ import org.flowable.common.engine.impl.interceptor.CommandContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 执行事件监听器事务监听器
+ */
 public class ExecuteEventListenerTransactionListener implements TransactionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteEventListenerTransactionListener.class);

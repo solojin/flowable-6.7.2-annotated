@@ -15,6 +15,8 @@ package org.flowable.common.engine.impl.cfg;
 import org.flowable.common.engine.impl.interceptor.CommandContext;
 
 /**
+ * 事务监听器
+ *
  * @author Tom Baeyens
  */
 public interface TransactionListener {
