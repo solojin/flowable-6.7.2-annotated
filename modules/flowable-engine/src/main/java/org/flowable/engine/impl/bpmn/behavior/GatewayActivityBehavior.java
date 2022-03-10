@@ -18,7 +18,8 @@ import org.flowable.engine.impl.persistence.entity.ExecutionEntityManager;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
- * Super class for all gateway activity implementations.
+ * 网关活动行为抽象类
+ * 用于所有网关活动实现的超类。
  * 
  * @author Joram Barrez
  */

@@ -16,14 +16,16 @@ package org.activiti.engine.impl.bpmn.behavior;
 import org.flowable.engine.delegate.DelegateExecution;
 
 /**
+ * 基于事件的网关活动行为类
+ *
  * @author Daniel Meyer
  */
 public class EventBasedGatewayActivityBehavior extends FlowNodeActivityBehavior {
 
     @Override
     public void execute(DelegateExecution execution) {
-        // the event based gateway doesn't really do anything
-        // ignoring outgoing sequence flows (they're only parsed for the diagram)
+        // 基于事件的网关实际上什么都不做
+        // 忽略流出序列流（它们只针对图表进行分析）
     }
 
 }

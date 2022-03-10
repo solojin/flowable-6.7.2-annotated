@@ -31,7 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of the Exclusive Gateway/XOR gateway/exclusive data-based gateway as defined in the BPMN specification.
+ * 独占网关活动行为类
+ * 实现BPMN规范中定义的独占网关/XOR网关/基于数据的独占网关。
  * 
  * @author Joram Barrez
  */
@@ -42,12 +43,12 @@ public class ExclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExclusiveGatewayActivityBehavior.class);
 
     /**
-     * The default behaviour of BPMN, taking every outgoing sequence flow (where the condition evaluates to true), is not valid for an exclusive gateway.
+     * BPMN的默认行为，即获取每个流出序列流（条件的计算结果为true），对独占网关无效。
      * 
-     * Hence, this behaviour is overridden and replaced by the correct behavior: selecting the first sequence flow which condition evaluates to true (or which hasn't got a condition) and leaving the
-     * activity through that sequence flow.
+     * 因此，该行为被覆盖，并被正确的行为所取代：选择条件评估为true（或没有条件）的第一个序列流，并离开
+     * 通过该序列流的活动。
      * 
-     * If no sequence flow is selected (ie all conditions evaluate to false), then the default sequence flow is taken (if defined).
+     * 如果未选择序列流（即所有条件评估为false），则采用默认序列流（如果定义）。
      */
     @Override
     public void leave(DelegateExecution execution) {
@@ -75,7 +76,7 @@ public class ExclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
         SequenceFlow defaultSequenceFlow = null;
         String defaultSequenceFlowId = exclusiveGateway.getDefaultFlow();
 
-        // Determine sequence flow to take
+        // 确定要采取的顺序流
         Iterator<SequenceFlow> sequenceFlowIterator = exclusiveGateway.getOutgoingFlows().iterator();
         while (outgoingSequenceFlow == null && sequenceFlowIterator.hasNext()) {
             SequenceFlow sequenceFlow = sequenceFlowIterator.next();
@@ -94,14 +95,14 @@ public class ExclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
                 outgoingSequenceFlow = sequenceFlow;
             }
 
-            // Already store it, if we would need it later. Saves one for loop.
+            // 已经储存好了，如果我们以后需要的话。为循环保存一个。
             if (defaultSequenceFlowId != null && defaultSequenceFlowId.equals(sequenceFlow.getId())) {
                 defaultSequenceFlow = sequenceFlow;
             }
 
         }
 
-        // Leave the gateway
+        // 离开网关
         if (outgoingSequenceFlow != null) {
             execution.setCurrentFlowElement(outgoingSequenceFlow);
         } else {
@@ -109,7 +110,7 @@ public class ExclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
                 execution.setCurrentFlowElement(defaultSequenceFlow);
             } else {
 
-                // No sequence flow could be found, not even a default one
+                // 找不到序列流，甚至找不到默认序列流
                 throw new FlowableException("No outgoing sequence flow of the exclusive gateway '" + exclusiveGateway.getId() + "' could be selected for continuing the process");
             }
         }

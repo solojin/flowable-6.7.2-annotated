@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 并行网关活动行为类
  * Implementation of the Parallel Gateway/AND gateway as defined in the BPMN 2.0 specification.
  * 
  * The Parallel Gateway can be used for splitting a path of execution into multiple paths of executions (AND-split/fork behavior), one for every outgoing sequence flow.
