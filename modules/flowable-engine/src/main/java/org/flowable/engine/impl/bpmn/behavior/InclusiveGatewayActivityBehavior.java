@@ -44,13 +44,12 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior im
 
     @Override
     public void execute(DelegateExecution execution) {
-        // The join in the inclusive gateway works as follows:
-        // When an execution enters it, it is inactivated.
-        // All the inactivated executions stay in the inclusive gateway
-        // until ALL executions that CAN reach the inclusive gateway have reached it.
+        // 加入包容网关的工作如下：
+        // 当执行进入时，它将被停止。
         //
-        // This check is repeated on execution changes until the inactivated
-        // executions leave the gateway.
+        // 所有未激活的执行都保留在包容性网关中，直到所有可以到达包容性网关的执行都到达它。
+        //
+        // 在执行更改时重复此检查，直到未激活执行离开网关。
 
         execution.inactivate();
         executeInclusiveGatewayLogic((ExecutionEntity) execution, false);
@@ -74,30 +73,30 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior im
             ExecutionEntity executionEntity = executionIterator.next();
             if (!executionEntity.getActivityId().equals(execution.getCurrentActivityId())) {
                 if (ExecutionGraphUtil.isReachable(execution.getProcessDefinitionId(), executionEntity.getActivityId(), execution.getCurrentActivityId())) {
-                    //Now check if they are in the same "execution path"
+                    // 在相同的执行路径中检查
                     if (executionEntity.getParentId().equals(execution.getParentId())) {
                         oneExecutionCanReachGatewayInstance = true;
                         break;
                     }
                 }
             } else if (executionEntity.isActive() && (executionEntity.getId().equals(execution.getId()) || isAsynchronousActivity(executionEntity))) {
-                // Special case: the execution has reached the inc gw, but the operation hasn't been executed yet for that execution
+                // 特殊情况：执行已到达包容性网关，但尚未执行该执行的操作
                 oneExecutionCanReachGatewayInstance = true;
                 break;
             }
         }
 
-        // Is needed to set the endTime for all historic activity joins
+        // 需要设置所有历史活动联接的结束时间
         if (!inactiveCheck || !oneExecutionCanReachGatewayInstance) {
             CommandContextUtil.getActivityInstanceEntityManager(commandContext).recordActivityEnd(execution, null);
         }
 
-        // If no execution can reach the gateway, the gateway activates and executes fork behavior
+        // 如果没有执行可以到达网关，网关将激活并执行fork行为
         if (!oneExecutionCanReachGatewayInstance) {
 
             LOGGER.debug("Inclusive gateway cannot be reached by any execution and is activated");
 
-            // Kill all executions here (except the incoming)
+            // 在此处杀死所有执行（传入的执行除外）
             Collection<ExecutionEntity> executionsInGateway = executionEntityManager
                 .findInactiveExecutionsByActivityIdAndProcessInstanceId(execution.getCurrentActivityId(), execution.getProcessInstanceId());
             for (ExecutionEntity executionEntityInGateway : executionsInGateway) {
@@ -111,7 +110,7 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior im
                 }
             }
 
-            // Leave
+            // 离开
             CommandContextUtil.getAgenda(commandContext).planTakeOutgoingSequenceFlowsOperation(execution, true);
         }
     }
