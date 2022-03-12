@@ -19,9 +19,10 @@ import org.flowable.engine.impl.delegate.TriggerableActivityBehavior;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
 
 /**
- * Superclass for all 'connectable' BPMN 2.0 process elements: tasks, gateways and events. This means that any subclass can be the source or target of a sequenceflow.
- * 
- * Corresponds with the notion of the 'flownode' in BPMN 2.0.
+ * 流节点活动行为类
+ *
+ * 所有“可连接”BPMN 2.0流程元素的超类：任务、网关和事件。这意味着任何子类都可以是sequenceflow的源或目标。
+ * 与BPMN 2.0中的“流节点”（flownode）概念相对应。
  * 
  * @author Joram Barrez
  */
@@ -32,7 +33,7 @@ public abstract class FlowNodeActivityBehavior implements TriggerableActivityBeh
     protected BpmnActivityBehavior bpmnActivityBehavior = new BpmnActivityBehavior();
 
     /**
-     * Default behaviour: just leave the activity with no extra functionality.
+     * 默认行为：无额外功能的离开活动。
      */
     @Override
     public void execute(DelegateExecution execution) {
@@ -40,22 +41,28 @@ public abstract class FlowNodeActivityBehavior implements TriggerableActivityBeh
     }
 
     /**
-     * Default way of leaving a BPMN 2.0 activity: evaluate the conditions on the outgoing sequence flow and take those that evaluate to true.
+     * 离开BPMN 2.0活动的默认方式是：评估流出序列流上的条件，并将评估结果置为真。
      */
     public void leave(DelegateExecution execution) {
         bpmnActivityBehavior.performDefaultOutgoingBehavior((ExecutionEntity) execution);
     }
 
+    /**
+     * 忽略条件的离开
+     */
     public void leaveIgnoreConditions(DelegateExecution execution) {
         bpmnActivityBehavior.performIgnoreConditionsOutgoingBehavior((ExecutionEntity) execution);
     }
 
     @Override
     public void trigger(DelegateExecution execution, String signalName, Object signalData) {
-        // concrete activity behaviours that do accept signals should override this method;
+        // 接受信号的具体活动行为应重写该方法
         throw new FlowableException("this activity isn't waiting for a trigger");
     }
 
+    /**
+     * 解析活动类型
+     */
     protected String parseActivityType(FlowNode flowNode) {
         String elementType = flowNode.getClass().getSimpleName();
         elementType = elementType.substring(0, 1).toLowerCase() + elementType.substring(1);
