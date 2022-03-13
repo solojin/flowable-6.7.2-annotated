@@ -35,17 +35,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper for initializing and closing process engines in server environments. <br>
- * All created {@link ProcessEngine}s will be registered with this class. <br>
- * The flowable-webapp-init webapp will call the {@link #init()} method when the webapp is deployed and it will call the {@link #destroy()} method when the webapp is destroyed, using a
- * context-listener ( <code>org.flowable.impl.servlet.listener.ProcessEnginesServletContextListener</code> ). That way, all applications can just use the {@link #getProcessEngines()} to obtain
- * pre-initialized and cached process engines. <br>
- * <br>
- * Please note that there is <b>no lazy initialization</b> of process engines, so make sure the context-listener is configured or {@link ProcessEngine}s are already created so they were registered on
- * this class.<br>
- * <br>
- * The {@link #init()} method will try to build one {@link ProcessEngine} for each flowable.cfg.xml file found on the classpath. If you have more then one, make sure you specify different
- * process.engine.name values.
+ * 流程引擎抽象类
+ *
+ * 在服务器环境下，初始化和关闭流程引擎的助手
+ * 所有创建的流程引擎类{@link ProcessEngine}都将注册到此类
+ * 通过一个上下文监听器context-listener ( org.flowable.impl.servlet.listener.ProcessEnginesServletContextListener )，当webapp部署时，会调用初始化方法{@link #init()};当webapp销毁时，会调用销毁方法{@link #destroy()}
+ * 这样的话，所用应用都可以仅仅使用流程引擎抽象类去获得预初始和缓存的流程引擎。
+ * 请注意，流程引擎没有懒加载，所以确保上下文监听器已经配置或流程引擎接口类{@link ProcessEngine}已经被创建且注册到此类。
+ * 初始化方法{@link #init()}将会为在classpath目录下的每一个flowable.cfg.xml文件创建一个流程引擎接口类{@link ProcessEngine}。
+ * 如果你有不只一个流程引擎配置文件，请确保它们有不同的名称。
  * 
  * @author Tom Baeyens
  * @author Joram Barrez
@@ -63,13 +61,14 @@ public abstract class ProcessEngines {
     protected static List<EngineInfo> processEngineInfos = new ArrayList<>();
 
     /**
-     * Initializes all process engines that can be found on the classpath for resources <code>flowable.cfg.xml</code> (plain Flowable style configuration) and for resources
-     * <code>flowable-context.xml</code> (Spring style configuration).
+     * 初始化所有能在classpath文件夹下找到的资源文件
+     * Flowable 风格的资源文件 flowable.cfg.xml
+     * Spring 风格的资源文件 flowable-context.xml
      */
     public static synchronized void init() {
         if (!isInitialized()) {
             if (processEngines == null) {
-                // Create new map to store process-engines if current map is null
+                // 当前map为空时，创建一个新的map去存放流程引擎
                 processEngines = new HashMap<>();
             }
             ClassLoader classLoader = ReflectUtil.getClassLoader();
@@ -80,9 +79,8 @@ public abstract class ProcessEngines {
                 throw new FlowableIllegalArgumentException("problem retrieving flowable.cfg.xml resources on the classpath: " + System.getProperty("java.class.path"), e);
             }
 
-            // Remove duplicated configuration URL's using set. Some
-            // classloaders may return identical URL's twice, causing duplicate
-            // startups
+            // 使用set集合去重配置路径。
+            // 一些类加载器可能会返回两次完全相同的路径，造成重复启动。
             Set<URL> configUrls = new HashSet<>();
             while (resources.hasMoreElements()) {
                 configUrls.add(resources.nextElement());
@@ -126,15 +124,16 @@ public abstract class ProcessEngines {
     }
 
     /**
-     * Registers the given process engine. No {@link EngineInfo} will be available for this process engine. An engine that is registered will be closed when the {@link ProcessEngines#destroy()} is
-     * called.
+     * 注册已经提供的流程引擎。
+     * 没有引擎信息{@link EngineInfo}可用于此进程引擎。
+     * 调用销毁方法{@link ProcessEngines#destroy()}可关闭已经注册的引擎。*
      */
     public static void registerProcessEngine(ProcessEngine processEngine) {
         processEngines.put(processEngine.getName(), processEngine);
     }
 
     /**
-     * Unregisters the given process engine.
+     * 移除一个已注册的流程引擎
      */
     public static void unregister(ProcessEngine processEngine) {
         processEngines.remove(processEngine.getName());
@@ -142,9 +141,9 @@ public abstract class ProcessEngines {
 
     private static EngineInfo initProcessEngineFromResource(URL resourceUrl) {
         EngineInfo processEngineInfo = processEngineInfosByResourceUrl.get(resourceUrl.toString());
-        // if there is an existing process engine info
+        // 如果这里存在流程引擎信息
         if (processEngineInfo != null) {
-            // remove that process engine from the member fields
+            // 从成员字段中删除该流程引擎
             processEngineInfos.remove(processEngineInfo);
             if (processEngineInfo.getException() == null) {
                 String processEngineName = processEngineInfo.getName();
@@ -186,14 +185,15 @@ public abstract class ProcessEngines {
         }
     }
 
-    /** Get initialization results. */
+    /** 获取初始化的结果集。 */
     public static List<EngineInfo> getProcessEngineInfos() {
         return processEngineInfos;
     }
 
     /**
-     * Get initialization results. Only info will we available for process engines which were added in the {@link ProcessEngines#init()}. No {@link EngineInfo} is available for engines which were
-     * registered programmatically.
+     * 获取初始化的结果集。
+     * 只能获取到通过初始化方法{@link ProcessEngines#init()}增加的流程引擎。
+     * 获取不到通过流程方式注册的流程引擎。
      */
     public static EngineInfo getProcessEngineInfo(String processEngineName) {
         return processEngineInfosByName.get(processEngineName);
@@ -204,10 +204,10 @@ public abstract class ProcessEngines {
     }
 
     /**
-     * obtain a process engine by name.
+     * 通过一个名称获取流程引擎
      * 
      * @param processEngineName
-     *            is the name of the process engine or null for the default process engine.
+     *            一个流程引擎的名称或者为空时使用默认的流程引擎。
      */
     public static ProcessEngine getProcessEngine(String processEngineName) {
         if (!isInitialized()) {
@@ -217,7 +217,7 @@ public abstract class ProcessEngines {
     }
 
     /**
-     * retries to initialize a process engine that previously failed.
+     * 重新初始化先前失败的流程引擎
      */
     public static EngineInfo retry(String resourceUrl) {
         LOGGER.debug("retying initializing of resource {}", resourceUrl);
@@ -229,14 +229,15 @@ public abstract class ProcessEngines {
     }
 
     /**
-     * provides access to process engine to application clients in a managed server environment.
+     * 在托管服务器环境下，向应用程序客户端提供对流程引擎的访问。
      */
     public static Map<String, ProcessEngine> getProcessEngines() {
         return processEngines;
     }
 
     /**
-     * closes all process engines. This method should be called when the server shuts down.
+     * 关闭所有的流程引擎。
+     * 应该在服务器关闭时调用此方法。
      */
     public static synchronized void destroy() {
         if (isInitialized()) {
