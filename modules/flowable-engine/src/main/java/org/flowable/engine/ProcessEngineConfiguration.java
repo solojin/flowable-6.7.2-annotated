@@ -39,46 +39,26 @@ import org.flowable.job.service.impl.asyncexecutor.AsyncExecutor;
 import org.flowable.task.service.TaskPostProcessor;
 
 /**
- * Configuration information from which a process engine can be build.
- * 
- * <p>
- * Most common is to create a process engine based on the default configuration file:
- * 
- * <pre>
+ * 流程引擎配置类
+ *
+ * 用于构建流程引擎的配置信息
+ *
+ * 最常见的是基于默认配置文件创建流程引擎：
+ *
  * ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().buildProcessEngine();
- * </pre>
- * 
- * <p>
- * To create a process engine programmatic, without a configuration file, the first option is {@link #createStandaloneProcessEngineConfiguration()}
- * 
- * <pre>
+ *
+ * 要在没有配置文件的情况下通过编程创建流程引擎，第一个选项是{@link#createStandaloneProcessEngineConfiguration（）}
  * ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration().buildProcessEngine();
- * </pre>
  *
- * <p>
- * This creates a new process engine with all the defaults to connect to a remote h2 database (jdbc:h2:tcp://localhost/flowable) in standalone mode. Standalone mode means that the process engine will
- * manage the transactions on the JDBC connections that it creates. One transaction per service method. For a description of how to write the configuration files, see the userguide.
- * </p>
- * 
- * <p>
- * The second option is great for testing: {@link #createStandaloneInMemProcessEngineConfiguration()}
- * 
- * <pre>
+ * 在独立模式下，将创建一个包含连接到远程h2数据库的所有默认设置（jdbc:h2:tcp://localhost/flowable)的新流程引擎。独立模式意味着流程引擎将管理它创建的JDBC连接上的事务。每个服务方法一个事务。有关如何编写配置文件的说明，请参阅《用户指南》。
+ *
+ * 第二个选项非常适合测试：{@link#createStandaloneInMemProcessEngineConfiguration（）}
+ *
  * ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration().buildProcessEngine();
- * </pre>
  *
- * <p>
- * This creates a new process engine with all the defaults to connect to an memory h2 database (jdbc:h2:tcp://localhost/flowable) in standalone mode. The DB schema strategy default is in this case
- * {@code create-drop}. Standalone mode means that Flowable will manage the transactions on the JDBC connections that it creates. One transaction per service method.
- * </p>
- * 
- * <p>
- * On all forms of creating a process engine, you can first customize the configuration before calling the {@link #buildProcessEngine()} method by calling any of the setters like this:
- * 
- * <pre>
+ * 在创建流程引擎的所有形式中，在调用{@link#buildProcessEngine（）}方法之前，可以先自定义配置，方法如下：
  * ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().setMailServerHost(&quot;gmail.com&quot;).setJdbcUsername(&quot;mickey&quot;).setJdbcPassword(&quot;mouse&quot;)
- *         .buildProcessEngine();
- * </pre>
+ *           .buildProcessEngine();
  * 
  * @see ProcessEngines
  * @author Tom Baeyens
@@ -92,8 +72,8 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     protected boolean asyncHistoryExecutorActivate;
 
     protected String mailServerHost = "localhost";
-    protected String mailServerUsername; // by default no name and password are provided, which
-    protected String mailServerPassword; // means no authentication for mail server
+    protected String mailServerUsername; // 默认情况下，不提供任何名称和密码
+    protected String mailServerPassword; // 意味着邮件服务器没有身份验证
     protected int mailServerPort = 25;
     protected int mailServerSSLPort = 465;
     protected boolean useSSL;
@@ -105,7 +85,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     protected Map<String, MailServerInfo> mailServers = new HashMap<>();
     protected Map<String, String> mailSessionsJndi = new HashMap<>();
 
-    // Set Http Client config defaults
+    // 设置Http客户端配置默认值
     protected HttpClientConfig httpClientConfig = new HttpClientConfig();
 
     protected HistoryLevel historyLevel;
@@ -125,13 +105,13 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     protected AsyncTaskExecutor asyncHistoryTaskExecutor;
     protected boolean shutdownAsyncHistoryTaskExecutor;
 
-    /** define the default wait time for a failed job in seconds */
+    /** 定义失败作业的默认等待时间（秒） */
     protected int defaultFailedJobWaitTime = 10;
-    /** define the default wait time for a failed async job in seconds */
+    /** 定义失败异步作业的默认等待时间（秒） */
     protected int asyncFailedJobWaitTime = 10;
 
     /**
-     * Process diagram generator. Default value is DefaultProcessDiagramGenerator
+     * 流程图生成器。默认值为DefaultProcessDiagramGenerator
      */
     protected ProcessDiagramGenerator processDiagramGenerator;
 
@@ -140,7 +120,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     protected boolean alwaysUseArraysForDmnMultiHitPolicies = true;
     
     /**
-     *  include the sequence flow name in case there's no Label DI, 
+     *  如果没有标签DI，请包含顺序流名称,
      */
     protected boolean drawSequenceFlowNameWithNoLabelDI = false;
     
@@ -152,7 +132,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
 
     protected boolean enableProcessDefinitionInfoCache;
 
-    // History Cleanup
+    // 清除历史
     protected boolean enableHistoryCleaning = false;
     protected String historyCleaningTimeCycleConfig = "0 0 1 * * ?";
     protected Duration cleanInstancesEndedAfter = Duration.ofDays(365);
@@ -161,10 +141,10 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     protected HistoryCleaningManager historyCleaningManager;
 
 
-    /** postprocessor for a task builder */
+    /** 任务生成器的后处理器 */
     protected TaskPostProcessor taskPostProcessor = null;
 
-    /** use one of the static createXxxx methods instead */
+    /** 使用一个静态创建方法static createXxxx替代 */
     protected ProcessEngineConfiguration() {
     }
 
@@ -198,10 +178,10 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
         return new StandaloneInMemProcessEngineConfiguration();
     }
 
-    // TODO add later when we have test coverage for this
+    // 待我们对此进行测试覆盖后再添加
     // public static ProcessEngineConfiguration
     // createJtaProcessEngineConfiguration() {
-    // return new JtaProcessEngineConfiguration();
+    //      return new JtaProcessEngineConfiguration();
     // }
 
     public abstract RepositoryService getRepositoryService();
@@ -220,7 +200,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
 
     public abstract ProcessEngineConfiguration getProcessEngineConfiguration();
 
-    // getters and setters
+    // getters and setters 方法区
     // //////////////////////////////////////////////////////
 
     @Override
@@ -607,11 +587,11 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     }
 
     /**
-     * @deprecated Use {@link #setEngineLifecycleListeners(List)}.
+     * @deprecated 废弃方法 使用 {@link #setEngineLifecycleListeners(List)} 替代
      */
     @Deprecated
     public ProcessEngineConfiguration setProcessEngineLifecycleListener(ProcessEngineLifecycleListener processEngineLifecycleListener) {
-        // Backwards compatibility (when there was only one typed engine listener)
+        // 向后兼容性（当只有一个类型化引擎监听器时）
         if (engineLifecycleListeners == null || engineLifecycleListeners.isEmpty()) {
             List<EngineLifecycleListener> engineLifecycleListeners = new ArrayList<>(1);
             engineLifecycleListeners.add(processEngineLifecycleListener);
@@ -640,7 +620,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     }
 
     /**
-     * @deprecated Use {@link #getEngineLifecycleListeners()}.
+     * @deprecated 废弃方法 使用 {@link #getEngineLifecycleListeners()} 替代
      */
     @Deprecated
     public ProcessEngineLifecycleListener getProcessEngineLifecycleListener() {
@@ -820,7 +800,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     }
 
     /**
-     * @deprecated use {@link #getCleanInstancesEndedAfter()} instead
+     * @deprecated 废弃方法 使用 {@link #getCleanInstancesEndedAfter()} 替代
      */
     @Deprecated
     public int getCleanInstancesEndedAfterNumberOfDays() {
@@ -828,7 +808,7 @@ public abstract class ProcessEngineConfiguration extends AbstractEngineConfigura
     }
 
     /**
-     * @deprecated use {@link #setCleanInstancesEndedAfter(Duration)} instead
+     * @deprecated 使用 {@link #setCleanInstancesEndedAfter(Duration)} 替代
      */
     @Deprecated
     public ProcessEngineConfiguration setCleanInstancesEndedAfterNumberOfDays(int cleanInstancesEndedAfterNumberOfDays) {
