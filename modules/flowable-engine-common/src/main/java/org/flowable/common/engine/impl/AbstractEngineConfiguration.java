@@ -129,27 +129,30 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+/**
+ * 抽象引擎配置
+ */
 public abstract class AbstractEngineConfiguration {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /** The tenant id indicating 'no tenant' */
+    /** 表示“无租户”的租户id */
     public static final String NO_TENANT_ID = "";
 
     /**
-     * Checks the version of the DB schema against the library when the form engine is being created and throws an exception if the versions don't match.
+     * 在创建表单引擎时，对照库检查DB模式的版本，如果版本不匹配，则引发异常。
      */
     public static final String DB_SCHEMA_UPDATE_FALSE = "false";
     public static final String DB_SCHEMA_UPDATE_CREATE = "create";
     public static final String DB_SCHEMA_UPDATE_CREATE_DROP = "create-drop";
 
     /**
-     * Creates the schema when the form engine is being created and drops the schema when the form engine is being closed.
+     * 在创建表单引擎时创建模式，在关闭表单引擎时删除模式.
      */
     public static final String DB_SCHEMA_UPDATE_DROP_CREATE = "drop-create";
 
     /**
-     * Upon building of the process engine, a check is performed and an update of the schema is performed if it is necessary.
+     * 构建流程引擎后，将执行检查，并在必要时更新模式.
      */
     public static final String DB_SCHEMA_UPDATE_TRUE = "true";
 
@@ -177,13 +180,13 @@ public abstract class AbstractEngineConfiguration {
     protected String databaseSchemaUpdate = DB_SCHEMA_UPDATE_FALSE;
 
     /**
-     * Whether to use a lock when performing the database schema create or update operations.
+     * 执行数据库模式创建或更新操作时是否使用锁.
      */
     protected boolean useLockForDatabaseSchemaUpdate = false;
 
     protected String xmlEncoding = "UTF-8";
 
-    // COMMAND EXECUTORS ///////////////////////////////////////////////
+    // 命令执行器 ///////////////////////////////////////////////
 
     protected CommandExecutor commandExecutor;
     protected Collection<? extends CommandInterceptor> defaultCommandInterceptors;
@@ -203,16 +206,17 @@ public abstract class AbstractEngineConfiguration {
 
     protected ClassLoader classLoader;
     /**
-     * Either use Class.forName or ClassLoader.loadClass for class loading. See http://forums.activiti.org/content/reflectutilloadclass-and-custom- classloader
+     * 使用Clas.forname方法或者ClassLoader.loadClass方法加载类。
+     * 查看http://forums.activiti.org/content/reflectutilloadclass-and-custom- classloader
      */
     protected boolean useClassForNameClassLoading = true;
 
     protected List<EngineLifecycleListener> engineLifecycleListeners;
 
-    // Event Registry //////////////////////////////////////////////////
+    // 事件注册 //////////////////////////////////////////////////
     protected Map<String, EventRegistryEventConsumer> eventRegistryEventConsumers = new HashMap<>();
 
-    // MYBATIS SQL SESSION FACTORY /////////////////////////////////////
+    // MYBATIS SQL SESSION 工厂 /////////////////////////////////////
 
     protected boolean isDbHistoryUsed = true;
     protected DbSqlSessionFactory dbSqlSessionFactory;
@@ -221,16 +225,15 @@ public abstract class AbstractEngineConfiguration {
     protected TransactionContextFactory transactionContextFactory;
 
     /**
-     * If set to true, enables bulk insert (grouping sql inserts together). Default true.
-     * For some databases (eg DB2+z/OS) needs to be set to false.
+     * 如果设置为true，则启用批量插入（将sql插入分组在一起）。默认为true.
+     * 对于某些数据库（例如DB2+z/OS），需要将其设置为false.
      */
     protected boolean isBulkInsertEnabled = true;
 
     /**
-     * Some databases have a limit of how many parameters one sql insert can have (eg SQL Server, 2000 params (!= insert statements) ). Tweak this parameter in case of exceptions indicating too much
-     * is being put into one bulk insert, or make it higher if your database can cope with it and there are inserts with a huge amount of data.
-     * <p>
-     * By default: 100 (55 for mssql server as it has a hard limit of 2000 parameters in a statement)
+     * 一些数据库对一条sql insert的参数有限制（例如sql Server，最多2000个参数（不等于插入语句））。如果异常很多时，请调整此参数
+     * 放入到一个大容量插入中，或者如果数据库能够处理，并且有大量数据需要插入，则将其提高.
+     * 默认情况下：100（mssql server为55，因为它在语句中有2000个参数的硬限制）
      */
     protected int maxNrOfStatementsInBulkInsert = 100;
 
@@ -245,7 +248,7 @@ public abstract class AbstractEngineConfiguration {
     protected List<MybatisTypeAliasConfigurator> dependentEngineMybatisTypeAliasConfigs;
     protected List<MybatisTypeHandlerConfigurator> dependentEngineMybatisTypeHandlerConfigs;
 
-    // SESSION FACTORIES ///////////////////////////////////////////////
+    // SESSION 工厂 ///////////////////////////////////////////////
     protected List<SessionFactory> customSessionFactories;
     protected Map<Class<?>, SessionFactory> sessionFactories;
 
@@ -260,94 +263,93 @@ public abstract class AbstractEngineConfiguration {
     protected boolean transactionsExternallyManaged;
 
     /**
-     * Flag that can be set to configure or not a relational database is used. This is useful for custom implementations that do not use relational databases at all.
+     * 使用可设置为配置或不配置关系数据库的标志。这对于完全不使用关系数据库的自定义实现非常有用.
      *
-     * If true (default), the {@link AbstractEngineConfiguration#getDatabaseSchemaUpdate()} value will be used to determine what needs to happen wrt the database schema.
+     * 如果为true（默认值），将使用{@link AbstractEngineConfiguration#getDatabaseSchemaUpdate（）}值来确定数据库模式需要执行的操作.
      *
-     * If false, no validation or schema creation will be done. That means that the database schema must have been created 'manually' before but the engine does not validate whether the schema is
-     * correct. The {@link AbstractEngineConfiguration#getDatabaseSchemaUpdate()} value will not be used.
+     * 如果为false，则不会进行验证或模式创建。这意味着之前必须“手动”创建数据库模式，但引擎不会验证该模式是否正确。
+     * 将不使用{@link AbstractEngineConfiguration#getDatabaseSchemaUpdate（）}值.
      */
     protected boolean usingRelationalDatabase = true;
     
     /**
-     * Flag that can be set to configure whether or not a schema is used. This is useful for custom implementations that do not use relational databases at all.
-     * Setting {@link #usingRelationalDatabase} to true will automatically imply using a schema.
+     * 可设置为配置是否使用模式的标志。这对于完全不使用关系数据库的自定义实现非常有用.
+     * 将{@link#usingRelationalDatabase}设置为true将自动意味着使用模式.
      */
     protected boolean usingSchemaMgmt = true;
 
     /**
-     * Allows configuring a database table prefix which is used for all runtime operations of the process engine. For example, if you specify a prefix named 'PRE1.', Flowable will query for executions
-     * in a table named 'PRE1.ACT_RU_EXECUTION_'.
+     * 允许配置用于process engine所有运行时操作的数据库表前缀。例如，如果指定一个名为“PRE1”的前缀，
+     * Flowable将通过'PRE1.ACT_RU_EXECUTION_'表查询执行情况.
      *
-     * <p>
-     * <strong>NOTE: the prefix is not respected by automatic database schema management. If you use {@link AbstractEngineConfiguration#DB_SCHEMA_UPDATE_CREATE_DROP} or
-     * {@link AbstractEngineConfiguration#DB_SCHEMA_UPDATE_TRUE}, Flowable will create the database tables using the default names, regardless of the prefix configured here.</strong>
+     * 注意：自动数据库模式管理不考虑前缀。如果使用{@link AbstractEngineConfiguration#DB_SCHEMA_UPDATE_CREATE_DROP}
+     * 或{@link AbstractEngineConfiguration#DB_SCHEMA_UPDATE_TRUE}，Flowable将使用默认名称创建数据库表，而不考虑此处配置的前缀.
      */
     protected String databaseTablePrefix = "";
 
     /**
-     * Escape character for doing wildcard searches.
+     * 用于进行通配符搜索的转义字符.
      *
-     * This will be added at then end of queries that include for example a LIKE clause. For example: SELECT * FROM table WHERE column LIKE '%\%%' ESCAPE '\';
+     * 这将添加到包含LIKE子句查询的末尾。例如：SELECT * FROM table WHERE column LIKE '%\%%' 的转义符'\';
      */
     protected String databaseWildcardEscapeCharacter;
 
     /**
-     * database catalog to use
+     * 要使用的数据库目录
      */
     protected String databaseCatalog = "";
 
     /**
-     * In some situations you want to set the schema to use for table checks / generation if the database metadata doesn't return that correctly, see https://jira.codehaus.org/browse/ACT-1220,
+     * 在某些情况下，如果数据库元数据没有正确返回，您需要设置用于表检查/生成的模式, 查看 https://jira.codehaus.org/browse/ACT-1220,
      * https://jira.codehaus.org/browse/ACT-1062
      */
     protected String databaseSchema;
 
     /**
-     * Set to true in case the defined databaseTablePrefix is a schema-name, instead of an actual table name prefix. This is relevant for checking if Flowable-tables exist, the databaseTablePrefix
-     * will not be used here - since the schema is taken into account already, adding a prefix for the table-check will result in wrong table-names.
+     * 如果定义的databaseTablePrefix是模式名，而不是实际的表名前缀，则设置为true。这与检查是否存在Flowable表（databaseTablePrefix）有关。
+     * 如果已经考虑了模式，就不会再使用-，为表检查添加前缀将导致错误的表名.
      */
     protected boolean tablePrefixIsSchema;
     
     /**
-     * Set to true if the latest version of a definition should be retrieved, ignoring a possible parent deployment id value
+     * 如果最新版本的定义可被恢复，则设置为true,忽略可能的父级部署ID值
      */
     protected boolean alwaysLookupLatestDefinitionVersion;
     
     /**
-     * Set to true if by default lookups should fallback to the default tenant (an empty string by default or a defined tenant value)
+     * 默认查找应退回到默认租户，则设置为true（默认情况下为空字符串或定义的租户值）
      */
     protected boolean fallbackToDefaultTenant;
 
     /**
-     * Default tenant provider that is executed when looking up definitions, in case the global or local fallback to default tenant value is true
+     * 默认租户提供程序，在全局或本地回退到默认租户值为true的情况下，在查找定义时执行
      */
     protected DefaultTenantProvider defaultTenantProvider = (tenantId, scope, scopeKey) -> NO_TENANT_ID;
 
     /**
-     * Enables the MyBatis plugin that logs the execution time of sql statements.
+     * 启用记录sql语句执行时间的MyBatis插件.
      */
     protected boolean enableLogSqlExecutionTime;
 
     protected Properties databaseTypeMappings = getDefaultDatabaseTypeMappings();
 
     /**
-     * Duration between the checks when acquiring a lock.
+     * 获取锁时检查之间的持续时间.
      */
     protected Duration lockPollRate = Duration.ofSeconds(10);
 
     /**
-     * Duration to wait for the DB Schema lock before giving up.
+     * 在放弃之前等待DB模式锁定的持续时间.
      */
     protected Duration schemaLockWaitTime = Duration.ofMinutes(5);
 
-    // DATA MANAGERS //////////////////////////////////////////////////////////////////
+    // 数据管理器 //////////////////////////////////////////////////////////////////
 
     protected PropertyDataManager propertyDataManager;
     protected ByteArrayDataManager byteArrayDataManager;
     protected TableDataManager tableDataManager;
 
-    // ENTITY MANAGERS ////////////////////////////////////////////////////////////////
+    // 实体管理器  ////////////////////////////////////////////////////////////////
 
     protected PropertyEntityManager propertyEntityManager;
     protected ByteArrayEntityManager byteArrayEntityManager;
@@ -356,7 +358,7 @@ public abstract class AbstractEngineConfiguration {
     protected List<EngineDeployer> customPostDeployers;
     protected List<EngineDeployer> deployers;
     
-    // CONFIGURATORS ////////////////////////////////////////////////////////////
+    // 配置器 ////////////////////////////////////////////////////////////
 
     protected boolean enableConfiguratorServiceLoader = true; // Enabled by default. In certain environments this should be set to false (eg osgi)
     protected List<EngineConfigurator> configurators; // The injected configurators
@@ -419,13 +421,13 @@ public abstract class AbstractEngineConfiguration {
     protected Clock clock;
     protected ObjectMapper objectMapper;
 
-    // Variables
+    // 变量
 
     public static final int DEFAULT_GENERIC_MAX_LENGTH_STRING = 4000;
     public static final int DEFAULT_ORACLE_MAX_LENGTH_STRING = 2000;
 
     /**
-     * Define a max length for storing String variable types in the database. Mainly used for the Oracle NVARCHAR2 limit of 2000 characters
+     * 定义在数据库中存储字符串变量类型的最大长度。主要用于Oracle NVARCHAR2 2000个字符的限制
      */
     protected int maxLengthStringVariableType = -1;
     
@@ -433,7 +435,7 @@ public abstract class AbstractEngineConfiguration {
         addEngineConfiguration(getEngineCfgKey(), getEngineScopeType(), this);
     }
 
-    // DataSource
+    // 数据源
     // ///////////////////////////////////////////////////////////////
 
     protected void initDataSource() {
@@ -534,8 +536,8 @@ public abstract class AbstractEngineConfiguration {
             }
         }
 
-        // Special care for MSSQL, as it has a hard limit of 2000 params per statement (incl bulk statement).
-        // Especially with executions, with 100 as default, this limit is passed.
+        // 特别注意MSSQL，因为每个语句（包括批量语句）有2000个参数的硬限制.
+        // 特别是在执行时，默认值为100，这一限制就超过了.
         if (DATABASE_TYPE_MSSQL.equals(databaseType)) {
             maxNrOfStatementsInBulkInsert = DEFAULT_MAX_NR_OF_STATEMENTS_BULK_INSERT_SQL_SERVER;
         }
@@ -547,7 +549,7 @@ public abstract class AbstractEngineConfiguration {
         }
     }
 
-    // session factories ////////////////////////////////////////////////////////
+    // session 工厂  ////////////////////////////////////////////////////////
 
     public void addSessionFactory(SessionFactory sessionFactory) {
         sessionFactories.put(sessionFactory.getSessionType(), sessionFactory);
@@ -678,7 +680,7 @@ public abstract class AbstractEngineConfiguration {
         }
     }
 
-    // id generator
+    // ID生成器
     // /////////////////////////////////////////////////////////////
 
     public void initIdGenerator() {
@@ -700,7 +702,7 @@ public abstract class AbstractEngineConfiguration {
         }
     }
 
-    // Data managers ///////////////////////////////////////////////////////////
+    // 数据管理器 ///////////////////////////////////////////////////////////
 
     public void initDataManagers() {
         if (propertyDataManager == null) {
@@ -712,7 +714,7 @@ public abstract class AbstractEngineConfiguration {
         }
     }
 
-    // Entity managers //////////////////////////////////////////////////////////
+    // 实体管理器 //////////////////////////////////////////////////////////
 
     public void initEntityManagers() {
         if (propertyEntityManager == null) {
@@ -846,7 +848,7 @@ public abstract class AbstractEngineConfiguration {
                 }
                 properties.put("wildcardEscapeClause", wildcardEscapeClause);
 
-                // set default properties
+                // 设置默认属性
                 properties.put("limitBefore", "");
                 properties.put("limitAfter", "");
                 properties.put("limitBetween", "");
@@ -904,10 +906,10 @@ public abstract class AbstractEngineConfiguration {
     }
 
     public void initMybatisTypeHandlers(Configuration configuration) {
-        // When mapping into Map<String, Object> there is currently a problem with MyBatis.
-        // It will return objects which are driver specific.
-        // Therefore we are registering the mappings between Object.class and the specific jdbc type here.
-        // see https://github.com/mybatis/mybatis-3/issues/2216 for more info
+        // MyBatis当前存在问题映射到Map<String，Object>.
+        // 它将返回特定于驱动程序的对象.
+        // 因此，我们正在Object.class和特殊jdbc类型间映射.
+        // 更多信息 https://github.com/mybatis/mybatis-3/issues/2216
         TypeHandlerRegistry handlerRegistry = configuration.getTypeHandlerRegistry();
 
         handlerRegistry.register(Object.class, JdbcType.BOOLEAN, new BooleanTypeHandler());
@@ -997,7 +999,7 @@ public abstract class AbstractEngineConfiguration {
     }
 
     protected void parseMybatisXmlMapping(Configuration configuration, String resource) {
-        // see XMLConfigBuilder.mapperElement()
+        // 查看 XMLConfigBuilder.mapperElement()
         XMLMapperBuilder mapperParser = new XMLMapperBuilder(getResourceAsStream(resource), configuration, resource, configuration.getSqlFragments());
         mapperParser.parse();
     }
@@ -1026,12 +1028,12 @@ public abstract class AbstractEngineConfiguration {
         allConfigurators = new ArrayList<>();
         allConfigurators.addAll(getEngineSpecificEngineConfigurators());
 
-        // Configurators that are explicitly added to the config
+        // 显式添加到配置中的配置程序
         if (configurators != null) {
             allConfigurators.addAll(configurators);
         }
 
-        // Auto discovery through ServiceLoader
+        // 通过ServiceLoader自动发现
         if (enableConfiguratorServiceLoader) {
             ClassLoader classLoader = getClassLoader();
             if (classLoader == null) {
@@ -1051,8 +1053,7 @@ public abstract class AbstractEngineConfiguration {
 
             if (!allConfigurators.isEmpty()) {
 
-                // Order them according to the priorities (useful for dependent
-                // configurator)
+                // 根据优先顺序排列（对依赖型配置器有用）
                 allConfigurators.sort(new Comparator<EngineConfigurator>() {
 
                     @Override
@@ -1069,7 +1070,7 @@ public abstract class AbstractEngineConfiguration {
                     }
                 });
 
-                // Execute the configurators
+                // 执行配置器
                 logger.info("Found {} Engine Configurators in total:", allConfigurators.size());
                 for (EngineConfigurator configurator : allConfigurators) {
                     logger.info("{} (priority:{})", configurator.getClass(), configurator.getPriority());
@@ -1083,16 +1084,16 @@ public abstract class AbstractEngineConfiguration {
     public void close() {
         if (forceCloseMybatisConnectionPool && dataSource instanceof PooledDataSource) {
             /*
-             * When the datasource is created by a Flowable engine (i.e. it's an instance of PooledDataSource),
-             * the connection pool needs to be closed when closing the engine.
-             * Note that calling forceCloseAll() multiple times (as is the case when running with multiple engine) is ok.
+             * 当数据源由Flowable引擎创建 (i.e. 它是PooledDataSource的实例),
+             * 关闭引擎时，需要关闭连接池.
+             * 请注意，多次调用forceCloseAll（）是可以的（与使用多个引擎运行时的情况相同）.
              */
             ((PooledDataSource) dataSource).forceCloseAll();
         }
     }
 
     protected List<EngineConfigurator> getEngineSpecificEngineConfigurators() {
-        // meant to be overridden if needed
+        // 如果需要的话可以被覆盖
         return Collections.emptyList();
     }
 
@@ -1114,7 +1115,7 @@ public abstract class AbstractEngineConfiguration {
         return new LockManagerImpl(commandExecutor, lockName, getLockPollRate(), getEngineCfgKey());
     }
 
-    // getters and setters
+    // getters and setters 方法
     // //////////////////////////////////////////////////////
 
     public abstract String getEngineName();
@@ -1711,8 +1712,8 @@ public abstract class AbstractEngineConfiguration {
     }
 
     /**
-     * @return name of the default tenant
-     * @deprecated use {@link AbstractEngineConfiguration#getDefaultTenantProvider()} instead
+     * @return 默认租户的名称
+     * @deprecated 使用 {@link AbstractEngineConfiguration#getDefaultTenantProvider()} 替代
      */
     @Deprecated
     public String getDefaultTenantValue() {
@@ -1843,7 +1844,7 @@ public abstract class AbstractEngineConfiguration {
     protected void initTypedEventListeners() {
         if (typedEventListeners != null) {
             for (Map.Entry<String, List<FlowableEventListener>> listenersToAdd : typedEventListeners.entrySet()) {
-                // Extract types from the given string
+                // 从给定字符串中提取类型
                 FlowableEngineEventType[] types = FlowableEngineEventType.getTypesFromString(listenersToAdd.getKey());
 
                 for (FlowableEventListener listenerToAdd : listenersToAdd.getValue()) {
@@ -2015,8 +2016,8 @@ public abstract class AbstractEngineConfiguration {
     }
 
     /**
-     * @return All {@link EngineConfigurator} instances. Will only contain values after init of the engine.
-     * Use the {@link #getConfigurators()} or {@link #addConfigurator(EngineConfigurator)} methods otherwise.
+     * @return 所有{@link EngineConfigurator}实例。将仅包含引擎初始化后的值.
+     * 否则，请使用{@link#getConfigurator（）}或{@link#addConfigurator（EngineConfigurator）}方法.
      */
     public List<EngineConfigurator> getAllConfigurators() {
         return allConfigurators;
