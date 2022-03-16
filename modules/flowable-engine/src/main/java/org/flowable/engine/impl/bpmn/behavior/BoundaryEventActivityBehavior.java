@@ -26,6 +26,8 @@ import org.flowable.engine.impl.persistence.entity.ExecutionEntityManager;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
+ * 边界事件活动行为类
+ *
  * @author Joram Barrez
  */
 public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
@@ -43,7 +45,7 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
 
     @Override
     public void execute(DelegateExecution execution) {
-        // Overridden by subclasses
+        // 被子类覆盖
     }
 
     @Override
@@ -60,12 +62,12 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
     }
 
     protected void executeInterruptingBehavior(ExecutionEntity executionEntity, CommandContext commandContext) {
-        // The destroy scope operation will look for the parent execution and
-        // destroy the whole scope, and leave the boundary event using this parent execution.
+        // 销毁作用域操作将查找父执行和
+        // 销毁整个作用域，并使用此父执行保留边界事件。
         //
-        // The take outgoing seq flows operation below (the non-interrupting else clause) on the other hand uses the
-        // child execution to leave, which keeps the scope alive.
-        // Which is what we need here.
+        // 另一方面，下面的take outgoing seq flows操作（非中断else子句）使用
+        // 要离开的子执行，这使作用域保持活动状态。
+        // 这就是我们需要的。
 
         ExecutionEntityManager executionEntityManager = CommandContextUtil.getExecutionEntityManager(commandContext);
         ExecutionEntity attachedRefScopeExecution = executionEntityManager.findById(executionEntity.getParentId());
@@ -93,11 +95,11 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
 
         deleteChildExecutions(attachedRefScopeExecution, executionEntity, commandContext);
 
-        // set new parent for boundary event execution
+        // 为边界事件执行设置新父级
         executionEntity.setParent(parentScopeExecution);
 
-        // TakeOutgoingSequenceFlow will not set history correct when no outgoing sequence flow for boundary event
-        // (This is a theoretical case ... shouldn't use a boundary event without outgoing sequence flow ...)
+        // 当边界事件没有传出序列流时，TakeOutgoingSequenceFlow将不会设置正确的历史记录
+        //（这是一个理论案例……不应使用没有传出序列流的边界事件…）
         if (executionEntity.getCurrentFlowElement() instanceof FlowNode
                 && ((FlowNode) executionEntity.getCurrentFlowElement()).getOutgoingFlows().isEmpty()) {
             
@@ -108,14 +110,13 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
     }
 
     protected void executeNonInterruptingBehavior(ExecutionEntity executionEntity, CommandContext commandContext) {
-        // Non-interrupting: the current execution is given the first parent
-        // scope (which isn't its direct parent)
+        // 无中断：当前执行被赋予第一个父级
+        // 范围（不是其直接父级）
         //
-        // Why? Because this execution does NOT have anything to do with
-        // the current parent execution (the one where the boundary event is on): when it is deleted or whatever,
-        // this does not impact this new execution at all, it is completely independent in that regard.
+        // 为什么？因为这次执行与当前父级执行（边界事件处于启用状态的执行）：当它被删除或其他任何情况时，
+        // 这根本不会影响新的执行，在这方面它是完全独立的。
 
-        // Note: if the parent of the parent does not exists, this becomes a concurrent execution in the process instance!
+        // 注意：如果父对象的父对象不存在，这将成为流程实例中的并发执行！
 
         ExecutionEntityManager executionEntityManager = CommandContextUtil.getExecutionEntityManager(commandContext);
 
@@ -141,7 +142,7 @@ public class BoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
         nonInterruptingExecution.setActive(false);
         nonInterruptingExecution.setCurrentFlowElement(executionEntity.getCurrentFlowElement());
         
-        // create new start activity instance for the non interrupting boundary event
+        // 为非中断边界事件创建新的开始活动实例
         CommandContextUtil.getActivityInstanceEntityManager(commandContext).recordActivityStart(executionEntity);
 
         CommandContextUtil.getAgenda(commandContext).planTakeOutgoingSequenceFlowsOperation(nonInterruptingExecution, true);
