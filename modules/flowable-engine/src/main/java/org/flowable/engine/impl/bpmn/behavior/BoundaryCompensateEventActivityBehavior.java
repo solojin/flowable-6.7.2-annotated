@@ -33,6 +33,24 @@ import org.flowable.eventsubscription.service.impl.persistence.entity.Compensate
 import org.flowable.eventsubscription.service.impl.persistence.entity.EventSubscriptionEntity;
 
 /**
+ * 边界补偿事件活动行为类
+ *
+ * 补偿边界事件（compensation boundary event），可以为活动附加补偿处理器。
+ *
+ * 补偿边界事件必须使用直接关联的方式引用单个的补偿处理器。
+ *
+ * 补偿边界事件与其它边界事件的活动策略不同。其它边界事件，例如信号边界事件，在其依附的活动启动时激活；当该活动结束时会被解除，并取消相应的事件订阅。而补偿边界事件不是这样。补偿边界事件在其依附的活动成功完成时激活，同时创建补偿事件的相应订阅。当补偿事件被触发，或者相应的流程实例结束时，才会移除订阅。请考虑下列因素：
+ *
+ * 当补偿被触发时，会调用补偿边界事件关联的补偿处理器。调用次数与其依附的活动成功完成的次数相同。
+ *
+ * 如果补偿边界事件依附在具有多实例特性的活动上，则会为每一个实例创建补偿事件订阅。
+ *
+ * 如果补偿边界事件依附在位于循环内部的活动上，则每次该活动执行时，都会创建一个补偿事件订阅。
+ *
+ * 如果流程实例结束，则取消补偿事件的订阅。
+ *
+ * 请注意：嵌入式子流程不支持补偿边界事件。
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryCompensateEventActivityBehavior extends BoundaryEventActivityBehavior {
@@ -79,7 +97,7 @@ public class BoundaryCompensateEventActivityBehavior extends BoundaryEventActivi
             throw new FlowableException("Compensation activity could not be found (or it is missing 'isForCompensation=\"true\"'");
         }
 
-        // find SubProcess or Process instance execution
+        // 查找子流程或流程实例执行
         ExecutionEntity scopeExecution = null;
         ExecutionEntity parentExecution = executionEntity.getParent();
         while (scopeExecution == null && parentExecution != null) {

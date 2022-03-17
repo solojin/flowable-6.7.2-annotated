@@ -31,6 +31,18 @@ import org.flowable.eventsubscription.service.EventSubscriptionService;
 import org.flowable.eventsubscription.service.impl.persistence.entity.CompensateEventSubscriptionEntity;
 
 /**
+ * 边界取消事件活动行为类
+ *
+ * 取消边界事件（cancel boundary event），在事务取消时触发。当取消边界事件触发时，首先会中断当前范围的所有活动执行。
+ * 接下来，启动事务范围内所有有效的的补偿边界事件（compensation boundary event）。
+ * 补偿会同步执行，也就是说在离开事务前，边界事件会等待补偿完成。当补偿完成时，沿取消边界事件的任何出口顺序流离开事务子流程。
+ *
+ * 请注意：一个事务子流程只允许使用一个取消边界事件。
+ *
+ * 请注意：如果事务子流程中有嵌套的子流程，只会对成功完成的子流程触发补偿。
+ *
+ * 请注意：如果取消边界事件放置在具有多实例特性的事务子流程上，如果一个实例触发了取消，则边界事件将取消所有实例。
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryCancelEventActivityBehavior extends BoundaryEventActivityBehavior {
@@ -46,7 +58,7 @@ public class BoundaryCancelEventActivityBehavior extends BoundaryEventActivityBe
         ExecutionEntityManager executionEntityManager = processEngineConfiguration.getExecutionEntityManager();
 
         ExecutionEntity subProcessExecution = null;
-        // TODO: this can be optimized. A full search in the all executions shouldn't be needed
+        // TODO:这是可以优化的。不需要对所有执行情况进行全面搜索
         List<ExecutionEntity> processInstanceExecutions = executionEntityManager.findChildExecutionsByProcessInstanceId(execution.getProcessInstanceId());
         for (ExecutionEntity childExecution : processInstanceExecutions) {
             if (childExecution.getCurrentFlowElement() != null
@@ -67,7 +79,7 @@ public class BoundaryCancelEventActivityBehavior extends BoundaryEventActivityBe
 
             String deleteReason = DeleteReason.BOUNDARY_EVENT_INTERRUPTING + "(" + boundaryEvent.getId() + ")";
 
-            // cancel boundary is always sync
+            // 取消边界总是同步的
             ScopeUtil.throwCompensationEvent(eventSubscriptions, execution, false);
             executionEntityManager.deleteExecutionAndRelatedData(subProcessExecution, deleteReason, false);
             if (subProcessExecution.getCurrentFlowElement() instanceof Activity) {
