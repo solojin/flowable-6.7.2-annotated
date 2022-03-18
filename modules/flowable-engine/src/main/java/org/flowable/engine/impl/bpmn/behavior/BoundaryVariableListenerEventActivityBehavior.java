@@ -30,6 +30,8 @@ import org.flowable.eventsubscription.service.impl.persistence.entity.EventSubsc
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
+ * 边界变量监听器事件活动行为类
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */

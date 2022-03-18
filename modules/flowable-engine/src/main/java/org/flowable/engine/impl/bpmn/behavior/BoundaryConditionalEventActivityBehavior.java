@@ -25,6 +25,10 @@ import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
+ * 边界条件事件活动行为类
+ *
+ * 条件边界事件（Conditional Boundary Event）类似如监听器，如果满足一个特定的条件，它就会被触发。
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryConditionalEventActivityBehavior extends BoundaryEventActivityBehavior {

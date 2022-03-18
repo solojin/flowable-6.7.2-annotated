@@ -22,6 +22,8 @@ import org.activiti.engine.impl.pvm.delegate.ActivityExecution;
 import org.flowable.engine.delegate.DelegateExecution;
 
 /**
+ * 取消边界事件活动行为类
+ *
  * @author Daniel Meyer
  */
 public class CancelBoundaryEventActivityBehavior extends FlowNodeActivityBehavior {
@@ -34,14 +36,14 @@ public class CancelBoundaryEventActivityBehavior extends FlowNodeActivityBehavio
         if (eventSubscriptions.isEmpty()) {
             leave(activityExecution);
         } else {
-            // cancel boundary is always sync
+            // 取消边界总是同步的
             ScopeUtil.throwCompensationEvent(eventSubscriptions, activityExecution, false);
         }
     }
 
     @Override
     public void signal(ActivityExecution execution, String signalName, Object signalData) throws Exception {
-        // join compensating executions
+        // 加入补偿执行
         if (execution.getExecutions().isEmpty()) {
             leave(execution);
         } else {

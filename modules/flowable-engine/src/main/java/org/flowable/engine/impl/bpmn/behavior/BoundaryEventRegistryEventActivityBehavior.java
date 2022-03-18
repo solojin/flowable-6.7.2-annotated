@@ -36,6 +36,8 @@ import org.flowable.eventsubscription.service.EventSubscriptionService;
 import org.flowable.eventsubscription.service.impl.persistence.entity.EventSubscriptionEntity;
 
 /**
+ * 边界事件注册事件活动行为类
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryEventRegistryEventActivityBehavior extends BoundaryEventActivityBehavior {
