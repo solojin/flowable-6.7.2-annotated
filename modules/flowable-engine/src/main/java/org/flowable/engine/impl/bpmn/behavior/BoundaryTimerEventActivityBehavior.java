@@ -24,6 +24,8 @@ import org.flowable.engine.impl.util.TimerUtil;
 import org.flowable.job.service.impl.persistence.entity.TimerJobEntity;
 
 /**
+ * 边界定时器事件活动行为类
+ *
  * @author Joram Barrez
  */
 public class BoundaryTimerEventActivityBehavior extends BoundaryEventActivityBehavior {

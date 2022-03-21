@@ -32,6 +32,8 @@ import org.flowable.eventsubscription.service.impl.persistence.entity.EventSubsc
 import org.flowable.eventsubscription.service.impl.persistence.entity.MessageEventSubscriptionEntity;
 
 /**
+ * 边界消息事件活动行为类
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryMessageEventActivityBehavior extends BoundaryEventActivityBehavior {

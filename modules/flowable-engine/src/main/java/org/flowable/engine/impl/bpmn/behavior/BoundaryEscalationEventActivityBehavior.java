@@ -25,6 +25,11 @@ import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
 import org.flowable.engine.impl.util.CommandContextUtil;
 
 /**
+ * 边界扩大事件活动行为类
+ *
+ * 扩大事件大多数用在连接子流程和父流程，用于触发一个子流程，不能发起流程实例
+ * 与错误事件不同，扩大事件不是临界事件，在抛出扩大事件的地方会继续执行
+ *
  * @author Tijs Rademakers
  */
 public class BoundaryEscalationEventActivityBehavior extends BoundaryEventActivityBehavior {
@@ -54,6 +59,7 @@ public class BoundaryEscalationEventActivityBehavior extends BoundaryEventActivi
             escalationCode = escalationEventDefinition.getEscalationCode();
         }
 
+        // 从命令上下文中获取流程引擎配置，进而获取事件调遣器
         ProcessEngineConfigurationImpl processEngineConfiguration = CommandContextUtil.getProcessEngineConfiguration(commandContext);
         FlowableEventDispatcher eventDispatcher = processEngineConfiguration.getEventDispatcher();
         if (eventDispatcher != null && eventDispatcher.isEnabled()) {

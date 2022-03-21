@@ -34,6 +34,8 @@ import org.flowable.eventsubscription.service.impl.persistence.entity.EventSubsc
 import org.flowable.eventsubscription.service.impl.persistence.entity.SignalEventSubscriptionEntity;
 
 /**
+ * 边界信号事件活动行为类
+ *
  * @author Joram Barrez
  * @author Tijs Rademakers
  */
