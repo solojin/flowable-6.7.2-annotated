@@ -15,10 +15,13 @@ package org.flowable.engine.impl.delegate;
 import org.flowable.engine.delegate.DelegateExecution;
 
 /**
+ * 可触发的活动行为类
+ *
  * @author Joram Barrez
  */
 public interface TriggerableActivityBehavior extends ActivityBehavior {
 
+    // 委托执行，信号事件，信号数据
     void trigger(DelegateExecution execution, String signalEvent, Object signalData);
 
 }

@@ -17,10 +17,13 @@ import java.io.Serializable;
 import org.flowable.engine.delegate.DelegateExecution;
 
 /**
+ * 活动行为接口类
+ *
  * @author Tom Baeyens
  * @author Joram Barrez
  */
 public interface ActivityBehavior extends Serializable {
 
+    // 委托执行
     void execute(DelegateExecution execution);
 }

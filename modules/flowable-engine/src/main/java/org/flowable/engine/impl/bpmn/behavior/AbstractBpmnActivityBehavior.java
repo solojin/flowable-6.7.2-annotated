@@ -29,7 +29,9 @@ import org.flowable.engine.impl.util.CommandContextUtil;
 import org.flowable.engine.impl.util.ProcessDefinitionUtil;
 
 /**
- * Denotes an 'activity' in the sense of BPMN 2.0: a parent class for all tasks, subprocess and callActivity.
+ * 抽象BPMN元素活动行为类
+ *
+ * 表示BPMN 2.0意义上的“活动”：所有任务、子流程和调用活动的父类。
  * 
  * @author Joram Barrez
  */
@@ -37,11 +39,12 @@ public class AbstractBpmnActivityBehavior extends FlowNodeActivityBehavior {
 
     private static final long serialVersionUID = 1L;
 
+    // 多实例活动行为
     protected MultiInstanceActivityBehavior multiInstanceActivityBehavior;
 
     /**
-     * Subclasses that call leave() will first pass through this method, before the regular {@link FlowNodeActivityBehavior#leave(DelegateExecution)} is called. This way, we can check if the activity
-     * has loop characteristics, and delegate to the behavior if this is the case.
+     * 调用leave（）的子类将首先通过此方法，然后调用常规的{@link FlowNodeActivityBehavior#leave（DelegateExecution）}。
+     * 通过这种方式，我们可以检查活动是否具有循环特征，如果是这种情况，则委托给行为。
      */
     @Override
     public void leave(DelegateExecution execution) {
@@ -59,7 +62,7 @@ public class AbstractBpmnActivityBehavior extends FlowNodeActivityBehavior {
 
     protected void executeCompensateBoundaryEvents(Collection<BoundaryEvent> boundaryEvents, DelegateExecution execution) {
 
-        // The parent execution becomes a scope, and a child execution is created for each of the boundary events
+        // 父执行成为作用域，并为每个边界事件创建子执行
         for (BoundaryEvent boundaryEvent : boundaryEvents) {
 
             if (CollectionUtil.isEmpty(boundaryEvent.getEventDefinitions())) {
@@ -84,7 +87,7 @@ public class AbstractBpmnActivityBehavior extends FlowNodeActivityBehavior {
     protected Collection<BoundaryEvent> findBoundaryEventsForFlowNode(final String processDefinitionId, final FlowElement flowElement) {
         Process process = getProcessDefinition(processDefinitionId);
 
-        // This could be cached or could be done at parsing time
+        // 这可以缓存，也可以在解析时完成
         List<BoundaryEvent> results = new ArrayList<>(1);
         Collection<BoundaryEvent> boundaryEvents = process.findFlowElementsOfType(BoundaryEvent.class, true);
         for (BoundaryEvent boundaryEvent : boundaryEvents) {
@@ -96,7 +99,7 @@ public class AbstractBpmnActivityBehavior extends FlowNodeActivityBehavior {
     }
 
     protected Process getProcessDefinition(String processDefinitionId) {
-        // TODO: must be extracted / cache should be accessed in another way
+        // TODO:必须提取/应以其他方式访问缓存
         return ProcessDefinitionUtil.getProcess(processDefinitionId);
     }
 
