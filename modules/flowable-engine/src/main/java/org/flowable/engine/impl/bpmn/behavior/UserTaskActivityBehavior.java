@@ -61,6 +61,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
+ * 用户任务活动行为类
+ *
  * @author Joram Barrez
  */
 public class UserTaskActivityBehavior extends TaskActivityBehavior implements ActivityWithMigrationContextBehavior {
@@ -155,9 +157,10 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Ac
 
         TaskHelper.insertTask(task, (ExecutionEntity) execution, !skipUserTask, (!skipUserTask && processEngineConfiguration.isEnableEntityLinks()));
 
-        // Handling assignments need to be done after the task is inserted, to have an id
+        // 处理任务需要在任务插入后完成，才能有一个id
         if (!skipUserTask) {
             if (processEngineConfiguration.isLoggingSessionEnabled()) {
+                // 日志
                 BpmnLoggingSessionUtil.addLoggingData(LoggingSessionConstants.TYPE_USER_TASK_CREATE, "User task '" + 
                                 task.getName() + "' created", task, execution);
             }
@@ -172,7 +175,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Ac
 
             processEngineConfiguration.getListenerNotificationHelper().executeTaskListeners(task, TaskListener.EVENTNAME_CREATE);
 
-            // All properties set, now firing 'create' events
+            // 设置所有属性，现在触发“创建”事件
             FlowableEventDispatcher eventDispatcher = processEngineConfiguration.getTaskServiceConfiguration().getEventDispatcher();
             if (eventDispatcher != null  && eventDispatcher.isEnabled()) {
                 eventDispatcher.dispatchEvent(FlowableTaskEventBuilder.createEntityEvent(FlowableEngineEventType.TASK_CREATED, task),
@@ -187,7 +190,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Ac
                 }
             }
         } else {
-            TaskHelper.deleteTask(task, null, false, false, false); // false: no events fired for skipped user task
+            TaskHelper.deleteTask(task, null, false, false, false); // false：没有为跳过的用户任务触发事件
             leave(execution);
         }
 
@@ -488,7 +491,8 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Ac
         return Collections.emptyList();
 
     }
-    
+
+    // 获取代理人值
     protected String getAssigneeValue(UserTask userTask, MigrationContext migrationContext, ObjectNode taskElementProperties) {
         if (migrationContext != null && migrationContext.getAssignee() != null) {
             return migrationContext.getAssignee();

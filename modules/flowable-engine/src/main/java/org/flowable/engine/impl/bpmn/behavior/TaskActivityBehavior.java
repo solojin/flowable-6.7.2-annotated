@@ -19,9 +19,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Parent class for all BPMN 2.0 task types such as ServiceTask, ScriptTask, UserTask, etc.
+ * 任务活动行为类
+ *
+ * 所有BPMN 2.0任务类型（如ServiceTask、ScriptTask、UserTask等）的父类。
  * 
- * When used on its own, it behaves just as a pass-through activity.
+ * 单独使用时，它的行为就像一个传递活动。
  * 
  * @author Joram Barrez
  */
