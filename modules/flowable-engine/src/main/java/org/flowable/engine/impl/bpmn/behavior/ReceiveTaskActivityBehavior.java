@@ -17,10 +17,12 @@ import org.flowable.engine.RuntimeService;
 import org.flowable.engine.delegate.DelegateExecution;
 
 /**
- * A receive task is a wait state that waits to receive some message.
+ * 接收任务活动行为
+ *
+ * 接收任务是等待接收消息的等待状态。
  * 
- * Currently, the only message that is supported is the external trigger, given by calling the {@link RuntimeService#trigger(String)} operation.
- * 
+ * 目前，唯一支持的消息是外部触发器，通过调用{@link RuntimeService#trigger（String）}操作给出。
+ *
  * @author Joram Barrez
  */
 public class ReceiveTaskActivityBehavior extends TaskActivityBehavior {
@@ -29,7 +31,7 @@ public class ReceiveTaskActivityBehavior extends TaskActivityBehavior {
 
     @Override
     public void execute(DelegateExecution execution) {
-        // Do nothing: waitstate behavior
+        // 不做事：等待状态行为
     }
 
     @Override

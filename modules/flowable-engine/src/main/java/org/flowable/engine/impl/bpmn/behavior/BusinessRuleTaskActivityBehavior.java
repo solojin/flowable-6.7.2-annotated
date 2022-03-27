@@ -29,7 +29,9 @@ import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
 
 /**
- * Activity implementation of the BPMN 2.0 business rule task.
+ * 业务规则活动行为类
+ *
+ * BPMN 2.0业务规则任务的活动实现。
  * 
  * @author Tijs Rademakers
  * @author Joram Barrez
@@ -48,6 +50,7 @@ public class BusinessRuleTaskActivityBehavior extends TaskActivityBehavior imple
 
     @Override
     public void execute(DelegateExecution execution) {
+        // 获取流程定义
         ProcessDefinition processDefinition = ProcessDefinitionUtil.getProcessDefinition(execution.getProcessDefinitionId());
         String deploymentId = processDefinition.getDeploymentId();
 

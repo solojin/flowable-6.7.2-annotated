@@ -30,7 +30,9 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Implementation of the BPMN 2.0 script task.
+ * 脚本任务活动行为类
+ *
+ * BPMN 2.0脚本任务的实现。
  *
  * @author Joram Barrez
  * @author Christian Stettler
@@ -47,7 +49,7 @@ public class ScriptTaskActivityBehavior extends TaskActivityBehavior {
     protected String language;
     protected String resultVariable;
     protected String skipExpression;
-    protected boolean storeScriptVariables; // see https://activiti.atlassian.net/browse/ACT-1626
+    protected boolean storeScriptVariables; // 参考 https://activiti.atlassian.net/browse/ACT-1626
 
     public ScriptTaskActivityBehavior(String script, String language, String resultVariable) {
         this.script = script;
