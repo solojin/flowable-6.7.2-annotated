@@ -57,6 +57,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
+ * 人类任务活动行为
+ *
  * @author Joram Barrez
  */
 public class HumanTaskActivityBehavior extends TaskActivityBehavior implements PlanItemActivityBehavior, CmmnActivityWithMigrationContextBehavior {
@@ -88,7 +90,7 @@ public class HumanTaskActivityBehavior extends TaskActivityBehavior implements P
             taskEntity.setScopeType(ScopeTypes.CMMN);
             taskEntity.setTenantId(planItemInstanceEntity.getTenantId());
 
-            // set the stage instance id, if this plan item (task) belongs to a stage
+            // 如果此计划项（任务）属于某个阶段，请设置阶段实例id
             taskEntity.setPropagatedStageInstanceId(planItemInstanceEntity.getStageInstanceId());
 
             taskEntity.setTaskDefinitionKey(humanTask.getId());
@@ -161,7 +163,7 @@ public class HumanTaskActivityBehavior extends TaskActivityBehavior implements P
             
 
         } else {
-            // if not blocking, treat as a manual task. No need to create a task entry.
+            // 如果没有阻塞，则将其视为手动任务。无需创建任务条目。
             CommandContextUtil.getAgenda(commandContext).planCompletePlanItemInstanceOperation(planItemInstanceEntity);
 
         }
@@ -415,7 +417,7 @@ public class HumanTaskActivityBehavior extends TaskActivityBehavior implements P
             throw new FlowableException("No task entity found for plan item instance " + planItemInstance.getId());
         }
 
-        // Should be only one
+        // 应该只有一个
         for (TaskEntity taskEntity : taskEntities) {
             if (!taskEntity.isDeleted()) {
                 TaskHelper.deleteTask(taskEntity, null, false, true, cmmnEngineConfiguration);
