@@ -35,6 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 子任务活动行为类
+ *
  * @author Tijs Rademakers
  * @author Joram Barrez
  */
@@ -143,8 +145,8 @@ public abstract class ChildTaskActivityBehavior extends CoreCmmnTriggerableActiv
     }
 
     /**
-     * Called when a manual delete is triggered (NOT when a terminate/complete is triggered),
-     * for example when a deployment is deleted and everything related needs to be deleted.
+     * 在触发手动删除时调用（而不是在触发终止/完成时），
+     * 例如，当部署被删除，需要删除所有相关内容时。
      */
     public abstract void deleteChildEntity(CommandContext commandContext, DelegatePlanItemInstance delegatePlanItemInstance, boolean cascade);
 

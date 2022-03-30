@@ -41,6 +41,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 流程任务活动行为类
+ * 扩展自子任务活动行为类
+ *
  * @author Joram Barrez
  */
 public class ProcessTaskActivityBehavior extends ChildTaskActivityBehavior implements PlanItemActivityBehavior {
@@ -140,9 +143,11 @@ public class ProcessTaskActivityBehavior extends ChildTaskActivityBehavior imple
     @Override
     public void trigger(CommandContext commandContext, PlanItemInstanceEntity planItemInstance) {
         if (!PlanItemInstanceState.ACTIVE.equals(planItemInstance.getState())) {
+            // 只能触发处于活动状态的计划项
             throw new FlowableIllegalStateException("Can only trigger a plan item that is in the ACTIVE state");
         }
         if (planItemInstance.getReferenceId() == null) {
+            // 无法触发流程任务计划项实例：未设置引用id
             throw new FlowableIllegalStateException("Cannot trigger process task plan item instance : no reference id set");
         }
         if (!ReferenceTypes.PLAN_ITEM_CHILD_PROCESS.equals(planItemInstance.getReferenceType())) {
@@ -150,12 +155,12 @@ public class ProcessTaskActivityBehavior extends ChildTaskActivityBehavior imple
                     + planItemInstance.getReferenceType() + "' not supported");
         }
 
-        // Need to be set before planning the complete operation
+        // 需要在规划完整的操作之前进行设置
         CmmnEngineConfiguration cmmnEngineConfiguration = CommandContextUtil.getCmmnEngineConfiguration(commandContext);
         CaseInstanceEntity caseInstance = cmmnEngineConfiguration.getCaseInstanceEntityManager().findById(planItemInstance.getCaseInstanceId());
         handleOutParameters(planItemInstance, caseInstance, cmmnEngineConfiguration.getProcessInstanceService());
 
-        // Triggering the plan item (as opposed to a regular complete) terminates the process instance
+        // 触发计划项（与常规完成相反）会终止流程实例
         CommandContextUtil.getAgenda(commandContext).planCompletePlanItemInstanceOperation(planItemInstance);
         deleteProcessInstance(commandContext, planItemInstance);
     }
@@ -163,7 +168,7 @@ public class ProcessTaskActivityBehavior extends ChildTaskActivityBehavior imple
     @Override
     public void onStateTransition(CommandContext commandContext, DelegatePlanItemInstance planItemInstance, String transition) {
         if (PlanItemInstanceState.ACTIVE.equals(planItemInstance.getState())) {
-            // The process task plan item will be deleted by the regular TerminatePlanItemOperation
+            // 常规TerminatePlanItem操作将删除流程任务计划项
             if (PlanItemTransition.TERMINATE.equals(transition) || PlanItemTransition.EXIT.equals(transition)) {
                 deleteProcessInstance(commandContext, planItemInstance);
 
@@ -225,8 +230,8 @@ public class ProcessTaskActivityBehavior extends ChildTaskActivityBehavior imple
 
     protected String getParentDeploymentIfSameDeployment(CmmnEngineConfiguration cmmnEngineConfiguration, PlanItemInstanceEntity planItemInstanceEntity) {
         if (!sameDeployment) {
-            // If not same deployment then return null
-            // Parent deployment should not be taken into consideration then
+            // 如果不是同一部署，则返回null
+            // 那么就不应该考虑父部署
             return null;
         } else {
             return CaseDefinitionUtil.getDefinitionDeploymentId(planItemInstanceEntity.getCaseDefinitionId(), cmmnEngineConfiguration);
