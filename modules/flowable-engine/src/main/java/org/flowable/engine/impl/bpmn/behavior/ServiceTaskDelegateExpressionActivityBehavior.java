@@ -46,7 +46,8 @@ import org.flowable.engine.impl.util.CommandContextUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * {@link ActivityBehavior} used when 'delegateExpression' is used for a serviceTask.
+ * 服务任务委托表达式活动行为
+ * {@link ActivityBehavior}当“delegateExpression”用于serviceTask时使用
  *
  * @author Joram Barrez
  * @author Josh Long
@@ -81,6 +82,7 @@ public class ServiceTaskDelegateExpressionActivityBehavior extends TaskActivityB
         boolean loggingSessionEnabled = processEngineConfiguration.isLoggingSessionEnabled();
         if (triggerable && delegate instanceof TriggerableActivityBehavior) {
             if (loggingSessionEnabled) {
+                // 使用委托触发服务任务
                 BpmnLoggingSessionUtil.addLoggingData(LoggingSessionConstants.TYPE_SERVICE_TASK_BEFORE_TRIGGER,
                         "Triggering service task with delegate " + delegate, execution);
             }
@@ -94,9 +96,11 @@ public class ServiceTaskDelegateExpressionActivityBehavior extends TaskActivityB
 
         } else if (loggingSessionEnabled) {
             if (!triggerable) {
+                // 委托表达式已触发但不可触发的服务任务
                 BpmnLoggingSessionUtil.addLoggingData(LoggingSessionConstants.TYPE_SERVICE_TASK_WRONG_TRIGGER,
                         "Service task with delegate expression triggered but not triggerable " + delegate, execution);
             } else {
+                // 已触发委托表达式但未实现TriggerableActivityBehavior的服务任务
                 BpmnLoggingSessionUtil.addLoggingData(LoggingSessionConstants.TYPE_SERVICE_TASK_WRONG_TRIGGER,
                         "Service task with delegate expression triggered but not implementing TriggerableActivityBehavior " + delegate, execution);
             }
@@ -134,6 +138,7 @@ public class ServiceTaskDelegateExpressionActivityBehavior extends TaskActivityB
                 Object delegate = DelegateExpressionUtil.resolveDelegateExpression(expression, execution, fieldDeclarations);
 
                 if (loggingSessionEnabled) {
+                    // 使用委托执行服务任务
                     BpmnLoggingSessionUtil.addLoggingData(LoggingSessionConstants.TYPE_SERVICE_TASK_ENTER,
                             "Executing service task with delegate " + delegate, execution);
                 }
