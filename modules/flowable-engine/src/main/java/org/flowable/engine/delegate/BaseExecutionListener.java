@@ -15,7 +15,7 @@ package org.flowable.engine.delegate;
 import java.io.Serializable;
 
 /**
- * Callback interface to be notified of execution events like starting a process instance, ending an activity instance or taking a transition.
+ * 回调接口将收到执行事件的通知，如启动流程实例、结束活动实例或途径.
  * 
  * @author Yvo Swillens
  */
