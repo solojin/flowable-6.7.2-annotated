@@ -19,9 +19,9 @@ import org.flowable.common.engine.api.delegate.event.FlowableEvent;
 import org.flowable.common.engine.api.delegate.event.FlowableEventListener;
 
 /**
- * Base event listener that can be used when implementing an {@link FlowableEventListener} to get notified when an entity is created, updated, deleted or if another entity-related event occurs.
- * 
- * Override the <code>onXX(..)</code> methods to respond to entity changes accordingly.
+ * 在实现｛@link FlowableEventListener｝时可以使用的基本事件侦听器，以便在创建、更新、删除实体或发生其他与实体相关的事件时获得通知.
+ *
+ * 重写<code>onXX（..）</code>方法以相应地响应实体更改。
  * 
  * @author Frederik Heremans
  * 
@@ -56,7 +56,7 @@ public class BaseEntityEventListener extends AbstractFlowableEventListener {
     @Override
     public final void onEvent(FlowableEvent event) {
         if (isValidEvent(event)) {
-            // Check if this event
+            // 检查此事件
             if (event.getType() == FlowableEngineEventType.ENTITY_CREATED) {
                 onCreate(event);
             } else if (event.getType() == FlowableEngineEventType.ENTITY_INITIALIZED) {
@@ -66,7 +66,7 @@ public class BaseEntityEventListener extends AbstractFlowableEventListener {
             } else if (event.getType() == FlowableEngineEventType.ENTITY_UPDATED) {
                 onUpdate(event);
             } else {
-                // Entity-specific event
+                // 实体特定事件
                 onEntityEvent(event);
             }
         }
