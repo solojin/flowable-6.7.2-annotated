@@ -18,7 +18,7 @@ import java.util.List;
 import org.flowable.common.engine.api.FlowableException;
 
 /**
- * Describes basic methods for doing native queries
+ * 描述执行Native查询的基本方法
  * 
  * @author Tijs Rademakers
  * @author Joram Barrez
@@ -26,31 +26,30 @@ import org.flowable.common.engine.api.FlowableException;
 public interface NativeQuery<T extends NativeQuery<?, ?>, U extends Object> {
 
     /**
-     * Hand in the SQL statement you want to execute. BEWARE: if you need a count you have to hand in a count() statement yourself, otherwise the result will be treated as lost of Flowable entities.
-     * 
-     * If you need paging you have to insert the pagination code yourself. We skipped doing this for you as this is done really different on some databases (especially MS-SQL / DB2)
-     */
+     * 处理要执行的SQL语句。注意：如果你需要一个count，你必须自己使用一个count（）语句，否则结果将被视为Flowable实体的丢失。
+     * 如果需要分页，则必须自己插入分页代码。我们跳过了这一步，因为这在某些数据库（尤其是MS-SQL/DB2）上做得非常不同
+     * */
     T sql(String selectClause);
 
     /**
-     * Add parameter to be replaced in query for index, e.g. :param1, :myParam, ...
+     * 添加要在索引查询中替换的参数，例如：param1，：myParam。。。
      */
     T parameter(String name, Object value);
 
-    /** Executes the query and returns the number of results */
+    /** 执行查询并返回结果数 */
     long count();
 
     /**
-     * Executes the query and returns the resulting entity or null if no entity matches the query criteria.
+     * 执行查询并返回结果实体，如果没有实体与查询条件匹配，则返回null。
      * 
      * @throws FlowableException
-     *             when the query results in more than one entities.
+     *             当查询产生多个实体时。
      */
     U singleResult();
 
-    /** Executes the query and get a list of entities as the result. */
+    /** 执行查询并获得实体列表作为结果。 */
     List<U> list();
 
-    /** Executes the query and get a list of entities as the result. */
+    /** 执行查询并获得实体列表作为结果。 */
     List<U> listPage(int firstResult, int maxResults);
 }
