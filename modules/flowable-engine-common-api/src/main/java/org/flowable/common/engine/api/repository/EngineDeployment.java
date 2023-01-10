@@ -16,9 +16,9 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Represents a deployment that is already present in the engine repository.
+ * 表示引擎存储库中已存在的部署。
  * 
- * A deployment is a container for resources such as process definitions, case definitions, images, forms, etc.
+ * 部署是资源的容器，如流程定义、案例定义、图像、表单等。
  * 
  * @author Tijs Rademakers
  */
