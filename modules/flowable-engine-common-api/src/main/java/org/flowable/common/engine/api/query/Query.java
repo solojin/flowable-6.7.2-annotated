@@ -16,7 +16,7 @@ package org.flowable.common.engine.api.query;
 import java.util.List;
 
 /**
- * Describes basic methods for querying.
+ * 描述查询的基本方法
  *
  * @author Frederik Heremans
  */
@@ -27,12 +27,12 @@ public interface Query<T extends Query<?, ?>, U extends Object> {
     }
 
     /**
-     * Order the results ascending on the given property as defined in this class (needs to come after a call to one of the orderByXxxx methods).
+     * 根据该类中定义的给定属性对结果进行升序排序（需要在调用orderByXxxx方法之一之后）。
      */
     T asc();
 
     /**
-     * Order the results descending on the given property as defined in this class (needs to come after a call to one of the orderByXxxx methods).
+     * 将结果按该类中定义的给定属性降序排列（需要在调用orderByXxxx方法之一之后）。
      */
     T desc();
 
@@ -41,24 +41,24 @@ public interface Query<T extends Query<?, ?>, U extends Object> {
     T orderBy(QueryProperty property, NullHandlingOnOrder nullHandlingOnOrder);
 
     /**
-     * Executes the query and returns the number of results
+     * 执行查询并返回结果数
      */
     long count();
 
     /**
-     * Executes the query and returns the resulting entity or null if no entity matches the query criteria.
+     * 执行查询并返回结果实体，如果没有实体与查询条件匹配，则返回null。
      *
-     * @throws org.flowable.common.engine.api.FlowableException when the query results in more than one entities.
+     * @throws org.flowable.common.engine.api.FlowableException 当查询产生多个实体时。
      */
     U singleResult();
 
     /**
-     * Executes the query and get a list of entities as the result.
+     * 执行查询并获得实体列表作为结果。
      */
     List<U> list();
 
     /**
-     * Executes the query and get a list of entities as the result.
+     * 执行查询并获得实体列表作为结果。
      */
     List<U> listPage(int firstResult, int maxResults);
 }
