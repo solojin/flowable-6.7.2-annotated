@@ -15,10 +15,10 @@ package org.flowable.common.engine.impl.cfg;
 import org.flowable.common.engine.impl.db.IdBlock;
 
 /**
- * generates {@link IdBlock}s that are used to assign ids to new objects.
+ * 生成用于为新对象分配ID的｛@link IdBlock｝。
  * 
- * The scope of an instance of this class is process engine, which means that there is only one instance in one process engine instance.
- * 
+ * 此类的实例的范围是流程引擎，这意味着一个流程引擎实例中只有一个实例。
+ *
  * @author Tom Baeyens
  * @author Joram Barrez
  */
