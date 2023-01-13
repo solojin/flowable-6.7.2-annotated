@@ -41,7 +41,9 @@ public class FlowableEventSupport {
     protected Map<FlowableEventType, List<FlowableEventListener>> typedListeners;
 
     public FlowableEventSupport() {
+        // 全局事件监听器
         eventListeners = new CopyOnWriteArrayList<>();
+        // 具体类型的事件监听器
         typedListeners = new HashMap<>();
     }
 
@@ -93,14 +95,14 @@ public class FlowableEventSupport {
             throw new FlowableIllegalArgumentException("Event type cannot be null.");
         }
 
-        // Call global listeners
+        // 回调全局监听器
         if (!eventListeners.isEmpty()) {
             for (FlowableEventListener listener : eventListeners) {
                 dispatchEvent(event, listener);
             }
         }
 
-        // Call typed listeners, if any
+        // 如果有的话，回调类型监听器
         List<FlowableEventListener> typed = typedListeners.get(event.getType());
         if (typed != null && !typed.isEmpty()) {
             for (FlowableEventListener listener : typed) {
