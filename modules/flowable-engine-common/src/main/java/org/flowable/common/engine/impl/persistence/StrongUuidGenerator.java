@@ -19,14 +19,14 @@ import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
 
 /**
- * {@link IdGenerator} implementation based on the current time and the ethernet address of the machine it is running on.
+ * ｛@link IdGenerator｝实现基于当前时间和它运行的机器的以太网地址。
  * 
  * @author Tijs Rademakers
  * @author Joram Barrez
  */
 public class StrongUuidGenerator implements IdGenerator {
 
-    // different ProcessEngines on the same classloader share one generator.
+    // 同一类加载器上的不同ProcessEngine共享一个生成器。
     protected static volatile TimeBasedGenerator timeBasedGenerator;
 
     public StrongUuidGenerator() {
