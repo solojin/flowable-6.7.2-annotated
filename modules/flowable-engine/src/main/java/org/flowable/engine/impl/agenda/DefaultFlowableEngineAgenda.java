@@ -27,12 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * For each API call (and thus {@link Command}) being executed, a new agenda instance is created. On this agenda, operations are put, which the {@link CommandExecutor} will keep executing until all
- * are executed.
+ * 对于正在执行的每个API调用（以及｛@link Command｝），都会创建一个新的代理实例。
+ * 在这个代理上，操作被放置，｛@link CommandExecutor｝将继续执行，直到所有执行。
  *
- * The agenda also gives easy access to methods to plan new operations when writing {@link ActivityBehavior} implementations.
+ * 在编写｛@link ActivityBehavior｝实现时，该代理还允许轻松访问计划新操作的方法。
  *
- * During a {@link Command} execution, the agenda can always be fetched using {@link CommandContextUtil#getAgenda()}.
+ * 在执行｛@link Command｝期间，始终可以使用｛@linkCommandContextUtil#getAgenda（）｝获取代理。
  *
  * @author Joram Barrez
  */
