@@ -44,7 +44,7 @@ public class BpmnDeploymentHelper {
     protected EventSubscriptionManager eventSubscriptionManager;
 
     /**
-     * Verifies that no two process definitions share the same key, to prevent database unique index violation.
+     * 验证没有两个进程定义共享同一个键，以防止数据库唯一索引冲突。
      * 
      * @throws FlowableException
      *             if any two processes have the same key
@@ -61,7 +61,7 @@ public class BpmnDeploymentHelper {
     }
 
     /**
-     * Updates all the process definition entities to match the deployment's values for tenant, engine version, and deployment id.
+     * 更新所有流程定义实体，以匹配租户、引擎版本和部署id的部署值。
      */
     public void copyDeploymentValuesToProcessDefinitions(DeploymentEntity deployment,
             List<ProcessDefinitionEntity> processDefinitions) {
@@ -86,7 +86,7 @@ public class BpmnDeploymentHelper {
     }
 
     /**
-     * Updates all the process definition entities to have the correct resource names.
+     * 更新所有流程定义实体以具有正确的资源名称。
      */
     public void setResourceNamesOnProcessDefinitions(ParsedDeployment parsedDeployment) {
         for (ProcessDefinitionEntity processDefinition : parsedDeployment.getAllProcessDefinitions()) {
@@ -96,8 +96,8 @@ public class BpmnDeploymentHelper {
     }
 
     /**
-     * Gets the most recent persisted process definition that matches this one for tenant and key. If none is found, returns null. This method assumes that the tenant and key are properly set on the
-     * process definition entity.
+     * 获取与租户和键的最新持久化进程定义匹配的最新进程定义。如果未找到，则返回null。此方法假定租户和密钥在
+     * 流程定义实体。
      */
     public ProcessDefinitionEntity getMostRecentVersionOfProcessDefinition(ProcessDefinitionEntity processDefinition) {
         String key = processDefinition.getKey();
