@@ -13,7 +13,7 @@
 package org.flowable.common.engine.impl;
 
 /**
- * Implementations of this class can be plugged into a {@link AbstractEngineConfiguration}. Such implementations can configure the engine in any way programmatically possible.
+ * 此类的实现可以插入{@link AbstractEngineConfiguration}。这样的实现可以以任何编程方式配置引擎。
  * 
  * @author Joram Barrez
  * @author Tijs Rademakers
@@ -21,30 +21,31 @@ package org.flowable.common.engine.impl;
 public interface EngineConfigurator {
 
     /**
-     * Called <b>before</b> any initialisation has been done. This can for example be useful to change configuration settings before anything that uses those properties is created.
+     * 在完成任何初始化之前调用<b>。例如，这对于在创建使用这些属性的任何内容之前更改配置设置很有用。
      * 
-     * Allows to tweak the engine by passing the {@link AbstractEngineConfiguration} which allows tweaking it programmatically.
+     * 允许通过传递{@link AbstractEngineConfiguration}来调整引擎，该参数允许以编程方式调整引擎。
      * 
-     * An example is the jdbc url. When a {@link EngineConfigurator} instance wants to change it, it needs to do it in this method, or otherwise the datasource would already have been created
-     * with the 'old' value for the jdbc url.
+     * 例如，jdbc url。当{@link EngineConfigurator}实例想要更改它时，它需要使用此方法，否则数据源就已经创建了
+     * 带有jdbc url的“old”值。
      */
     void beforeInit(AbstractEngineConfiguration engineConfiguration);
 
     /**
-     * Called when the engine boots up, before it is usable, but after the initialisation of internal objects is done.
+     * 当引擎启动时，在可用之前，但在内部对象初始化完成之后调用。
      * 
-     * Allows to tweak the engine by passing the {@link AbstractEngineConfiguration} which allows tweaking it programmatically.
+     * 允许通过传递{@link AbstractEngineConfiguration}来调整引擎，该参数允许以编程方式调整引擎。
      * 
-     * An example is the ldap user/group manager, which is an addition to the engine. No default properties need to be overridden for this (otherwise the
-     * {@link #beforeInit(AbstractEngineConfiguration)} method should be used) so the logic contained in this method is executed after initialisation of the default objects.
+     * ldap用户/组管理器就是一个例子，它是对引擎的一个补充。无需为此重写默认属性（否则应该使用
+     * {@link#beforeInit（AbstractEngineConfiguration）}方法），因此此方法中包含的逻辑在初始化默认对象后执行。
+     *
      * 
-     * Probably a better name would be 'afterInit' (cfr {@link #beforeInit(AbstractEngineConfiguration)}), but not possible due to backwards compatibility.
+     * 也许更好的名称应该是'afterInit'（cfr{@link#beforeInit（AbstractEngineConfiguration）}），但由于向后兼容，这是不可能的。
      */
     void configure(AbstractEngineConfiguration engineConfiguration);
 
     /**
-     * When the {@link EngineConfigurator} instances are used, they are first ordered by this priority number (lowest to highest). If you have dependencies between
-     * {@link EngineConfigurator} instances, use the priorities accordingly to order them as needed.
+     * 使用{@link EngineConfigurator}实例时，它们首先按此优先级编号排序（从低到高）。如果您在
+     * {@link EngineConfigurator}实例间有依赖，根据需要使用相应的优先级对其进行排序。
      */
     int getPriority();
 
