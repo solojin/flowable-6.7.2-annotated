@@ -44,12 +44,12 @@ public class GenericEventListenerTest extends FlowableCmmnTestCase {
     @Test
     @CmmnDeployment
     public void testSimpleEnableTask() {
-        //Simple use of the UserEventListener as EntryCriteria of a Task
+        //简单使用UserEventListener作为任务的EntryCriteria
         CaseInstance caseInstance = cmmnRuntimeService.createCaseInstanceBuilder().caseDefinitionKey(name.getMethodName()).start();
         assertThat(caseInstance).isNotNull();
         assertThat(cmmnRuntimeService.createCaseInstanceQuery().count()).isEqualTo(1);
 
-        //3 PlanItems reachable
+        //3 PlanItems 可到达
         assertThat(cmmnRuntimeService.createPlanItemInstanceQuery().count()).isEqualTo(3);
         assertThat(cmmnRuntimeService.createPlanItemInstanceQuery().list())
                 .extracting(PlanItemInstance::getPlanItemDefinitionType, PlanItemInstance::getPlanItemDefinitionId, PlanItemInstance::getState)
@@ -66,7 +66,7 @@ public class GenericEventListenerTest extends FlowableCmmnTestCase {
         assertThat(listenerInstance.getPlanItemDefinitionId()).isEqualTo("eventListener");
         assertThat(listenerInstance.getState()).isEqualTo(PlanItemInstanceState.AVAILABLE);
 
-        // Verify same result is returned from query
+        // 验证是否从查询返回相同的结果
         GenericEventListenerInstance eventListenerInstance = cmmnRuntimeService.createGenericEventListenerInstanceQuery().caseInstanceId(caseInstance.getId())
                 .singleResult();
         assertThat(eventListenerInstance).isNotNull();
