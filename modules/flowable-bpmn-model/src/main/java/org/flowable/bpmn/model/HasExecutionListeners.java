@@ -16,7 +16,7 @@ package org.flowable.bpmn.model;
 import java.util.List;
 
 /**
- * Interface indicating an element has execution-listeners
+ * 指示元素具有执行监听器的接口
  * 
  * @author Frederik Heremans
  */
