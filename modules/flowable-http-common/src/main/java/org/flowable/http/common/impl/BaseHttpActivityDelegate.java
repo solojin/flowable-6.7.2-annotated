@@ -48,7 +48,7 @@ public abstract class BaseHttpActivityDelegate {
     protected Expression requestMethod;
     // HttpRequest URL (http://flowable.org)
     protected Expression requestUrl;
-    // Line separated HTTP body headers(Optional)
+    // 行分隔的HTTP正文标头(Optional)
     protected Expression requestHeaders;
     // HttpRequest body expression (Optional)
     protected Expression requestBody;
@@ -60,7 +60,7 @@ public abstract class BaseHttpActivityDelegate {
     protected Expression disallowRedirects;
     // Comma separated list of HTTP body status codes to fail, for example 400,5XX (Optional)
     protected Expression failStatusCodes;
-    // Comma separated list of HTTP body status codes to handle, for example 404,3XX (Optional)
+    // 行分隔的HTTP主体标头要处理的HTTP主体状态代码的逗号分隔列表，例如404,3XX（可选）
     protected Expression handleStatusCodes;
     // Flag to ignore exceptions (Optional)
     protected Expression ignoreException;
